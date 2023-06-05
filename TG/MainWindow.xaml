@@ -1,0 +1,20 @@
+﻿<Window x:Class="TG.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+         xmlns:API="clr-namespace:TG.Client.View.APICollect"
+        mc:Ignorable="d"
+        Title="TG.Client" Height="700" Width="800" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <TabControl>
+            
+            <TabItem Header="API采集">
+                <API:APICollectView></API:APICollectView>
+            </TabItem>
+            <TabItem Header="采集用户"></TabItem>
+            <TabItem Header="群发消息"></TabItem>
+            <TabItem Header="批量邀请"></TabItem>
+        </TabControl>
+    </Grid>
+</Window>
