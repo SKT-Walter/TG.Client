@@ -87,14 +87,20 @@
     <Compile Include="Model\BaseReplyPo.cs" />
     <Compile Include="Model\BaseViewModel.cs" />
     <Compile Include="Model\Login\LoginPo.cs" />
+    <Compile Include="Model\OperatorType.cs" />
+    <Compile Include="Model\TdMsgPo.cs" />
+    <Compile Include="Model\TdUserPo.cs" />
+    <Compile Include="Model\TimeFilterType.cs" />
     <Compile Include="TG\AuthorizationRequestHandler.cs" />
     <Compile Include="TG\CommonHandler.cs" />
     <Compile Include="TG\DefaultHandler.cs" />
     <Compile Include="TG\IMessage.cs" />
+    <Compile Include="TG\MsgHandler.cs" />
     <Compile Include="TG\ParseGroupHandler.cs" />
     <Compile Include="TG\TdClientHandler.cs" />
     <Compile Include="TG\TestClientResultHandler.cs" />
     <Compile Include="TG\UpdateHandler.cs" />
+    <Compile Include="Utils\AsyncThreadQueue.cs" />
     <Compile Include="ViewModel\APICollect\APICollectViewModel.cs" />
     <Compile Include="ViewModel\CollectUser\CollectUserViewModel.cs" />
     <Compile Include="View\APICollect\APICollectView.xaml.cs">
@@ -122,6 +128,14 @@
     <Page Include="Resources\CommonStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\DataGridStyleDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\ScrollViewerDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\APICollect\APICollectView.xaml">
       <SubType>Designer</SubType>

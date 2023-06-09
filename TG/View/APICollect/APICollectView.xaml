@@ -5,18 +5,46 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TG.Client.View.APICollect"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Background="#F0F5FF">
+             d:DesignHeight="650" d:DesignWidth="800" Background="#FFFFFF">
 
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/CommonStyle.xaml"/>
                 <ResourceDictionary Source="/Resources/ButtonStyleDictionary.xaml"/>
+                <ResourceDictionary Source="/Resources/DataGridStyleDictionary.xaml"/>
+                <ResourceDictionary Source="/Resources/ScrollViewerDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
+            <Style x:Key="DataGridCellStylesss" TargetType="{x:Type DataGridCell}">
+                <Setter Property="IsTabStop" Value="False"/>
+                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                <Setter Property="Foreground" Value="{StaticResource White-1}"/>
+                <Setter Property="Height" Value="30"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type DataGridCell}">
+                            <Border x:Name="Bg" Background="Transparent" UseLayoutRounding="True"  BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0">
+                                <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Margin="5,0,0,0"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- 居中 -->
+            <Style x:Key="CustomeDataGridTextCenterStyle" TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource DataGridCellStylesss}">
+                <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                <!--<Setter Property="BorderThickness" Value="0, 0, 1, 0"/>
+                <Setter Property="BorderBrush" Value="#0A0F0E"/>-->
+            </Style>
+
+
+
         </ResourceDictionary>
     </UserControl.Resources>
-    
-    
+
+
 
     <Grid Margin="10, 0, 10, 0" >
         <Grid.RowDefinitions>
@@ -25,7 +53,7 @@
             <RowDefinition Height="50"></RowDefinition>
             <RowDefinition Height="30"></RowDefinition>
             <RowDefinition Height="30"></RowDefinition>
-            <RowDefinition Height="70"></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
             <RowDefinition Height="30"></RowDefinition>
             <RowDefinition Height="50"></RowDefinition>
             <RowDefinition Height="50"></RowDefinition>
@@ -38,13 +66,55 @@
         <TextBlock Text="账号验证" Grid.Row="0" Foreground="{StaticResource Black-1}" VerticalAlignment="Center"></TextBlock>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0, 0, 0, 8">
-            <ComboBox IsEditable="True" Width="120" Padding="0, 12, 0, 0" TextBlock.TextAlignment="Center" Text="{Binding PhonePrefix}"></ComboBox>
-            <TextBox Width="400" Margin="10, 0, 0, 0" Padding="0, 12, 0, 0" TextBlock.TextAlignment="Center" Text="{Binding Phone}"></TextBox>
+            <ComboBox IsEditable="True" Width="120" Padding="0, 12, 0, 0" TextBlock.TextAlignment="Center" Text="{Binding PhonePrefix}"
+                      ToolTip="号码前缀，如中国+86">
+            </ComboBox>
+            <TextBox Width="200" Margin="10, 0, 0, 0" TextBlock.TextAlignment="Center" Text="{Binding Phone}">
+                <TextBox.Resources>
+                    <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.5" Stretch="None" AlignmentX="Left">
+                        <VisualBrush.Visual>
+                            <TextBlock Text="请输入电话号码"/>
+                        </VisualBrush.Visual>
+                    </VisualBrush>
+                </TextBox.Resources>
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Style.Triggers>
+                            <Trigger Property="Text" Value="{x:Null}">
+                                <Setter Property="Background" Value="{StaticResource HintText}"/>
+                            </Trigger>
+                            <Trigger Property="Text" Value="">
+                                <Setter Property="Background" Value="{StaticResource HintText}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
             <Button x:Name="btnSendCode" Width="100" Margin="15, 0, 0, 0" Content="发送验证码" Click="BtnSendCode_Click"></Button>
         </StackPanel>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0, 0, 0, 8">
-            <TextBox Width="200" Padding="0, 12, 0, 0" TextBlock.TextAlignment="Center" Text="{Binding VerifyCode}"></TextBox>
+            <TextBox Width="200" Padding="0, 12, 0, 0" TextBlock.TextAlignment="Center" Text="{Binding VerifyCode}">
+                <TextBox.Resources>
+                    <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.5" Stretch="None" AlignmentX="Left" >
+                        <VisualBrush.Visual>
+                            <TextBlock Text="请输入验证码"/>
+                        </VisualBrush.Visual>
+                    </VisualBrush>
+                </TextBox.Resources>
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Style.Triggers>
+                            <Trigger Property="Text" Value="{x:Null}">
+                                <Setter Property="Background" Value="{StaticResource HintText}"/>
+                            </Trigger>
+                            <Trigger Property="Text" Value="">
+                                <Setter Property="Background" Value="{StaticResource HintText}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
             <Button x:Name="btnVerify" Width="100" Margin="15, 0, 0, 0" Content="验证" Click="BtnVerify_Click"></Button>
 
             <Button x:Name="btnTest" Width="150" Content="Test connect status" Margin="15, 0, 0, 0" Click="BtnTest_Click"
@@ -56,11 +126,31 @@
 
         <TextBlock Grid.Row="4" Text="采集群成员" VerticalAlignment="Center" Foreground="{StaticResource Black-1}"></TextBlock>
 
-        <TextBox Grid.Row="5" Text="{Binding InviteLink}"></TextBox>
+        <TextBox Grid.Row="5" Text="{Binding InviteLink}">
+            <TextBox.Resources>
+                <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.5" Stretch="None" AlignmentX="Left" AlignmentY="Top">
+                    <VisualBrush.Visual>
+                        <TextBlock Text="输入群链接，如https://t.me/name"/>
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </TextBox.Resources>
+            <TextBox.Style>
+                <Style TargetType="TextBox">
+                    <Style.Triggers>
+                        <Trigger Property="Text" Value="{x:Null}">
+                            <Setter Property="Background" Value="{StaticResource HintText}"/>
+                        </Trigger>
+                        <Trigger Property="Text" Value="">
+                            <Setter Property="Background" Value="{StaticResource HintText}"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
 
         <StackPanel Grid.Row="6" Orientation="Horizontal" VerticalAlignment="Center">
             <TextBlock  Text="设置采集的用户数量" Foreground="{StaticResource Black-1}"></TextBlock>
-            <TextBlock  Text="筛选活跃用户" Margin="155, 0, 0, 0" Foreground="{StaticResource Black-1}"></TextBlock>
+            <TextBlock  Text="筛选活跃用户" Margin="55, 0, 0, 0" Foreground="{StaticResource Black-1}"></TextBlock>
         </StackPanel>
 
         <Grid Grid.Row="7">
@@ -84,11 +174,27 @@
         <Button x:Name="btnCollect" Grid.Row="8" Content="开始采集" Click="BtnCollect_Click" Style="{StaticResource CollectButtonStyle}"></Button>
 
         <ProgressBar Grid.Row="9" Background="{Binding LinearGradientBrush}" Value="{Binding CollectProcess}" Margin="0, 2, 0, 2"></ProgressBar>
-        
+
         <TextBlock Grid.Row="10" Text="采集的用户列表" Foreground="{StaticResource Black-1}" VerticalAlignment="Center"></TextBlock>
-        <DataGrid Grid.Row="11">
-            
+        <!--<DataGrid Grid.Row="11" ItemsSource="{Binding UserList}">-->
+
+        <Button Grid.Row="10" HorizontalAlignment="Right" Content="CSV格式导出" Margin="0, 2, 10, 2" Style="{StaticResource ExportButtonStyle}"></Button>
+
+
+        <DataGrid x:Name="dgData" Grid.Row="11" ItemsSource="{Binding UserList}" GridLinesVisibility="Vertical" Style="{StaticResource DefaultDataGrid}" SelectionMode="Single"
+                      ColumnHeaderStyle="{StaticResource DataGridColumnHeaderCenterStyle}" Margin="0, 0, 0, 10"  HorizontalContentAlignment="Stretch"
+                  CellStyle="{StaticResource CustomeDataGridTextCenterStyle}" RowStyle="{StaticResource DataGridRowStyle}" 
+                  Background="{StaticResource Gray-1}">
+
+            <DataGrid.Columns>
+
+                <DataGridTextColumn Binding="{Binding UserId}" Header="用户Id" Width="Auto" MinWidth="85" FontSize="{StaticResource FontSize-12}" ClipboardContentBinding="{Binding Id}"/>
+                <DataGridTextColumn Binding="{Binding Name}" Header="用户名" Width="Auto" MinWidth="85" FontSize="{StaticResource FontSize-12}" ClipboardContentBinding="{Binding Name}"/>
+                <DataGridTextColumn Binding="{Binding PhoneNumber}" Header="电话号码" Width="Auto" MinWidth="85" FontSize="{StaticResource FontSize-12}" ClipboardContentBinding="{Binding Phone}"/>
+
+            </DataGrid.Columns>
+
         </DataGrid>
-        
+
     </Grid>
 </UserControl>

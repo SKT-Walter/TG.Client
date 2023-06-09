@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,12 +9,20 @@ using System.Windows.Media;
 using TG.Client.Model;
 using TG.Client.Model.Login;
 using TG.Client.TG;
+using TG.Client.Utils;
 
 namespace TG.ViewModel.APICollect
 {
     public class APICollectViewModel : BaseViewModel, IMessage
     {
         private FrameworkElement ownUI = null;
+        private AsyncThreadQueue<TdUserPo> processUserThreadQueue;
+        private ObservableCollection<TdUserPo> userList = new ObservableCollection<TdUserPo>();
+
+        public ObservableCollection<TdUserPo> UserList
+        {
+            get { return userList; }
+        }
 
         #region 属性
 
@@ -121,6 +130,33 @@ namespace TG.ViewModel.APICollect
             }
         }
 
+
+        private bool inner24Hour = false;
+
+        public bool Inner24Hour
+        {
+            get { return inner24Hour; }
+            set
+            {
+                inner24Hour = value;
+
+                this.OnPropertyChanged();
+            }
+        }
+
+        private bool inner7Day = false;
+
+        public bool Inner7Day
+        {
+            get { return inner7Day; }
+            set
+            {
+                inner7Day = value;
+
+                this.OnPropertyChanged();
+            }
+        }
+
         #endregion
 
         private LoginPo GetLoginPo()
@@ -147,7 +183,11 @@ namespace TG.ViewModel.APICollect
 
         public void OnClickCollectBtn()
         {
-            TdClientHandler.Instance.CollectUser(InviteLink);
+            userList.Clear();
+
+            int num = 0;
+            int.TryParse(CollectNum, out num);
+            TdClientHandler.Instance.CollectUser(InviteLink, Inner24Hour ? TimeFilterType.OneDay : Inner7Day ? TimeFilterType.SevenDay : TimeFilterType.None, num);
         }
 
         public void OnClickDownBtn()
@@ -193,7 +233,31 @@ namespace TG.ViewModel.APICollect
             VerifyForeground = ownUI.FindResource("Black-1") as Brush;
 
 
+            processUserThreadQueue = new AsyncThreadQueue<TdUserPo>(OnUserChange);
+
+            TdClientHandler.Instance.OnUserChange += Instance_OnUserChange;
             TdClientHandler.Instance.CreateTdClient(this);
+        }
+
+        private void OnUserChange(TdUserPo userPo)
+        {
+            Application.Current.Dispatcher.BeginInvoke((Action)(() =>
+            {
+                UserList.Add(userPo);
+            }));
+
+           
+        }
+
+        private void Instance_OnUserChange(Telegram.Td.Api.User user)
+        {
+            TdUserPo userPo = new TdUserPo();
+            userPo.UserId = user.Id;
+            userPo.FirstName = user.FirstName;
+            userPo.LastName = user.LastName;
+            userPo.PhoneNumber = user.PhoneNumber;
+
+            processUserThreadQueue.Enqueue(userPo);
         }
 
         public void OnMessage(object obj)

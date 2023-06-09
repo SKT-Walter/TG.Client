@@ -24,20 +24,23 @@
 
 
     <!--颜色--> 
-    <SolidColorBrush x:Key="Black-1" Color="#000000"/> 
-    
-    
+    <SolidColorBrush x:Key="Black-1" Color="#000000"/>
+
+
     <SolidColorBrush x:Key="White-1" Color="#F0F5FF"/>
-    
-    
+    <SolidColorBrush x:Key="White-2" Color="#FFFFFF"/> 
+
     <SolidColorBrush x:Key="Blue-1" Color="#2B47CF"/>
-    
-    
+    <SolidColorBrush x:Key="Blue-2" Color="#3149CB"/>
+    <SolidColorBrush x:Key="Blue-3" Color="#87A6FC"/>
+
     <SolidColorBrush x:Key="Orange-1" Color="Orange"/>
-    <SolidColorBrush x:Key="Orange-2" Color="#F2CFA4"/>
+    <SolidColorBrush x:Key="Orange-2" Color="#F2CFA4"/> 
 
 
     <SolidColorBrush x:Key="Green-1" Color="#14A2A2"/>
+
+    <SolidColorBrush x:Key="Gray-1" Color="#F0F5FF"/>
 
 
     <LinearGradientBrush x:Key="LinearGradientBrush" StartPoint="0,0" EndPoint="1,1">
@@ -47,5 +50,29 @@
         <GradientStop Color="LimeGreen" Offset="1.0" />
     </LinearGradientBrush>
 
+
+
+    <!-- 表格 -->
+    <SolidColorBrush x:Key="DefaultBackgroup.ColorBrush" Color="#0F0F0F"/>
+    <SolidColorBrush x:Key="DefaultForegroup.ColorBrush" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="DataGridColumnHeaderBackground" Color="#1E1E1E"/>
+    <SolidColorBrush x:Key="DataGridColumnHeaderForeground" Color="#A0A0A0"/>
+    <SolidColorBrush x:Key="DataGridColumnHeaderBorderBrush" Color="#191919"/>
+    <SolidColorBrush x:Key="DefaultAlternatingRowBackground.ColorBrush" Color="#172422"/>
+    <SolidColorBrush x:Key="DefaultAlternatingRowBackground.Zero.ColorBrush" Color="#172422"/>
+    <SolidColorBrush x:Key="DefaultAlternatingRowBackground.One.ColorBrush" Color="#121A19"/>
+    <SolidColorBrush x:Key="DataGridCellBorderBrush" Color="#0F0F0F"/>
+    <SolidColorBrush x:Key="DataGrid.SubTitle.Foreground" Color="#A0A0A0"/>
+    <SolidColorBrush x:Key="DataGrid.ClosedStatus.Foreground" Color="#515151"/>
+
+    <SolidColorBrush x:Key="DataGrid.TextBlock.Foreground" Color="#FFDA9A"/>
+    <SolidColorBrush x:Key="DataGrid.Foreground" Color="#FFEBC8"/>
+
+    <SolidColorBrush x:Key="Item.MouseOver.Background" Color="#70136C5E"/>
+    <SolidColorBrush x:Key="Item.MouseOver.Border" Color="#70136C5E"/>
+    <SolidColorBrush x:Key="Item.SelectedInactive.Background" Color="#136C5E"/>
+    <SolidColorBrush x:Key="Item.SelectedInactive.Border" Color="#136C5E"/>
+    <SolidColorBrush x:Key="Item.SelectedActive.Background" Color="#136C5E"/>
+    <SolidColorBrush x:Key="Item.SelectedActive.Border" Color="#136C5E"/>
 
 </ResourceDictionary>
