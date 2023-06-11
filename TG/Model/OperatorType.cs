@@ -8,6 +8,7 @@ namespace TG.Client.Model
 {
     public enum OperatorType
     {
+        None,
 
         SearchChat,
 

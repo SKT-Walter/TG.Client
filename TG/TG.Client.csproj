@@ -92,7 +92,6 @@
     <Compile Include="Model\TdUserPo.cs" />
     <Compile Include="Model\TimeFilterType.cs" />
     <Compile Include="TG\AuthorizationRequestHandler.cs" />
-    <Compile Include="TG\CommonHandler.cs" />
     <Compile Include="TG\DefaultHandler.cs" />
     <Compile Include="TG\IMessage.cs" />
     <Compile Include="TG\MsgHandler.cs" />
@@ -106,8 +105,14 @@
     <Compile Include="View\APICollect\APICollectView.xaml.cs">
       <DependentUpon>APICollectView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\BatchInvite\BatchInviteView.xaml.cs">
+      <DependentUpon>BatchInviteView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\CollectUser\CollectUserView.xaml.cs">
       <DependentUpon>CollectUserView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\GroupSendMsg\GroupSendMsgView.xaml.cs">
+      <DependentUpon>GroupSendMsgView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -141,7 +146,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\BatchInvite\BatchInviteView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\CollectUser\CollectUserView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\GroupSendMsg\GroupSendMsgView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

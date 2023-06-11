@@ -75,7 +75,7 @@ namespace TG.Client.TG
 
 
 
-
+        private bool isSendCode = false;
         public void OnAuthorizationStateUpdated(TdApi.AuthorizationState authorizationState)
         {
             if (authorizationState != null)
@@ -105,6 +105,16 @@ namespace TG.Client.TG
                 request.EnableStorageOptimizer = true;
 
                 _client.Send(request, new AuthorizationRequestHandler(this, msgListener, _authorizationState));
+            }
+            else if (_authorizationState is TdApi.AuthorizationStateWaitCode)
+            {
+                if (_client != null && !isSendCode && loginPo != null)
+                {
+                    string code = loginPo.AuthenticationCode;//ReadLine("Please enter authentication code: ");
+                    _client.Send(new TdApi.CheckAuthenticationCode(code), new AuthorizationRequestHandler(this, msgListener, _authorizationState));
+
+                    isSendCode = true;
+                }
             }
             else if (_authorizationState is TdApi.AuthorizationStateReady)
             {
@@ -333,11 +343,13 @@ namespace TG.Client.TG
 
         public void CollectUser(string groupUrl, TimeFilterType timeFilterType, int collectNum)
         {
+            currentOperatorType = OperatorType.None;
             currentCollectNum = collectNum;
             currentTimeFilterType = timeFilterType;
             if (!string.IsNullOrEmpty(groupUrl))
             {
                 string name = groupUrl.Replace("https://t.me/", "");
+                currentOperatorType = OperatorType.SearchChat;
                 _client.Send(new TdApi.SearchPublicChat() { Username = name }, this);
 
 
@@ -410,6 +422,14 @@ namespace TG.Client.TG
             TdApi.InputMessageContent content = new TdApi.InputMessageText(new TdApi.FormattedText(message, null), false, true);
             _client.Send(new TdApi.SendMessage(chatId, 0, 0, null, replyMarkup, content), _defaultHandler);
         }
+
+
+        private void SendCusMsg()
+        {
+            _client.Send(new TdApi.SearchPublicChat() { Username = "test" }, _defaultHandler);
+            _client.Send(new TdApi.CreatePrivateChat() {  })
+        }
+
 
         private long GetChatId(string arg)
         {
