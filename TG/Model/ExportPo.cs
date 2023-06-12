@@ -6,18 +6,10 @@ using System.Threading.Tasks;
 
 namespace TG.Client.Model
 {
-    public enum OperatorType
+    public class ExportPo
     {
-        None,
-
-        SearchChat,
-
-        SearchSupergroupMembers,
-
-        SearchChatUser,
-
-        SearchChatHistory,
-        
-
+        public string Phone { get; set; }
+        public string UserId { get; set; }
+        public string Name { get; set; }
     }
 }

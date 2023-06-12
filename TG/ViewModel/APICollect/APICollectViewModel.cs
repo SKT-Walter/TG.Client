@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -282,6 +283,33 @@ namespace TG.ViewModel.APICollect
                     this.VerifyMsg = baseReply.Msg;
 
                 }));
+            }
+        }
+
+
+        public void RequestExportOrders(string fileName)
+        {
+            StreamWriter sw = null;
+            try
+            {
+                sw = ExcelHelper.Instance.createStream(fileName);
+                if (sw != null)
+                {
+                    Console.WriteLine("fileName:" + fileName);
+                    //N:已申请,0:处理中，1,2:已确认(其中1为部分确认,2完全确认)，4:已撤销，8:失败
+                    //E(Broker B确认),F(Broker B撤销),G（Broker A确认），H（Broker A撤销）
+                    //request.orderStatus = "N,0,1";
+                    
+                    foreach (TdUserPo tdUserPo in UserList)
+                    {
+
+                    }
+
+                }
+            }
+            catch (Exception e)
+            {
+
             }
         }
     }

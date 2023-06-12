@@ -29,5 +29,15 @@ namespace TG.Client.View.GroupSendMsg
         {
 
         }
+
+        private void BtnAdd_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void BtnDown_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

@@ -27,6 +27,12 @@ namespace TG.Client.TG
         private object lockObj = new object();
         private long currentTimeFilter = 0;
 
+        public void ClearCache()
+        {
+            msgDic.Clear();
+            idSet.Clear();
+        }
+
         public bool ContainId(long userId)
         {
             return idSet.Contains(userId);
@@ -34,56 +40,100 @@ namespace TG.Client.TG
 
         public HashSet<long> GetAllId()
         {
-            return idSet;
+            HashSet<long> copySet = new HashSet<long>();
+
+            foreach (long lon in idSet)
+            {
+                copySet.Add(lon);
+            }
+
+            return copySet;
         }
 
-        public int AddOrUpdate(TdApi.Messages messages, TimeFilterType timeFilterType)
+        public void AddOrUpdateByMember(TdApi.ChatMembers chatMembers, int collectNum)
+        {
+            lock (lockObj)
+            {
+                int index = 0;
+                foreach (TdApi.ChatMember chatMember in chatMembers.Members)
+                {
+                    TdApi.MessageSenderUser messageSenderUser = chatMember.MemberId as TdApi.MessageSenderUser;
+                    if (messageSenderUser != null)
+                    {
+                        if (!idSet.Contains(messageSenderUser.UserId))
+                        {
+                            if (collectNum == 0)
+                            {
+                                idSet.Add(messageSenderUser.UserId);
+                            }
+                            else if (collectNum > 0 && index < collectNum)
+                            {
+                                idSet.Add(messageSenderUser.UserId);
+                                
+                            }
+                            else if (collectNum > 0 && index >= collectNum)
+                            {
+                                break;
+                            }
+                            index++;
+                        }
+                    }
+                    
+                }
+            }
+        }
+
+
+        public int AddOrUpdateByMessage(TdApi.Messages messages, TimeFilterType timeFilterType)
         {
             int lastMsgTime = 0;
             lock (lockObj)
             {
-                GetTimeFilter(timeFilterType);
-                foreach (TdApi.Message msg in messages.MessagesValue)
+                if (messages != null)
                 {
-                    TdMsgPo tdMsgPo = new TdMsgPo();
-                    tdMsgPo.MsgId = msg.Id;
-                    TdApi.MessageSenderUser messageSenderUser = msg.SenderId as TdApi.MessageSenderUser;
-                    if (messageSenderUser != null)
+                    GetTimeFilter(timeFilterType);
+                    foreach (TdApi.Message msg in messages.MessagesValue)
                     {
-                        tdMsgPo.UserId = messageSenderUser.UserId;
-                    }
-                    tdMsgPo.Time = msg.Date;
+                        TdMsgPo tdMsgPo = new TdMsgPo();
+                        tdMsgPo.MsgId = msg.Id;
+                        TdApi.MessageSenderUser messageSenderUser = msg.SenderId as TdApi.MessageSenderUser;
+                        if (messageSenderUser != null)
+                        {
+                            tdMsgPo.UserId = messageSenderUser.UserId;
+                        }
+                        tdMsgPo.Time = msg.Date;
 
-                    if (lastMsgTime == 0 || msg.Date < lastMsgTime)
-                    {
-                        lastMsgTime = msg.Date;
-                    }
+                        if (lastMsgTime == 0 || msg.Date < lastMsgTime)
+                        {
+                            lastMsgTime = msg.Date;
+                        }
 
 
-                    bool needAdd = false;
-                    if (timeFilterType == TimeFilterType.OneDay)
-                    {
-                        if (tdMsgPo.Time >= currentTimeFilter)
+                        bool needAdd = false;
+                        if (timeFilterType == TimeFilterType.OneDay)
+                        {
+                            if (tdMsgPo.Time >= currentTimeFilter)
+                            {
+                                needAdd = true;
+                            }
+                            //var toUnixTime = new DateTimeOffset(toDate.Date).ToUnixTimeSeconds();
+                        }
+                        else if (timeFilterType == TimeFilterType.SevenDay)
+                        {
+                            if (tdMsgPo.Time >= currentTimeFilter)
+                            {
+                                needAdd = true;
+                            }
+                        }
+                        else if (timeFilterType == TimeFilterType.None)
                         {
                             needAdd = true;
                         }
-                        //var toUnixTime = new DateTimeOffset(toDate.Date).ToUnixTimeSeconds();
-                    }
-                    else if (timeFilterType == TimeFilterType.SevenDay)
-                    {
-                        if (tdMsgPo.Time >= currentTimeFilter)
-                        {
-                            needAdd = true;
-                        }
-                    }
-                    else if (timeFilterType == TimeFilterType.None)
-                    {
-                        needAdd = true;
-                    }
 
-                    if (needAdd && !idSet.Contains(tdMsgPo.UserId))
-                    {
-                        idSet.Add(tdMsgPo.UserId);
+                        if (needAdd && !idSet.Contains(tdMsgPo.UserId))
+                        {
+                            idSet.Add(tdMsgPo.UserId);
+                        }
                     }
                 }
             }

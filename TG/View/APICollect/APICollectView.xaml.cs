@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TG.Client.Utils;
 using TG.ViewModel.APICollect;
 
 namespace TG.Client.View.APICollect
@@ -67,5 +71,31 @@ namespace TG.Client.View.APICollect
         {
             apiCollectViewModel.OnClickTestBtn();
         }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private string fileName = string.Empty;
+        private void BtnExport_Click(object sender, RoutedEventArgs e)
+        {
+            //SaveFileDialog saveFileDialog = new SaveFileDialog();
+            //saveFileDialog.Filter = "(文本文件*.csv)|*.csv";
+            //saveFileDialog.FileName = DateTime.Now.ToString("yyyyMMddHHmmss") + "_采集用户";
+            //saveFileDialog.AddExtension = true;
+            //saveFileDialog.RestoreDirectory = true;
+            //if ((bool)(saveFileDialog.ShowDialog()))
+            //{
+            //    fileName = saveFileDialog.FileName;
+            //    //ThreadPool.QueueUserWorkItem(new WaitCallback(RequestExportOrders));
+
+
+            //    //RequestExportOrders(null);
+            //}
+        }
+
+
+        
     }
 }

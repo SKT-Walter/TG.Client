@@ -86,6 +86,7 @@
     </ApplicationDefinition>
     <Compile Include="Model\BaseReplyPo.cs" />
     <Compile Include="Model\BaseViewModel.cs" />
+    <Compile Include="Model\ExportPo.cs" />
     <Compile Include="Model\Login\LoginPo.cs" />
     <Compile Include="Model\OperatorType.cs" />
     <Compile Include="Model\TdMsgPo.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="TG\TestClientResultHandler.cs" />
     <Compile Include="TG\UpdateHandler.cs" />
     <Compile Include="Utils\AsyncThreadQueue.cs" />
+    <Compile Include="Utils\ExcelHelper.cs" />
     <Compile Include="ViewModel\APICollect\APICollectViewModel.cs" />
     <Compile Include="ViewModel\CollectUser\CollectUserViewModel.cs" />
     <Compile Include="View\APICollect\APICollectView.xaml.cs">

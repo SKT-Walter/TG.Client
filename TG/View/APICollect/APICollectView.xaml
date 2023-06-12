@@ -178,7 +178,7 @@
         <TextBlock Grid.Row="10" Text="采集的用户列表" Foreground="{StaticResource Black-1}" VerticalAlignment="Center"></TextBlock>
         <!--<DataGrid Grid.Row="11" ItemsSource="{Binding UserList}">-->
 
-        <Button Grid.Row="10" HorizontalAlignment="Right" Content="CSV格式导出" Margin="0, 2, 10, 2" Style="{StaticResource ExportButtonStyle}"></Button>
+        <Button x:Name="btnExport" Grid.Row="10" HorizontalAlignment="Right" Content="CSV格式导出" Margin="0, 2, 10, 2" Style="{StaticResource ExportButtonStyle}" Click="BtnExport_Click"></Button>
 
 
         <DataGrid x:Name="dgData" Grid.Row="11" ItemsSource="{Binding UserList}" GridLinesVisibility="Vertical" Style="{StaticResource DefaultDataGrid}" SelectionMode="Single"

@@ -339,10 +339,12 @@ namespace TG.Client.TG
         private int endIndex = 0;
         private TimeFilterType currentTimeFilterType = TimeFilterType.None;
         private int currentCollectNum = 0;
+        private int limit = 200;
 
 
         public void CollectUser(string groupUrl, TimeFilterType timeFilterType, int collectNum)
         {
+            MsgHandler.Instance.ClearCache();
             currentOperatorType = OperatorType.None;
             currentCollectNum = collectNum;
             currentTimeFilterType = timeFilterType;
@@ -427,7 +429,7 @@ namespace TG.Client.TG
         private void SendCusMsg()
         {
             _client.Send(new TdApi.SearchPublicChat() { Username = "test" }, _defaultHandler);
-            _client.Send(new TdApi.CreatePrivateChat() {  })
+            //_client.Send(new TdApi.CreatePrivateChat() {  })
         }
 
 
@@ -465,84 +467,96 @@ namespace TG.Client.TG
                     currentGruopId = chatTypeSupergroup.SupergroupId;
                     currentChatLastMsgId = chat.LastMessage.Id;
 
-                    //获取用户列表
-                    //_client.Send(new TdApi.GetSupergroupMembers() { SupergroupId = currentGruopId, Filter = null, Offset = 0, Limit = 10 }, new TestClientResultHandler());
+                    currentChatId = chat.Id;
                 }
 
-                //DateTimeOffset fromDate = DateTimeOffset.Parse("2023-06-07"); //Replace with the start date you want
-                //DateTimeOffset toDate = DateTimeOffset.Parse("2023-06-08"); //Replace with the end date you want
-
-                //var fromUnixTime = new DateTimeOffset(fromDate.Date).ToUnixTimeSeconds();
-                //var toUnixTime = new DateTimeOffset(toDate.Date).ToUnixTimeSeconds();
-
-                //TdApi.ChatListMain chatListMain = new TdApi.ChatListMain();
-
-                currentOperatorType = OperatorType.SearchChatHistory;
-
-                currentChatId = chat.Id;
-                startIndex = 0;
-                endIndex = 500;
-                _client.Send(new TdApi.GetChatHistory()
+                if (currentTimeFilterType == TimeFilterType.None)//无活跃条件筛选时，获取全部成员
                 {
-                    ChatId = chat.Id, // 替换specificChatId为要查询的chat_id
-                    Limit = endIndex,
-                    FromMessageId = currentChatLastMsgId,
-                    Offset = startIndex,
-                    OnlyLocal = false
-                }, this);
+                    //获取用户列表
+                    startIndex = 0;
+                    endIndex = limit;
+
+                    currentOperatorType = OperatorType.SearchSupergroupMembers;
+
+                    _client.Send(new TdApi.GetSupergroupMembers() { SupergroupId = currentGruopId, Filter = null, Offset = startIndex, Limit = endIndex }, this);
+                }
+                else
+                {
+                    //DateTimeOffset fromDate = DateTimeOffset.Parse("2023-06-07"); //Replace with the start date you want
+                    //DateTimeOffset toDate = DateTimeOffset.Parse("2023-06-08"); //Replace with the end date you want
+
+                    //var fromUnixTime = new DateTimeOffset(fromDate.Date).ToUnixTimeSeconds();
+                    //var toUnixTime = new DateTimeOffset(toDate.Date).ToUnixTimeSeconds();
+
+                    //TdApi.ChatListMain chatListMain = new TdApi.ChatListMain();
+
+                    currentOperatorType = OperatorType.SearchChatHistory;
+
+                    
+                    startIndex = -50;
+                    endIndex = 100;
+                    _client.Send(new TdApi.GetChatHistory()
+                    {
+                        ChatId = currentChatId, 
+                        Limit = endIndex,
+                        FromMessageId = 0,//currentChatLastMsgId,
+                        Offset = 0,//startIndex,
+                        OnlyLocal = false
+                    }, this);
+                }
+            }
+            else if (currentOperatorType == OperatorType.SearchSupergroupMembers)//无活跃条件筛选时，获取全部成员
+            {
+                TdApi.ChatMembers chatMembers = @object as TdApi.ChatMembers;
+
+                MsgHandler.Instance.AddOrUpdateByMember(chatMembers, currentCollectNum);
+
+                if (chatMembers.TotalCount > endIndex && (currentCollectNum == 0 || (currentCollectNum > 0 && currentCollectNum > endIndex)))
+                {
+                    startIndex += limit;
+                    endIndex += limit;
+
+                    _client.Send(new TdApi.GetSupergroupMembers() { SupergroupId = currentGruopId, Filter = new TdApi.SupergroupMembersFilterBots(), Offset = startIndex, Limit = endIndex }, this);
+
+                    Thread.Sleep(100);
+                }
+                else
+                {
+                    GetUserDetail();
+                }
             }
             else if (currentOperatorType == OperatorType.SearchChatHistory)
             {
                 TdApi.Messages messages = @object as TdApi.Messages;
 
-
-                int lastTime = MsgHandler.Instance.AddOrUpdate(messages, currentTimeFilterType);
-
-                bool isContinue = MsgHandler.Instance.ContinueSearchHis(lastTime, currentTimeFilterType);
-
-
-                if (isContinue && messages.TotalCount > endIndex)
+                if (messages != null)
                 {
-                    startIndex += 500;
-                    endIndex += 500;
-                    _client.Send(new TdApi.GetChatHistory()
+                    int lastTime = MsgHandler.Instance.AddOrUpdateByMessage(messages, currentTimeFilterType);
+
+                    bool isContinue = MsgHandler.Instance.ContinueSearchHis(lastTime, currentTimeFilterType);
+
+
+                    if (isContinue && messages.TotalCount > 50 && messages.MessagesValue.Length >= 50)
                     {
-                        ChatId = currentChatId, // 替换specificChatId为要查询的chat_id
-                        Limit = 500,
-                        FromMessageId = currentChatLastMsgId,
-                        Offset = startIndex,
-                        OnlyLocal = false
-                    }, this);
-                }
-                else
-                {
-                    startIndex = 0;
-                    endIndex = 0;
+                        long lastMsgId = messages.MessagesValue[messages.MessagesValue.Length - 1].Id;
 
-                    
-                    endIndex += 500;
-                    currentOperatorType = OperatorType.SearchChatUser;
-
-                    HashSet<long> idSet = MsgHandler.Instance.GetAllId();
-
-                    int index = 0;
-                    foreach (long userId in idSet)
-                    {
-                        if (index >= currentCollectNum)
+                        startIndex = -50;
+                        endIndex = 50;
+                        _client.Send(new TdApi.GetChatHistory()
                         {
-                            break;  
-                        }
-                        else
-                        {
-                            _client.Send(new TdApi.GetUser() { UserId = userId }, this);
-                        }
+                            ChatId = currentChatId,
+                            Limit = limit,
+                            FromMessageId = lastMsgId,
+                            Offset = startIndex,
+                            OnlyLocal = false
+                        }, this);
 
-                        index++;
                         Thread.Sleep(100);
                     }
-
-                    
-                    
+                    else
+                    {
+                        GetUserDetail();
+                    }
                 }
             }
             else if (currentOperatorType == OperatorType.SearchChatUser)
@@ -551,6 +565,35 @@ namespace TG.Client.TG
                 OnUserChange?.Invoke(user);
             }
         }
+
+        private void GetUserDetail()
+        {
+            startIndex = 0;
+            endIndex = 0;
+
+
+            endIndex += 500;
+            currentOperatorType = OperatorType.SearchChatUser;
+
+            HashSet<long> idSet = MsgHandler.Instance.GetAllId();
+
+            int index = 0;
+            foreach (long userId in idSet)
+            {
+                if (currentCollectNum != 0 && index >= currentCollectNum)
+                {
+                    break;
+                }
+                else
+                {
+                    _client.Send(new TdApi.GetUser() { UserId = userId }, this);
+                }
+
+                index++;
+                Thread.Sleep(100);
+            }
+        }
+
     }
 
     
