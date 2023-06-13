@@ -93,6 +93,7 @@
     <Compile Include="Model\TdUserPo.cs" />
     <Compile Include="Model\TimeFilterType.cs" />
     <Compile Include="TG\AuthorizationRequestHandler.cs" />
+    <Compile Include="TG\BatchSendMsgHandler.cs" />
     <Compile Include="TG\DefaultHandler.cs" />
     <Compile Include="TG\IMessage.cs" />
     <Compile Include="TG\MsgHandler.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="Utils\ExcelHelper.cs" />
     <Compile Include="ViewModel\APICollect\APICollectViewModel.cs" />
     <Compile Include="ViewModel\CollectUser\CollectUserViewModel.cs" />
+    <Compile Include="ViewModel\GroupSendMsg\GroupSendMsgViewModel.cs" />
     <Compile Include="View\APICollect\APICollectView.xaml.cs">
       <DependentUpon>APICollectView.xaml</DependentUpon>
     </Compile>

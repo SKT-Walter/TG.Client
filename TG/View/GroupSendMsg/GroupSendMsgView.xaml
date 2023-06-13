@@ -36,7 +36,7 @@
 
         <TextBlock Text="用户名/群组名/电话号码" Grid.Row="1" Foreground="{StaticResource Black-1}" VerticalAlignment="Center"></TextBlock>
 
-        <TextBox Grid.Row="2">
+        <TextBox Grid.Row="2" Text="{Binding SendBatchUser}">
             <TextBox.Resources>
                 <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.5" Stretch="None" AlignmentX="Left" AlignmentY="Top">
                     <VisualBrush.Visual>
@@ -61,7 +61,7 @@
         <TextBlock Grid.Row="3" Text="消息内容" Foreground="{StaticResource Black-1}" VerticalAlignment="Center"></TextBlock>
 
 
-        <TextBox Grid.Row="4" Text="{Binding InviteLink}">
+        <TextBox Grid.Row="4" Text="{Binding SendMsg}">
             <TextBox.Resources>
                 <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.5" Stretch="None" AlignmentX="Left" AlignmentY="Top">
                     <VisualBrush.Visual>
@@ -92,16 +92,16 @@
         <TextBlock Grid.Row="6" Text="发送间隔" Foreground="{StaticResource Black-1}" VerticalAlignment="Center" Padding="0, 12, 0, 0"></TextBlock>
 
         <StackPanel Grid.Row="7" Orientation="Horizontal">
-            <Button x:Name="btnDownStart" Width="50" Height="40" Content="-" Click="BtnDown_Click" FontSize="{StaticResource FontSize-18}"></Button>
-            <TextBox Width="60" Height="40" TextAlignment="Center" Padding="0, 12, 0, 0" Text="{Binding CollectNum}"></TextBox>
-            <Button x:Name="btnAddStart" Width="50" Height="40" Content="+" Click="BtnAdd_Click" FontSize="{StaticResource FontSize-18}"></Button>
+            <Button x:Name="btnDownStart" Width="50" Height="40" Content="-" Click="BtnDownStart_Click" FontSize="{StaticResource FontSize-18}"></Button>
+            <TextBox Width="60" Height="40" TextAlignment="Center" Padding="0, 12, 0, 0" Text="{Binding StartInterval}"></TextBox>
+            <Button x:Name="btnAddStart" Width="50" Height="40" Content="+" Click="BtnAddStart_Click" FontSize="{StaticResource FontSize-18}"></Button>
 
             <TextBlock Margin="10, 0, 10, 0" Padding="0, 25, 0, 0">~</TextBlock>
 
 
-            <Button x:Name="btnDown" Width="50" Height="40" Content="-" Click="BtnDown_Click" FontSize="{StaticResource FontSize-18}"></Button>
-            <TextBox Width="60" Height="40" TextAlignment="Center" Padding="0, 12, 0, 0" Text="{Binding CollectNum}"></TextBox>
-            <Button x:Name="btnAdd" Width="50" Height="40" Content="+" Click="BtnAdd_Click" FontSize="{StaticResource FontSize-18}"></Button>
+            <Button x:Name="btnDownEnd" Width="50" Height="40" Content="-" Click="BtnDownEnd_Click" FontSize="{StaticResource FontSize-18}"></Button>
+            <TextBox Width="60" Height="40" TextAlignment="Center" Padding="0, 12, 0, 0" Text="{Binding EndInterval}"></TextBox>
+            <Button x:Name="btnAddEnd" Width="50" Height="40" Content="+" Click="BtnAddEnd_Click" FontSize="{StaticResource FontSize-18}"></Button>
 
         </StackPanel>
 
