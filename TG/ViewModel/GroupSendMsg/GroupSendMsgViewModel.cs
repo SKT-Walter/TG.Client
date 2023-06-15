@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TG.Client.Model;
+using TG.Client.TG;
 
 namespace TG.Client.ViewModel.GroupSendMsg
 {
     public class GroupSendMsgViewModel : BaseViewModel
     {
+        private System.Timers.Timer timer = null;
+
         #region 界面属性
 
         private string sendMsg;
@@ -63,6 +67,8 @@ namespace TG.Client.ViewModel.GroupSendMsg
         #endregion
 
         #region 按钮事件
+
+
 
         public void OnClickDownStartBtn()
         {
@@ -123,7 +129,38 @@ namespace TG.Client.ViewModel.GroupSendMsg
 
         public void SendGroupMsg()
         {
+            double interval = 0;
+            if (timer != null)
+            {
+                timer.Stop();
+                if (double.TryParse(StartInterval, out interval))
+                {
+                    // 设置定时器间隔，例如：1000表示每隔1秒触发一次
+                    timer.Interval = interval * 1000 * 60;
+                    
+                    // 设置定时器自动重启
+                    timer.AutoReset = true;
+                    timer.Start();
+                }
+            }
+            else
+            {
+                if (double.TryParse(StartInterval, out interval))
+                {
+                    // 设置定时器间隔，例如：1000表示每隔1秒触发一次
+                    timer = new System.Timers.Timer(interval * 1000 * 60);
+                    timer.Elapsed += Timer_Elapsed;
+                    // 设置定时器自动重启
+                    timer.AutoReset = true;
+                    timer.Start();
+                }
+            }
+            BatchSendMsgHandler.Instance.SendBatchMsg(SendBatchUser, SendMsg);
+        }
 
+        private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            BatchSendMsgHandler.Instance.SendBatchMsg(SendBatchUser, SendMsg);
         }
 
         #endregion
