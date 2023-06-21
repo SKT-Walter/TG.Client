@@ -44,8 +44,13 @@ namespace TG.Client.TG
 
             foreach (string user in userArr)
             {
-                _client.Send(new TdApi.SearchPublicChat() { Username = user }, new BatchSendMsgHandler(_client, SendMsgType.SearchChat, SendMsg));
+                long userId = MsgHandler.Instance.GetIdByName(user);
+                if (userId != 0)
+                {
+                    _client.Send(new TdApi.CreatePrivateChat() { UserId = userId, Force = false }, new BatchSendMsgHandler(_client, SendMsgType.CreateChat, SendMsg));
 
+                    //_client.Send(new TdApi.SearchPublicChat() { Username = user }, new BatchSendMsgHandler(_client, SendMsgType.SearchChat, SendMsg));
+                }
                 Thread.Sleep(100);
             }
         }

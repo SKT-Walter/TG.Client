@@ -181,11 +181,15 @@
         <Button x:Name="btnExport" Grid.Row="10" HorizontalAlignment="Right" Content="CSV格式导出" Margin="0, 2, 10, 2" Style="{StaticResource ExportButtonStyle}" Click="BtnExport_Click"></Button>
 
 
-        <DataGrid x:Name="dgData" Grid.Row="11" ItemsSource="{Binding UserList}" GridLinesVisibility="Vertical" Style="{StaticResource DefaultDataGrid}" SelectionMode="Single"
+        <DataGrid x:Name="dgData" Grid.Row="11" ItemsSource="{Binding UserList}" GridLinesVisibility="Vertical" Style="{StaticResource DefaultDataGrid}" SelectionMode="Extended"
                       ColumnHeaderStyle="{StaticResource DataGridColumnHeaderCenterStyle}" Margin="0, 0, 0, 10"  HorizontalContentAlignment="Stretch"
-                  CellStyle="{StaticResource CustomeDataGridTextCenterStyle}" RowStyle="{StaticResource DataGridRowStyle}" BorderThickness="1"
+                  CellStyle="{StaticResource CustomeDataGridTextCenterStyle}" RowStyle="{StaticResource DataGridRowStyle}" BorderThickness="1" PreviewKeyDown="DataGrid1_PreviewKeyDown"
                   Background="#FFE4E1DB">
-            <!--Background="{StaticResource Gray-1}">-->
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="复制选中行" Click="MenuItem_CopySelectedRows_Click"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
 
             <DataGrid.Columns>
 

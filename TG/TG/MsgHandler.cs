@@ -24,6 +24,7 @@ namespace TG.Client.TG
 
         private Dictionary<string, TdMsgPo> msgDic = new Dictionary<string, TdMsgPo>();
         private HashSet<long> idSet = new HashSet<long>();
+        private Dictionary<string, long> userDic = new Dictionary<string, long>();
         private object lockObj = new object();
         private long currentTimeFilter = 0;
 
@@ -32,6 +33,33 @@ namespace TG.Client.TG
             msgDic.Clear();
             idSet.Clear();
         }
+
+
+        public void AddOrUpdateUser(TdApi.User user)
+        {
+            lock (userDic)
+            {
+                string name = user.FirstName + " " + user.LastName;
+                if (!userDic.ContainsKey(name))
+                {
+                    userDic.Add(name, user.Id);
+                }
+            }
+        }
+
+        public long GetIdByName(string name)
+        {
+            lock (userDic)
+            {
+                if (userDic.ContainsKey(name))
+                {
+                    return userDic[name];
+                }
+            }
+
+            return 0;
+        }
+        
 
         public bool ContainId(long userId)
         {
@@ -65,6 +93,7 @@ namespace TG.Client.TG
                             if (collectNum == 0)
                             {
                                 idSet.Add(messageSenderUser.UserId);
+                                
                             }
                             else if (collectNum > 0 && index < collectNum)
                             {

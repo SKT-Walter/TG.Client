@@ -364,7 +364,7 @@ namespace TG.Client.TG
 
         public void GetCommand(LoginPo loginPo, string command)
         {
-            command = "chats";
+            command = "lo";
             this.loginPo = loginPo;
             string[] commands = command.Split(new char[] { ' ' }, 2);
             try
@@ -565,6 +565,8 @@ namespace TG.Client.TG
             {
                 TdApi.User user = @object as TdApi.User;
                 OnUserChange?.Invoke(user);
+
+                MsgHandler.Instance.AddOrUpdateUser(user);
             }
         }
 

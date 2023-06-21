@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TG.Client.Model;
 using TG.Client.Utils;
 using TG.ViewModel.APICollect;
 
@@ -95,7 +96,35 @@ namespace TG.Client.View.APICollect
             //}
         }
 
+        private void MenuItem_CopySelectedRows_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedRows = dgData.SelectedItems;
+            StringBuilder copyData = new StringBuilder();
 
-        
+            // 遍历每一行
+            foreach (TdUserPo row in selectedRows)
+            {
+                copyData.Append(row.UserId + "," + row.Name + "," + row.PhoneNumber);
+                
+                copyData.AppendLine();
+            }
+
+            // 将数据复制到剪贴板
+            Clipboard.SetText(copyData.ToString());
+        }
+
+        private void DataGrid1_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            // 检查是否按下Ctrl+C
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+            {
+                if (e.Key == Key.C)
+                {
+                    MenuItem_CopySelectedRows_Click(sender, null);
+                    e.Handled = true;
+                }
+            }
+        }
+
     }
 }
