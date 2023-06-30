@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using TG.Client.Handler;
 using TG.Client.Model;
 using TG.Client.Model.Login;
 using TG.Client.TG;
@@ -242,6 +243,8 @@ namespace TG.ViewModel.APICollect
 
         private void OnUserChange(TdUserPo userPo)
         {
+            UserHandler.Instance.SaveUser(userPo);
+
             Application.Current.Dispatcher.BeginInvoke((Action)(() =>
             {
                 UserList.Add(userPo);

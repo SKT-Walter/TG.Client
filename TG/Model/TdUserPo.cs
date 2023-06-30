@@ -14,5 +14,7 @@ namespace TG.Client.Model
         public string PhoneNumber { get; set; }
 
         public string Name { get { return FirstName + " " + LastName; } }
+
+        public string Flag { get; set; }
     }
 }

@@ -155,6 +155,11 @@ namespace TG.Client.ViewModel.GroupSendMsg
                     timer.Start();
                 }
             }
+
+            //加载RTF
+            var document = GemBox.Document.DocumentModel.Load("Input.rtf", GemBox.Document.LoadOptions.RtfDefault);
+            //保存为HTML
+            document.Save("Output.html", GemBox.Document.SaveOptions.HtmlDefault);
             BatchSendMsgHandler.Instance.SendBatchMsg(SendBatchUser, SendMsg);
         }
 

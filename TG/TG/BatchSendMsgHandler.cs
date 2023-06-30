@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using TG.Client.Handler;
 using TG.Client.Model;
 using Td = Telegram.Td;
 using TdApi = Telegram.Td.Api;
@@ -44,7 +45,13 @@ namespace TG.Client.TG
 
             foreach (string user in userArr)
             {
-                long userId = MsgHandler.Instance.GetIdByName(user);
+                long userId = 0;
+                TdUserPo userPo = UserHandler.Instance.QuoteUserByName(user);
+                if (userPo != null)
+                {
+                    userId = userPo.UserId;
+                }
+                //MsgHandler.Instance.GetIdByName(user);
                 if (userId != 0)
                 {
                     _client.Send(new TdApi.CreatePrivateChat() { UserId = userId, Force = false }, new BatchSendMsgHandler(_client, SendMsgType.CreateChat, SendMsg));
