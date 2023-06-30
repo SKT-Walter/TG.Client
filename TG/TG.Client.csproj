@@ -104,6 +104,7 @@
     <Compile Include="Model\ExportPo.cs" />
     <Compile Include="Model\Login\LoginPo.cs" />
     <Compile Include="Model\OperatorType.cs" />
+    <Compile Include="Model\SendMsgPo.cs" />
     <Compile Include="Model\SendMsgType.cs" />
     <Compile Include="Model\TdMsgPo.cs" />
     <Compile Include="Model\TdUserPo.cs" />

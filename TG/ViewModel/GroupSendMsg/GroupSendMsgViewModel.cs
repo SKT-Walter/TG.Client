@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
 using TG.Client.Model;
 using TG.Client.TG;
 
@@ -13,7 +17,21 @@ namespace TG.Client.ViewModel.GroupSendMsg
     {
         private System.Timers.Timer timer = null;
 
+        private FrameworkElement ownUI = null;
+
         #region 界面属性
+
+        private string filePath;
+        public string FilePath
+        {
+            get { return filePath; }
+            set
+            {
+                filePath = value;
+
+                this.OnPropertyChanged();
+            }
+        }
 
         private string sendMsg;
         public string SendMsg
@@ -69,6 +87,10 @@ namespace TG.Client.ViewModel.GroupSendMsg
         #region 按钮事件
 
 
+        private void Init(FrameworkElement ownUI)
+        {
+            this.ownUI = ownUI;
+        }
 
         public void OnClickDownStartBtn()
         {
@@ -156,10 +178,8 @@ namespace TG.Client.ViewModel.GroupSendMsg
                 }
             }
 
-            //加载RTF
-            var document = GemBox.Document.DocumentModel.Load("Input.rtf", GemBox.Document.LoadOptions.RtfDefault);
-            //保存为HTML
-            document.Save("Output.html", GemBox.Document.SaveOptions.HtmlDefault);
+            SendMsgPo
+
             BatchSendMsgHandler.Instance.SendBatchMsg(SendBatchUser, SendMsg);
         }
 

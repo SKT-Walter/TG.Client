@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -56,6 +57,32 @@ namespace TG.Client.View.GroupSendMsg
         private void BtnSendGroup_Click(object sender, RoutedEventArgs e)
         {
             groupSendMsgViewModel.SendGroupMsg();
+        }
+
+        private void cbImageView_Checked(object sender, RoutedEventArgs e)
+        {
+            if (cbImageView.IsChecked.HasValue && cbImageView.IsChecked.Value)
+            {
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                //限制选择类型为图片
+                openFileDialog.Filter = "图片文件(*.jpg,*.png)|*.jpg;*.png";
+                if (openFileDialog.ShowDialog() == true)
+                {
+                    string filePath = openFileDialog.FileName;
+                    // 你可以在这里进行你需要的操作，例如显示图片，或者是读取图片的内容等等
+
+                    groupSendMsgViewModel.FilePath = filePath;
+                }
+            }
+            else
+            {
+                groupSendMsgViewModel.FilePath = string.Empty;
+            }
+        }
+
+        private void cbImageView_Unchecked(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

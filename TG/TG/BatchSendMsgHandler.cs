@@ -56,6 +56,7 @@ namespace TG.Client.TG
                 {
                     _client.Send(new TdApi.CreatePrivateChat() { UserId = userId, Force = false }, new BatchSendMsgHandler(_client, SendMsgType.CreateChat, SendMsg));
 
+
                     //_client.Send(new TdApi.SearchPublicChat() { Username = user }, new BatchSendMsgHandler(_client, SendMsgType.SearchChat, SendMsg));
                 }
                 Thread.Sleep(100);
@@ -105,6 +106,7 @@ namespace TG.Client.TG
             TdApi.ReplyMarkup replyMarkup = new TdApi.ReplyMarkupInlineKeyboard(new TdApi.InlineKeyboardButton[][] { row, row, row });
 
             TdApi.InputMessageContent content = new TdApi.InputMessageText(new TdApi.FormattedText(message, null), false, true);
+
             _client.Send(new TdApi.SendMessage(chatId, 0, 0, null, replyMarkup, content), this);
         }
     }
