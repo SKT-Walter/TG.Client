@@ -342,6 +342,7 @@ namespace TG.Client.TG
         private TimeFilterType currentTimeFilterType = TimeFilterType.None;
         private int currentCollectNum = 0;
         private int limit = 200;
+        private string currentGroupName = string.Empty;
 
 
         public void CollectUser(string groupUrl, TimeFilterType timeFilterType, int collectNum)
@@ -353,6 +354,7 @@ namespace TG.Client.TG
             if (!string.IsNullOrEmpty(groupUrl))
             {
                 string name = groupUrl.Replace("https://t.me/", "");
+                currentGroupName = name;
                 currentOperatorType = OperatorType.SearchChat;
                 _client.Send(new TdApi.SearchPublicChat() { Username = name }, this);
 
@@ -564,6 +566,7 @@ namespace TG.Client.TG
             else if (currentOperatorType == OperatorType.SearchChatUser)
             {
                 TdApi.User user = @object as TdApi.User;
+                user.RestrictionReason = currentGroupName;
                 OnUserChange?.Invoke(user);
 
                 MsgHandler.Instance.AddOrUpdateUser(user);

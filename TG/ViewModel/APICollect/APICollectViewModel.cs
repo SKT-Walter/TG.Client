@@ -260,6 +260,7 @@ namespace TG.ViewModel.APICollect
             userPo.FirstName = user.FirstName;
             userPo.LastName = user.LastName;
             userPo.PhoneNumber = user.PhoneNumber;
+            userPo.Flag = user.RestrictionReason;
 
             processUserThreadQueue.Enqueue(userPo);
         }

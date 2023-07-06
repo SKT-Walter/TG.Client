@@ -11,9 +11,15 @@ namespace TG.Client.Handler
 {
     public class UserHandler
     {
+        private bool isInit = true;
         private UserHandler() 
         {
-            this.Init();
+            if (isInit)
+            {
+                this.Init();
+
+                isInit = false;
+            }
         }
         private static UserHandler server = new UserHandler();
 
@@ -29,7 +35,7 @@ namespace TG.Client.Handler
 
             List<string> pkColList = new List<string>();
             pkColList.Add("UserId");
-            SqlliteUtils.CreateTable<UserConfigPo>(pkColList);
+            SqlliteUtils.CreateTable<TdUserPo>(pkColList);
 
             userThread = new AsyncThreadQueue<TdUserPo>(UpdateData);
         }

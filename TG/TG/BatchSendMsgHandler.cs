@@ -13,9 +13,11 @@ namespace TG.Client.TG
 {
     public class BatchSendMsgHandler : Td.ClientResultHandler
     {
+        private long txtMsgId = 0;
         private Td.Client _client = null;
+        private TdApi.Chat txtMsgChat = null;
         private SendMsgType curentSendMsgType = SendMsgType.None;
-        public string SendMsg { get; set; }
+        public SendMsgPo SendMsg { get; set; }
 
         private static BatchSendMsgHandler batchSendMsgHandler = new BatchSendMsgHandler();
 
@@ -26,11 +28,16 @@ namespace TG.Client.TG
 
         }
 
-        public BatchSendMsgHandler(Td.Client client, SendMsgType sendMsgType, string msg)
+        public BatchSendMsgHandler(Td.Client client, SendMsgType sendMsgType, SendMsgPo msg, TdApi.Chat chat = null)
         {
             _client = client;
             curentSendMsgType = sendMsgType;
             SendMsg = msg;
+
+            if (chat != null)
+            {
+                txtMsgChat = chat;
+            }
         }
 
         public void Init(Td.Client client)
@@ -38,15 +45,16 @@ namespace TG.Client.TG
             _client = client;
         }
 
-        public void SendBatchMsg(string users, string msg)
+        public void SendBatchMsg(string users, SendMsgPo sendMsgPo)
         {
-            SendMsg = msg;
+            SendMsg = sendMsgPo;
             string[] userArr = users.Split(new char[] { '\n' });
 
             foreach (string user in userArr)
             {
                 long userId = 0;
-                TdUserPo userPo = UserHandler.Instance.QuoteUserByName(user);
+                string name = user.Replace("@", "");
+                TdUserPo userPo = UserHandler.Instance.QuoteUserByName(name);
                 if (userPo != null)
                 {
                     userId = userPo.UserId;
@@ -85,29 +93,65 @@ namespace TG.Client.TG
                     TdApi.Chat chat = baseObject as TdApi.Chat;
                     if (chat != null)
                     {
+                        txtMsgChat = chat;
                         SendMessage(chat.Id, SendMsg);
                     }
                 }
             }
-            else if (curentSendMsgType == SendMsgType.SearchChat)
+            else if (curentSendMsgType == SendMsgType.SendTxtAndImage)
             {
+                TdApi.Message replayMsg = baseObject as TdApi.Message;
+                if (replayMsg != null)
+                {
+                    txtMsgId = replayMsg.ChatId;
 
+                    SendImageMsg(txtMsgChat.Id, SendMsg);
+                }
             }
 
                 
         }
 
-        private void SendMessage(long chatId, string message)
+        private void SendMessage(long chatId, SendMsgPo message)
         {
             // initialize reply markup just for testing
             TdApi.InlineKeyboardButton[] row = { new TdApi.InlineKeyboardButton("https://telegram.org?1", new TdApi.InlineKeyboardButtonTypeUrl()),
                 new TdApi.InlineKeyboardButton("https://telegram.org?2", new TdApi.InlineKeyboardButtonTypeUrl()),
                 new TdApi.InlineKeyboardButton("https://telegram.org?3", new TdApi.InlineKeyboardButtonTypeUrl()) };
+
             TdApi.ReplyMarkup replyMarkup = new TdApi.ReplyMarkupInlineKeyboard(new TdApi.InlineKeyboardButton[][] { row, row, row });
 
-            TdApi.InputMessageContent content = new TdApi.InputMessageText(new TdApi.FormattedText(message, null), false, true);
+            if (!string.IsNullOrEmpty(message.SendMsg))
+            {
+                TdApi.InputMessageContent content = new TdApi.InputMessageText(new TdApi.FormattedText(message.SendMsg, null), false, true);
 
-            _client.Send(new TdApi.SendMessage(chatId, 0, 0, null, replyMarkup, content), this);
+                _client.Send(new TdApi.SendMessage(chatId, 0, 0, null, replyMarkup, content),
+                    !string.IsNullOrEmpty(message.FilePath) ? new BatchSendMsgHandler(_client, SendMsgType.SendTxtAndImage, SendMsg, txtMsgChat) : this);
+            }
+            
+        }
+
+        private void SendImageMsg(long chatId, SendMsgPo message)
+        {
+            TdApi.InlineKeyboardButton[] row = { new TdApi.InlineKeyboardButton("https://telegram.org?1", new TdApi.InlineKeyboardButtonTypeUrl()),
+                new TdApi.InlineKeyboardButton("https://telegram.org?2", new TdApi.InlineKeyboardButtonTypeUrl()),
+                new TdApi.InlineKeyboardButton("https://telegram.org?3", new TdApi.InlineKeyboardButtonTypeUrl()) };
+
+            TdApi.ReplyMarkup replyMarkup = new TdApi.ReplyMarkupInlineKeyboard(new TdApi.InlineKeyboardButton[][] { row, row, row });
+            
+            if (!string.IsNullOrEmpty(message.FilePath))
+            {
+                // 发送图片消息
+
+                TdApi.InputMessageContent photoMessage = new TdApi.InputMessagePhoto
+                {
+                    Photo = new TdApi.InputFileLocal(@message.FilePath),//(@"C:\photos\my-photo.jpg"),  // 这里你需要使用实际图片路径
+                    Caption = new TdApi.FormattedText { Text = string.Empty },//"图片说明" },  //图片下面会显示的文字
+                    
+                };
+
+                _client.Send(new TdApi.SendMessage(chatId, 0, txtMsgId, null, replyMarkup, photoMessage), this);
+            }
         }
     }
 }

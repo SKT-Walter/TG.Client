@@ -25,6 +25,17 @@ namespace TG.Client.TG
 
         void Td.ClientResultHandler.OnResult(TdApi.BaseObject @object)
         {
+            BaseReplyPo resp = new BaseReplyPo();
+            if (@object != null)
+            {
+                resp.Msg = @object.ToString();
+            }
+            else
+            {
+                resp.Msg = "AuthorizationRequestHandler result is null";
+            }
+            
+            msgListener.OnMessage(resp);
             if (@object is TdApi.Error)
             {
                 Console.WriteLine("Receive an error:" + @object);

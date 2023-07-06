@@ -13,8 +13,10 @@ namespace TG.Client.Model
         public string LastName { get; set; }
         public string PhoneNumber { get; set; }
 
-        public string Name { get { return FirstName + " " + LastName; } }
+        private string name;
+        public string Name { get { return FirstName + " " + LastName; } set { name = value; } }
 
         public string Flag { get; set; }
+        
     }
 }

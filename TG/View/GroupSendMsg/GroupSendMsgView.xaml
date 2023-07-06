@@ -26,8 +26,8 @@
             <RowDefinition Height="30"></RowDefinition>
             <RowDefinition></RowDefinition>
             <RowDefinition Height="36"></RowDefinition>
-            <RowDefinition Height="150"></RowDefinition>
-            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="140"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
             <RowDefinition Height="30"></RowDefinition>
             <RowDefinition Height="66"></RowDefinition>
             <RowDefinition Height="55"></RowDefinition>
@@ -84,11 +84,18 @@
             </TextBox.Style>
         </TextBox>
 
+        <Grid  Grid.Row="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="90"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right">
-            <CheckBox x:Name="cbImageView" Content="图片/视频" Checked="cbImageView_Checked" Unchecked="cbImageView_Checked"></CheckBox>
-            <!--<CheckBox x:Name="cbFile" Content="文件"></CheckBox>-->
-        </StackPanel>
+            <TextBlock x:Name="tbFilePath" Grid.Column="0" Text="{Binding FilePath}" Foreground="{StaticResource Black-1}" Margin="0, 5, 5, 0"></TextBlock>
+            <CheckBox x:Name="cbImageView" Grid.Column="1" Content="图片/视频" IsChecked="{Binding FilePathChecked}" Checked="cbImageView_Checked" Unchecked="cbImageView_Checked"
+                      Margin="0, 5, 5, 0" HorizontalAlignment="Left"></CheckBox>
+
+        </Grid>
+
 
         <TextBlock Grid.Row="6" Text="发送间隔" Foreground="{StaticResource Black-1}" VerticalAlignment="Center" Padding="0, 12, 0, 0"></TextBlock>
 

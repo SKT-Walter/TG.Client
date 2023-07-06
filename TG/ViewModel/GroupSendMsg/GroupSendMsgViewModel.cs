@@ -21,6 +21,18 @@ namespace TG.Client.ViewModel.GroupSendMsg
 
         #region 界面属性
 
+        private bool filePathChecked;
+        public bool FilePathChecked
+        {
+            get { return filePathChecked; }
+            set
+            {
+                filePathChecked = value;
+
+                this.OnPropertyChanged();
+            }
+        }
+
         private string filePath;
         public string FilePath
         {
@@ -178,14 +190,20 @@ namespace TG.Client.ViewModel.GroupSendMsg
                 }
             }
 
-            SendMsgPo
+            SendMsgPo sendMsgPo = new SendMsgPo();
+            sendMsgPo.FilePath = FilePathChecked ? FilePath : string.Empty;
+            sendMsgPo.SendMsg = sendMsg;
 
-            BatchSendMsgHandler.Instance.SendBatchMsg(SendBatchUser, SendMsg);
+            BatchSendMsgHandler.Instance.SendBatchMsg(SendBatchUser, sendMsgPo);
         }
 
         private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            BatchSendMsgHandler.Instance.SendBatchMsg(SendBatchUser, SendMsg);
+            SendMsgPo sendMsgPo = new SendMsgPo();
+            sendMsgPo.FilePath = FilePathChecked ? FilePath : string.Empty;
+            sendMsgPo.SendMsg = sendMsg;
+
+            BatchSendMsgHandler.Instance.SendBatchMsg(SendBatchUser, sendMsgPo);
         }
 
         #endregion

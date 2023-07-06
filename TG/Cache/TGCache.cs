@@ -4,13 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TG.Client.Model
+namespace TG.Client.Cache
 {
-    public enum SendMsgType
+    public class TGCache
     {
-        None,
-        SearchChat,
-        CreateChat,
-        SendTxtAndImage
+        public static string ImageFilePath = string.Empty;
     }
 }
