@@ -21,6 +21,8 @@ namespace TG.ViewModel.APICollect
         private AsyncThreadQueue<TdUserPo> processUserThreadQueue;
         private ObservableCollection<TdUserPo> userList = new ObservableCollection<TdUserPo>();
 
+        public event Action<object> OnChange;
+
         public ObservableCollection<TdUserPo> UserList
         {
             get { return userList; }
