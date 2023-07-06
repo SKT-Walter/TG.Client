@@ -19,6 +19,8 @@ namespace TG.Client.ViewModel.GroupSendMsg
 
         private FrameworkElement ownUI = null;
 
+        public event Action<object> OnChange;
+
         #region 界面属性
 
         private string filePath;
@@ -177,8 +179,6 @@ namespace TG.Client.ViewModel.GroupSendMsg
                     timer.Start();
                 }
             }
-
-            SendMsgPo
 
             BatchSendMsgHandler.Instance.SendBatchMsg(SendBatchUser, SendMsg);
         }

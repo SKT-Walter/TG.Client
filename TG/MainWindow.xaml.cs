@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TG.Client.Utils.SqlLite;
+using TG.Client.ViewModel.GroupSendMsg;
+using TG.ViewModel.APICollect;
 
 namespace TG
 {
@@ -30,7 +33,14 @@ namespace TG
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            
+            (apiCollect.DataContext as APICollectViewModel).OnChange += MainWindow_OnChange;
+            (groupSend.DataContext as GroupSendMsgViewModel).OnChange += MainWindow_OnChange;
+        }
+
+
+        private void MainWindow_OnChange(object obj)
+        {
+            tbLog.Text += string.Format("{0}:{1}\n", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), JsonConvert.SerializeObject(obj));
         }
     }
 }

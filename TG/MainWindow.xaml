@@ -76,18 +76,31 @@
     
     
     <Grid>
-        <TabControl>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80*"></RowDefinition>
+            <RowDefinition Height="20*"></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        <TabControl Grid.Row="0">
 
             <TabItem Header="API采集">
-                <API:APICollectView></API:APICollectView>
+                <API:APICollectView x:Name="apiCollect"></API:APICollectView>
             </TabItem>
             <!--<TabItem Header="采集用户"></TabItem>-->
             <TabItem Header="群发消息">
-                <GroupMsg:GroupSendMsgView></GroupMsg:GroupSendMsgView>
+                <GroupMsg:GroupSendMsgView x:Name="groupSend"></GroupMsg:GroupSendMsgView>
             </TabItem>
             <TabItem Header="批量邀请">
                 <BatchInvite:BatchInviteView></BatchInvite:BatchInviteView>
             </TabItem>
         </TabControl>
+
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Grid.Row="1" Margin="10, 0, 10, 0">
+            <TextBlock Width="Auto" Height="Auto" TextWrapping="Wrap" x:Name="tbLog">
+        
+            </TextBlock>
+        </ScrollViewer>
+
     </Grid>
 </Window>
