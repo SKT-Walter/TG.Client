@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using TG.Client.Handler;
 
 namespace TG.Client.Utils.SqlLite
 {
@@ -51,6 +52,7 @@ namespace TG.Client.Utils.SqlLite
             }
             catch (Exception ex)
             {
+                UserHandler.Instance.PublishMsg(ex);
             }
         } 
     }

@@ -59,6 +59,8 @@ namespace TG.Client.TG
                 {
                     userId = userPo.UserId;
                 }
+
+                UserHandler.Instance.PublishMsg("------尝试发送消息到用户：" + name + ", userId:" + userId);
                 //MsgHandler.Instance.GetIdByName(user);
                 if (userId != 0)
                 {
@@ -75,7 +77,7 @@ namespace TG.Client.TG
         public void OnResult(TdApi.BaseObject baseObject)
         {
             Console.WriteLine("BatchSendMsgHandler:" + baseObject.ToString());
-
+            UserHandler.Instance.PublishMsg(baseObject.ToString());
             if (baseObject != null && !(baseObject is TdApi.Error))
             {
                 if (curentSendMsgType == SendMsgType.SearchChat)

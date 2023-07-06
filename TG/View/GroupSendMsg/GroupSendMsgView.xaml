@@ -24,14 +24,13 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="10"></RowDefinition>
             <RowDefinition Height="30"></RowDefinition>
-            <RowDefinition></RowDefinition>
+            <RowDefinition  MinHeight="100"></RowDefinition>
             <RowDefinition Height="36"></RowDefinition>
             <RowDefinition Height="140"></RowDefinition>
             <RowDefinition Height="40"></RowDefinition>
             <RowDefinition Height="30"></RowDefinition>
             <RowDefinition Height="66"></RowDefinition>
             <RowDefinition Height="55"></RowDefinition>
-            <RowDefinition Height="50"></RowDefinition>
         </Grid.RowDefinitions>
 
         <TextBlock Text="用户名/群组名/电话号码" Grid.Row="1" Foreground="{StaticResource Black-1}" VerticalAlignment="Center"></TextBlock>
@@ -60,9 +59,9 @@
 
         <TextBlock Grid.Row="3" Text="消息内容" Foreground="{StaticResource Black-1}" VerticalAlignment="Center"></TextBlock>
 
-        
-        
-        <TextBox Grid.Row="4" Text="{Binding SendMsg}">
+
+
+        <TextBox Grid.Row="4" Text="{Binding SendMsg}" AcceptsReturn="True">
             <TextBox.Resources>
                 <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.5" Stretch="None" AlignmentX="Left" AlignmentY="Top">
                     <VisualBrush.Visual>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TG.Client.Handler;
 using TG.Client.Model;
 using Td = Telegram.Td;
 using TdApi = Telegram.Td.Api;
@@ -25,6 +26,7 @@ namespace TG.Client.TG
 
         void Td.ClientResultHandler.OnResult(TdApi.BaseObject @object)
         {
+            UserHandler.Instance.PublishMsg(@object.ToString());
             BaseReplyPo resp = new BaseReplyPo();
             if (@object != null)
             {

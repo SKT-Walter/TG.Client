@@ -14,30 +14,34 @@ namespace TG.Client.Handler
         private bool isInit = true;
         private UserHandler() 
         {
-            if (isInit)
-            {
-                this.Init();
-
-                isInit = false;
-            }
         }
         private static UserHandler server = new UserHandler();
 
-
+        public event Action<object> OnChange;
         public static UserHandler Instance { get { return server; } }
 
 
         private AsyncThreadQueue<TdUserPo> userThread;
 
+        public void PublishMsg(object obj)
+        {
+            OnChange?.Invoke(obj);
+        }
+
         public void Init()
         {
-            SqliteManager.Initialize();
+            if (isInit)
+            {
+                SqliteManager.Initialize();
 
-            List<string> pkColList = new List<string>();
-            pkColList.Add("UserId");
-            SqlliteUtils.CreateTable<TdUserPo>(pkColList);
+                List<string> pkColList = new List<string>();
+                pkColList.Add("UserId");
+                SqlliteUtils.CreateTable<TdUserPo>(pkColList);
 
-            userThread = new AsyncThreadQueue<TdUserPo>(UpdateData);
+                userThread = new AsyncThreadQueue<TdUserPo>(UpdateData);
+
+                isInit = false;
+            }
         }
 
         private void UpdateData(TdUserPo userPo)

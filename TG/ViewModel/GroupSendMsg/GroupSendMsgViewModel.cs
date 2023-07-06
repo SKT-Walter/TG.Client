@@ -19,6 +19,8 @@ namespace TG.Client.ViewModel.GroupSendMsg
 
         private FrameworkElement ownUI = null;
 
+        
+
         #region 界面属性
 
         private bool filePathChecked;

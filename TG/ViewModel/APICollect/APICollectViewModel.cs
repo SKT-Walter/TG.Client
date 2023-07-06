@@ -21,8 +21,6 @@ namespace TG.ViewModel.APICollect
         private AsyncThreadQueue<TdUserPo> processUserThreadQueue;
         private ObservableCollection<TdUserPo> userList = new ObservableCollection<TdUserPo>();
 
-        public event Action<object> OnChange;
-
         public ObservableCollection<TdUserPo> UserList
         {
             get { return userList; }
@@ -236,6 +234,7 @@ namespace TG.ViewModel.APICollect
 
             VerifyForeground = ownUI.FindResource("Black-1") as Brush;
 
+            UserHandler.Instance.Init();
 
             processUserThreadQueue = new AsyncThreadQueue<TdUserPo>(OnUserChange);
 
@@ -250,6 +249,7 @@ namespace TG.ViewModel.APICollect
             Application.Current.Dispatcher.BeginInvoke((Action)(() =>
             {
                 UserList.Add(userPo);
+
             }));
 
            
@@ -269,6 +269,7 @@ namespace TG.ViewModel.APICollect
 
         public void OnMessage(object obj)
         {
+            UserHandler.Instance.PublishMsg(obj);
             BaseReplyPo baseReply = obj as BaseReplyPo;
             if (baseReply != null)
             {

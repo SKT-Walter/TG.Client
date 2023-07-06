@@ -184,7 +184,7 @@
         <DataGrid x:Name="dgData" Grid.Row="11" ItemsSource="{Binding UserList}" GridLinesVisibility="Vertical" Style="{StaticResource DefaultDataGrid}" SelectionMode="Extended"
                       ColumnHeaderStyle="{StaticResource DataGridColumnHeaderCenterStyle}" Margin="0, 0, 0, 10"  HorizontalContentAlignment="Stretch"
                   CellStyle="{StaticResource CustomeDataGridTextCenterStyle}" RowStyle="{StaticResource DataGridRowStyle}" BorderThickness="1" PreviewKeyDown="DataGrid1_PreviewKeyDown"
-                  Background="#FFE4E1DB">
+                  Background="#FFE4E1DB" MinHeight="20">
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="复制选中行" Click="MenuItem_CopySelectedRows_Click"/>

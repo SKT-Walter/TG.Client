@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using TG.Client.Handler;
 using TG.Client.Model;
 using TG.Client.Model.Login;
 using Td = Telegram.Td;
@@ -366,7 +367,7 @@ namespace TG.Client.TG
 
         public void GetCommand(LoginPo loginPo, string command)
         {
-            command = "lo";
+            command = "me";
             this.loginPo = loginPo;
             string[] commands = command.Split(new char[] { ' ' }, 2);
             try
@@ -461,6 +462,7 @@ namespace TG.Client.TG
         public void OnResult(TdApi.BaseObject @object)
         {
             Print(@object.ToString());
+            UserHandler.Instance.PublishMsg(@object);
             if (currentOperatorType == OperatorType.SearchChat)
             {
                 TdApi.Chat chat = @object as TdApi.Chat;

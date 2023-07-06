@@ -78,8 +78,9 @@
     <Grid>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="80*"></RowDefinition>
-            <RowDefinition Height="20*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="15"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         
         <TabControl Grid.Row="0">
@@ -96,11 +97,18 @@
             </TabItem>
         </TabControl>
 
-        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Grid.Row="1" Margin="10, 0, 10, 0">
-            <TextBlock Width="Auto" Height="Auto" TextWrapping="Wrap" x:Name="tbLog">
-        
-            </TextBlock>
+        <TextBlock Grid.Row="1" Text="运行输出:" Margin="10, 0, 10, -5"></TextBlock>
+
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"    Grid.Row="2" Margin="10, 0, 10, 2"
+                      Background="#FFE4E1DB" >
+            <Border  BorderBrush="Gray" BorderThickness="1">
+                <TextBox Width="Auto" Height="Auto" TextWrapping="Wrap" x:Name="tbLog">
+
+                </TextBox>
+            </Border>
         </ScrollViewer>
+        
+        
 
     </Grid>
 </Window>
