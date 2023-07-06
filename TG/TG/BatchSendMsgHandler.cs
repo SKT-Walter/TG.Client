@@ -53,7 +53,7 @@ namespace TG.Client.TG
             foreach (string user in userArr)
             {
                 long userId = 0;
-                string name = user.Replace("@", "");
+                string name = user.Replace("@", "").Replace("\r", "");
                 TdUserPo userPo = UserHandler.Instance.QuoteUserByName(name);
                 if (userPo != null)
                 {
@@ -99,19 +99,20 @@ namespace TG.Client.TG
                         SendMessage(chat.Id, SendMsg);
                     }
                 }
-            }
-            else if (curentSendMsgType == SendMsgType.SendTxtAndImage)
-            {
-                TdApi.Message replayMsg = baseObject as TdApi.Message;
-                if (replayMsg != null)
+                else if (curentSendMsgType == SendMsgType.SendTxtAndImage)
                 {
-                    txtMsgId = replayMsg.ChatId;
+                    TdApi.Message replayMsg = baseObject as TdApi.Message;
+                    if (replayMsg != null)
+                    {
+                        txtMsgId = replayMsg.ChatId;
 
-                    SendImageMsg(txtMsgChat.Id, SendMsg);
+                        SendImageMsg(txtMsgChat.Id, SendMsg);
+
+                        this.curentSendMsgType = SendMsgType.None;
+                    }
                 }
-            }
 
-                
+            }
         }
 
         private void SendMessage(long chatId, SendMsgPo message)
@@ -151,7 +152,7 @@ namespace TG.Client.TG
                     Caption = new TdApi.FormattedText { Text = string.Empty },//"图片说明" },  //图片下面会显示的文字
                     
                 };
-
+                
                 _client.Send(new TdApi.SendMessage(chatId, 0, txtMsgId, null, replyMarkup, photoMessage), this);
             }
         }
