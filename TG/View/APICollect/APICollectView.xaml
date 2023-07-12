@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TG.Client.View.APICollect"
              mc:Ignorable="d" 
-             d:DesignHeight="650" d:DesignWidth="800" Background="#FFFFFF">
+             d:DesignHeight="650" d:DesignWidth="597" Background="#FFFFFF">
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -60,7 +60,7 @@
 
             <RowDefinition Height="10"></RowDefinition>
             <RowDefinition Height="30"></RowDefinition>
-            <RowDefinition></RowDefinition>
+            <RowDefinition Height="120"></RowDefinition>
         </Grid.RowDefinitions>
 
         <TextBlock Text="账号验证" Grid.Row="0" Foreground="{StaticResource Black-1}" VerticalAlignment="Center"></TextBlock>
@@ -175,14 +175,27 @@
 
         <ProgressBar Grid.Row="9" Background="{Binding LinearGradientBrush}" Value="{Binding CollectProcess}" Margin="0, 2, 0, 2"></ProgressBar>
 
-        <TextBlock Grid.Row="10" Text="采集的用户列表" Foreground="{StaticResource Black-1}" VerticalAlignment="Center"></TextBlock>
+        <Grid Grid.Row="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="Auto" MinWidth="60"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="采集的用户列表" Grid.Column="0" Foreground="{StaticResource Black-1}" VerticalAlignment="Center"></TextBlock>
+            <TextBlock Text="已采集：" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="{StaticResource Black-1}"></TextBlock>
+            <TextBlock Text="{Binding CollectedUserNum}" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="{StaticResource Black-1}"></TextBlock>
+        </Grid>
+        
+        
+        
         <!--<DataGrid Grid.Row="11" ItemsSource="{Binding UserList}">-->
 
-        <Button x:Name="btnExport" Grid.Row="10" HorizontalAlignment="Right" Content="CSV格式导出" Margin="0, 2, 10, 2" Style="{StaticResource ExportButtonStyle}" Click="BtnExport_Click"></Button>
+        <!--<Button x:Name="btnExport" Grid.Row="10" HorizontalAlignment="Right" Content="CSV格式导出" Margin="0, 2, 10, 2" Style="{StaticResource ExportButtonStyle}" Click="BtnExport_Click"></Button>-->
 
 
         <DataGrid x:Name="dgData" Grid.Row="11" ItemsSource="{Binding UserList}" GridLinesVisibility="Vertical" Style="{StaticResource DefaultDataGrid}" SelectionMode="Extended"
-                      ColumnHeaderStyle="{StaticResource DataGridColumnHeaderCenterStyle}" Margin="0, 0, 0, 10"  HorizontalContentAlignment="Stretch"
+                      ColumnHeaderStyle="{StaticResource DataGridColumnHeaderCenterStyle}" Margin="0, 0, 0, 10"  HorizontalContentAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Auto"
                   CellStyle="{StaticResource CustomeDataGridTextCenterStyle}" RowStyle="{StaticResource DataGridRowStyle}" BorderThickness="1" PreviewKeyDown="DataGrid1_PreviewKeyDown"
                   Background="#FFE4E1DB" MinHeight="20">
             <DataGrid.ContextMenu>

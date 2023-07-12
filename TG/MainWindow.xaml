@@ -92,9 +92,9 @@
             <TabItem Header="群发消息">
                 <GroupMsg:GroupSendMsgView x:Name="groupSend"></GroupMsg:GroupSendMsgView>
             </TabItem>
-            <TabItem Header="批量邀请">
+            <!--<TabItem Header="批量邀请">
                 <BatchInvite:BatchInviteView></BatchInvite:BatchInviteView>
-            </TabItem>
+            </TabItem>-->
         </TabControl>
 
         <TextBlock Grid.Row="1" Text="运行输出:" Margin="10, 0, 10, -5"></TextBlock>

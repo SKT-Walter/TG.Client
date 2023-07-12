@@ -467,7 +467,7 @@ namespace TG.Client.TG
             {
                 TdApi.Chat chat = @object as TdApi.Chat;
 
-                if (chat.Type is TdApi.ChatTypeSupergroup)
+                if (chat != null && chat.Type is TdApi.ChatTypeSupergroup)
                 {
                     TdApi.ChatTypeSupergroup chatTypeSupergroup = chat.Type as TdApi.ChatTypeSupergroup;
                     currentGruopId = chatTypeSupergroup.SupergroupId;
@@ -498,12 +498,12 @@ namespace TG.Client.TG
 
                     currentOperatorType = OperatorType.SearchChatHistory;
 
-                    
+
                     startIndex = -50;
                     endIndex = 100;
                     _client.Send(new TdApi.GetChatHistory()
                     {
-                        ChatId = currentChatId, 
+                        ChatId = currentChatId,
                         Limit = endIndex,
                         FromMessageId = 0,//currentChatLastMsgId,
                         Offset = 0,//startIndex,
@@ -568,10 +568,13 @@ namespace TG.Client.TG
             else if (currentOperatorType == OperatorType.SearchChatUser)
             {
                 TdApi.User user = @object as TdApi.User;
-                user.RestrictionReason = currentGroupName;
-                OnUserChange?.Invoke(user);
+                if (user != null)
+                {
+                    user.RestrictionReason = currentGroupName;
+                    OnUserChange?.Invoke(user);
 
-                MsgHandler.Instance.AddOrUpdateUser(user);
+                    MsgHandler.Instance.AddOrUpdateUser(user);
+                }
             }
         }
 

@@ -28,6 +28,18 @@ namespace TG.ViewModel.APICollect
 
         #region 属性
 
+        private int collectedUserNum;
+        public int CollectedUserNum
+        {
+            get { return collectedUserNum; }
+            set
+            {
+                collectedUserNum = value;
+
+                this.OnPropertyChanged();
+            }
+        }
+
         private string phonePrefix;
 
         public string PhonePrefix
@@ -186,7 +198,7 @@ namespace TG.ViewModel.APICollect
         public void OnClickCollectBtn()
         {
             userList.Clear();
-
+            CollectedUserNum = 0;
             int num = 0;
             int.TryParse(CollectNum, out num);
             TdClientHandler.Instance.CollectUser(InviteLink, Inner24Hour ? TimeFilterType.OneDay : Inner7Day ? TimeFilterType.SevenDay : TimeFilterType.None, num);
@@ -248,8 +260,9 @@ namespace TG.ViewModel.APICollect
 
             Application.Current.Dispatcher.BeginInvoke((Action)(() =>
             {
+                CollectedUserNum += 1;
                 UserList.Add(userPo);
-
+                
             }));
 
            
