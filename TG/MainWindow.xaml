@@ -7,7 +7,7 @@
         xmlns:GroupMsg="clr-namespace:TG.Client.View.GroupSendMsg"
         xmlns:BatchInvite="clr-namespace:TG.Client.View.BatchInvite"
         mc:Ignorable="d"
-        Title="TG.Client" Height="700" Width="597" WindowStartupLocation="CenterScreen">
+        Title="TG.Client" Height="750" Width="600" WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
 
@@ -79,7 +79,7 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="15"></RowDefinition>
+            <RowDefinition Height="20"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         
@@ -97,7 +97,7 @@
             </TabItem>-->
         </TabControl>
 
-        <TextBlock Grid.Row="1" Text="运行输出:" Margin="10, 0, 10, -5"></TextBlock>
+        <TextBlock Grid.Row="1" Text="运行输出:" Margin="10, 2, 10, -3"></TextBlock>
 
         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"    Grid.Row="2" Margin="10, 0, 10, 2"
                       Background="#FFE4E1DB" >

@@ -20,13 +20,38 @@ namespace TG.ViewModel.APICollect
         private FrameworkElement ownUI = null;
         private AsyncThreadQueue<TdUserPo> processUserThreadQueue;
         private ObservableCollection<TdUserPo> userList = new ObservableCollection<TdUserPo>();
-
+        
         public ObservableCollection<TdUserPo> UserList
         {
             get { return userList; }
         }
 
         #region 属性
+
+        private int collectedGroupUserNum;
+        public int CollectedGroupUserNum
+        {
+            get { return collectedGroupUserNum; }
+            set
+            {
+                collectedGroupUserNum = value;
+
+                this.OnPropertyChanged();
+            }
+        }
+
+
+        private int groupTotal;
+        public int GroupTotal
+        {
+            get { return groupTotal; }
+            set
+            {
+                groupTotal = value;
+
+                this.OnPropertyChanged();
+            }
+        }
 
         private int collectedUserNum;
         public int CollectedUserNum
@@ -197,8 +222,10 @@ namespace TG.ViewModel.APICollect
 
         public void OnClickCollectBtn()
         {
+            UserHandler.Instance.PublishMsg("start collect...");
+
             userList.Clear();
-            CollectedUserNum = 0;
+            GroupTotal = CollectedGroupUserNum = CollectedUserNum = 0;
             int num = 0;
             int.TryParse(CollectNum, out num);
             TdClientHandler.Instance.CollectUser(InviteLink, Inner24Hour ? TimeFilterType.OneDay : Inner7Day ? TimeFilterType.SevenDay : TimeFilterType.None, num);
@@ -244,6 +271,8 @@ namespace TG.ViewModel.APICollect
         {
             this.ownUI = ownui;
 
+            CommonHandler.Instance.OnGetMembers += Instance_OnGetMembers;
+
             VerifyForeground = ownUI.FindResource("Black-1") as Brush;
 
             UserHandler.Instance.Init();
@@ -252,6 +281,12 @@ namespace TG.ViewModel.APICollect
 
             TdClientHandler.Instance.OnUserChange += Instance_OnUserChange;
             TdClientHandler.Instance.CreateTdClient(this);
+        }
+
+        private void Instance_OnGetMembers(int arg1, int arg2)
+        {
+            GroupTotal = arg1;
+            CollectedGroupUserNum += arg2;
         }
 
         private void OnUserChange(TdUserPo userPo)

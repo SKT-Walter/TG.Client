@@ -96,6 +96,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Cache\TGCache.cs" />
+    <Compile Include="Handler\CommonHandler.cs" />
     <Compile Include="Handler\UserHandler.cs" />
     <Compile Include="Model\BaseReplyPo.cs" />
     <Compile Include="Model\BaseViewModel.cs" />

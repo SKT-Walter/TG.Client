@@ -56,7 +56,7 @@
             <RowDefinition Height="50"></RowDefinition>
             <RowDefinition Height="30"></RowDefinition>
             <RowDefinition Height="50"></RowDefinition>
-            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
 
             <RowDefinition Height="10"></RowDefinition>
             <RowDefinition Height="30"></RowDefinition>
@@ -177,14 +177,21 @@
 
         <Grid Grid.Row="10">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="120"></ColumnDefinition>
+                <ColumnDefinition Width="Auto" MinWidth="60"></ColumnDefinition>
+                <ColumnDefinition Width="Auto" MinWidth="60"></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                 <ColumnDefinition Width="Auto" MinWidth="60"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="Auto" MinWidth="60"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="采集的用户列表" Grid.Column="0" Foreground="{StaticResource Black-1}" VerticalAlignment="Center"></TextBlock>
-            <TextBlock Text="已采集：" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="{StaticResource Black-1}"></TextBlock>
-            <TextBlock Text="{Binding CollectedUserNum}" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="{StaticResource Black-1}"></TextBlock>
+            <TextBlock Text="可采集群用户总数：" Grid.Column="0" Foreground="{StaticResource Black-1}" VerticalAlignment="Center"></TextBlock>
+            <TextBlock Text="{Binding GroupTotal}" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="{StaticResource Orange-1}"></TextBlock>
+            <TextBlock Text="已采集群成员数：" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="{StaticResource Black-1}"></TextBlock>
+            <TextBlock Text="{Binding CollectedGroupUserNum}" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="{StaticResource Orange-1}"></TextBlock>
+
+            <TextBlock Text="已采集用户详情数：" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="{StaticResource Black-1}"></TextBlock>
+            <TextBlock Text="{Binding CollectedUserNum}" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="{StaticResource Orange-1}"></TextBlock>
         </Grid>
         
         

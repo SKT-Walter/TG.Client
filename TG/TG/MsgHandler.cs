@@ -78,36 +78,47 @@ namespace TG.Client.TG
             return copySet;
         }
 
+        public int GetLoadUserCount()
+        {
+            lock (lockObj)
+            {
+                return idSet.Count;
+            }
+        }
+
         public void AddOrUpdateByMember(TdApi.ChatMembers chatMembers, int collectNum)
         {
             lock (lockObj)
             {
                 int index = 0;
-                foreach (TdApi.ChatMember chatMember in chatMembers.Members)
+                if (chatMembers != null && chatMembers.Members != null)
                 {
-                    TdApi.MessageSenderUser messageSenderUser = chatMember.MemberId as TdApi.MessageSenderUser;
-                    if (messageSenderUser != null)
+                    foreach (TdApi.ChatMember chatMember in chatMembers.Members)
                     {
-                        if (!idSet.Contains(messageSenderUser.UserId))
+                        TdApi.MessageSenderUser messageSenderUser = chatMember.MemberId as TdApi.MessageSenderUser;
+                        if (messageSenderUser != null)
                         {
-                            if (collectNum == 0)
+                            if (!idSet.Contains(messageSenderUser.UserId))
                             {
-                                idSet.Add(messageSenderUser.UserId);
-                                
+                                if (collectNum == 0)
+                                {
+                                    idSet.Add(messageSenderUser.UserId);
+
+                                }
+                                else if (collectNum > 0 && index < collectNum)
+                                {
+                                    idSet.Add(messageSenderUser.UserId);
+
+                                }
+                                else if (collectNum > 0 && index >= collectNum)
+                                {
+                                    break;
+                                }
+                                index++;
                             }
-                            else if (collectNum > 0 && index < collectNum)
-                            {
-                                idSet.Add(messageSenderUser.UserId);
-                                
-                            }
-                            else if (collectNum > 0 && index >= collectNum)
-                            {
-                                break;
-                            }
-                            index++;
                         }
+
                     }
-                    
                 }
             }
         }

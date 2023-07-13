@@ -10,6 +10,8 @@ namespace TG.Client.Model
     {
         None,
 
+        SearchSupergroupFullInfo,
+
         SearchChat,
 
         SearchSupergroupMembers,
