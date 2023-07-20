@@ -49,7 +49,7 @@ namespace TG.Client.TG
         {
             SendMsg = sendMsgPo;
             string[] userArr = users.Split(new char[] { '\n' });
-
+            UserHandler.Instance.PublishMsg("Start send msg...");
             foreach (string user in userArr)
             {
                 long userId = 0;
@@ -69,7 +69,7 @@ namespace TG.Client.TG
 
                     //_client.Send(new TdApi.SearchPublicChat() { Username = user }, new BatchSendMsgHandler(_client, SendMsgType.SearchChat, SendMsg));
                 }
-                Thread.Sleep(100);
+                Thread.Sleep(500);
             }
         }
 

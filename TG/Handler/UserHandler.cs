@@ -52,12 +52,14 @@ namespace TG.Client.Handler
                 if (string.IsNullOrEmpty(dbUser.Flag) || !dbUser.Flag.Contains(userPo.Flag))
                 {
                     dbUser.Flag += userPo.UserId + ",";
+                    
                 }
             }
             else
             {
                 dbUser = userPo;
             }
+            dbUser.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             SqlliteUtils.Replace<TdUserPo>(dbUser);
         }
 
