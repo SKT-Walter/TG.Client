@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using TG.Client.Handler;
 using TG.Client.Model;
 using TG.Client.TG;
 
@@ -165,6 +166,7 @@ namespace TG.Client.ViewModel.GroupSendMsg
 
         public void SendGroupMsg()
         {
+            UserHandler.Instance.PublishMsg("start send msg...");
             double interval = 0;
             if (timer != null)
             {

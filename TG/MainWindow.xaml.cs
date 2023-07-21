@@ -43,6 +43,10 @@ namespace TG
             Application.Current.Dispatcher.BeginInvoke((Action)(() =>
             {
                 tbLog.Text += string.Format("{0}：{1}\n", DateTime.Now.ToString("HH:mm:ss"), JsonConvert.SerializeObject(obj));
+                if (tbLog.Text.Length > 20000)
+                {
+                    tbLog.Text = string.Empty;
+                }
             }));
         }
     }
