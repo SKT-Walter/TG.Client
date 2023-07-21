@@ -127,6 +127,8 @@
     <Compile Include="ViewModel\APICollect\APICollectViewModel.cs" />
     <Compile Include="ViewModel\CollectUser\CollectUserViewModel.cs" />
     <Compile Include="ViewModel\GroupSendMsg\GroupSendMsgViewModel.cs" />
+    <Compile Include="ViewModel\MoreAccLogin\LoginViewModel.cs" />
+    <Compile Include="ViewModel\MoreAccLogin\MoreAccLoginViewModel.cs" />
     <Compile Include="View\APICollect\APICollectView.xaml.cs">
       <DependentUpon>APICollectView.xaml</DependentUpon>
     </Compile>
@@ -138,6 +140,12 @@
     </Compile>
     <Compile Include="View\GroupSendMsg\GroupSendMsgView.xaml.cs">
       <DependentUpon>GroupSendMsgView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MoreAccLogin\LoginView.xaml.cs">
+      <DependentUpon>LoginView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MoreAccLogin\MoreAccLoginView.xaml.cs">
+      <DependentUpon>MoreAccLoginView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -180,6 +188,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\GroupSendMsg\GroupSendMsgView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MoreAccLogin\LoginView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MoreAccLogin\MoreAccLoginView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

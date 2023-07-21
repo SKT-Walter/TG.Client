@@ -18,5 +18,6 @@ namespace TG.Client.Model
 
         public string Flag { get; set; }
         
+        public string UpdateTime { get; set; }
     }
 }
