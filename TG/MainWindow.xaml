@@ -5,6 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
          xmlns:API="clr-namespace:TG.Client.View.APICollect"
         xmlns:GroupMsg="clr-namespace:TG.Client.View.GroupSendMsg"
+        xmlns:MoreAccLogin="clr-namespace:TG.Client.View.MoreAccLogin"
+
         xmlns:BatchInvite="clr-namespace:TG.Client.View.BatchInvite"
         mc:Ignorable="d"
         Title="TG.Client" Height="750" Width="600" WindowStartupLocation="CenterScreen">
@@ -91,6 +93,9 @@
             <!--<TabItem Header="采集用户"></TabItem>-->
             <TabItem Header="群发消息">
                 <GroupMsg:GroupSendMsgView x:Name="groupSend"></GroupMsg:GroupSendMsgView>
+            </TabItem>
+            <TabItem Header="多账号登录">
+                <MoreAccLogin:MoreAccLoginView></MoreAccLogin:MoreAccLoginView>
             </TabItem>
             <!--<TabItem Header="批量邀请">
                 <BatchInvite:BatchInviteView></BatchInvite:BatchInviteView>

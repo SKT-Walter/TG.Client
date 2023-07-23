@@ -50,68 +50,76 @@ namespace TG.Client.TG
             SendMsg = sendMsgPo;
             string[] userArr = users.Split(new char[] { '\n' });
             UserHandler.Instance.PublishMsg("Start send msg...");
-            foreach (string user in userArr)
+
+            Task.Run(() =>
             {
-                long userId = 0;
-                string name = user.Replace("@", "").Replace("\r", "");
-                TdUserPo userPo = UserHandler.Instance.QuoteUserByName(name);
-                if (userPo != null)
+                foreach (string user in userArr)
                 {
-                    userId = userPo.UserId;
+                    long userId = 0;
+                    string name = user.Replace("@", "").Replace("\r", "");
+                    TdUserPo userPo = UserHandler.Instance.QuoteUserByName(name);
+                    if (userPo != null)
+                    {
+                        userId = userPo.UserId;
+                    }
+
+                    UserHandler.Instance.PublishMsg("------尝试发送消息到用户：" + name + ", userId:" + userId);
+                    //MsgHandler.Instance.GetIdByName(user);
+                    if (userId != 0)
+                    {
+                        _client.Send(new TdApi.CreatePrivateChat() { UserId = userId, Force = true }, new BatchSendMsgHandler(_client, SendMsgType.CreateChat, SendMsg));
+
+
+                        //_client.Send(new TdApi.SearchPublicChat() { Username = user }, new BatchSendMsgHandler(_client, SendMsgType.SearchChat, SendMsg));
+                    }
+                    Thread.Sleep(2000);
                 }
-
-                UserHandler.Instance.PublishMsg("------尝试发送消息到用户：" + name + ", userId:" + userId);
-                //MsgHandler.Instance.GetIdByName(user);
-                if (userId != 0)
-                {
-                    _client.Send(new TdApi.CreatePrivateChat() { UserId = userId, Force = false }, new BatchSendMsgHandler(_client, SendMsgType.CreateChat, SendMsg));
-
-
-                    //_client.Send(new TdApi.SearchPublicChat() { Username = user }, new BatchSendMsgHandler(_client, SendMsgType.SearchChat, SendMsg));
-                }
-                Thread.Sleep(500);
-            }
+            });
+            
         }
 
 
         public void OnResult(TdApi.BaseObject baseObject)
         {
-            Console.WriteLine("BatchSendMsgHandler:" + baseObject.ToString());
-            UserHandler.Instance.PublishMsg(baseObject.ToString());
-            if (baseObject != null && !(baseObject is TdApi.Error))
+            //Console.WriteLine("BatchSendMsgHandler:" + baseObject.ToString());
+            if (baseObject != null)
             {
-                if (curentSendMsgType == SendMsgType.SearchChat)
+                UserHandler.Instance.PublishMsg("resp:" + baseObject.ToString());
+                if (!(baseObject is TdApi.Error))
                 {
-                    TdApi.Chat chat = baseObject as TdApi.Chat;
-                    if (chat != null)
+                    if (curentSendMsgType == SendMsgType.SearchChat)
                     {
-                        long userId = chat.Id;
+                        TdApi.Chat chat = baseObject as TdApi.Chat;
+                        if (chat != null)
+                        {
+                            long userId = chat.Id;
 
-                        _client.Send(new TdApi.CreatePrivateChat() { UserId = userId, Force = false }, new BatchSendMsgHandler(_client, SendMsgType.CreateChat, SendMsg));
+                            _client.Send(new TdApi.CreatePrivateChat() { UserId = userId, Force = true }, new BatchSendMsgHandler(_client, SendMsgType.CreateChat, SendMsg));
+                        }
                     }
-                }
-                else if (curentSendMsgType == SendMsgType.CreateChat)
-                {
-                    TdApi.Chat chat = baseObject as TdApi.Chat;
-                    if (chat != null)
+                    else if (curentSendMsgType == SendMsgType.CreateChat)
                     {
-                        txtMsgChat = chat;
-                        SendMessage(chat.Id, SendMsg);
+                        TdApi.Chat chat = baseObject as TdApi.Chat;
+                        if (chat != null)
+                        {
+                            txtMsgChat = chat;
+                            SendMessage(chat.Id, SendMsg);
+                        }
                     }
-                }
-                else if (curentSendMsgType == SendMsgType.SendTxtAndImage)
-                {
-                    TdApi.Message replayMsg = baseObject as TdApi.Message;
-                    if (replayMsg != null)
+                    else if (curentSendMsgType == SendMsgType.SendTxtAndImage)
                     {
-                        txtMsgId = replayMsg.ChatId;
+                        TdApi.Message replayMsg = baseObject as TdApi.Message;
+                        if (replayMsg != null)
+                        {
+                            txtMsgId = replayMsg.ChatId;
 
-                        SendImageMsg(txtMsgChat.Id, SendMsg);
+                            SendImageMsg(txtMsgChat.Id, SendMsg);
 
-                        this.curentSendMsgType = SendMsgType.None;
+                            this.curentSendMsgType = SendMsgType.None;
+                        }
                     }
-                }
 
+                }
             }
         }
 
