@@ -41,7 +41,7 @@ namespace TG.Client.View.GroupSendMsg
 
         private void BtnAddStart_Click(object sender, RoutedEventArgs e)
         {
-            groupSendMsgViewModel.OnClickDownStartBtn();
+            groupSendMsgViewModel.OnClickAddStartBtn();
         }
 
         private void BtnDownEnd_Click(object sender, RoutedEventArgs e)

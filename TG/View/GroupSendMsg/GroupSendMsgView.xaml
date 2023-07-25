@@ -96,14 +96,14 @@
         </Grid>
 
 
-        <TextBlock Grid.Row="6" Text="发送间隔" Foreground="{StaticResource Black-1}" VerticalAlignment="Center" Padding="0, 12, 0, 0"></TextBlock>
+        <TextBlock Grid.Row="6" Text="发送间隔(单位：秒)" Foreground="{StaticResource Black-1}" VerticalAlignment="Center" Padding="0, 12, 0, 0"></TextBlock>
 
         <StackPanel Grid.Row="7" Orientation="Horizontal">
             <Button x:Name="btnDownStart" Width="50" Height="40" Content="-" Click="BtnDownStart_Click" FontSize="{StaticResource FontSize-18}"></Button>
             <TextBox Width="60" Height="40" TextAlignment="Center" Padding="0, 12, 0, 0" Text="{Binding StartInterval}"></TextBox>
             <Button x:Name="btnAddStart" Width="50" Height="40" Content="+" Click="BtnAddStart_Click" FontSize="{StaticResource FontSize-18}"></Button>
 
-            <TextBlock Margin="10, 0, 10, 0" Padding="0, 25, 0, 0">~</TextBlock>
+            <TextBlock Margin="10, 0, 10, 0" Padding="0, 25, 0, 0" Foreground="{StaticResource Black-1}">~</TextBlock>
 
 
             <Button x:Name="btnDownEnd" Width="50" Height="40" Content="-" Click="BtnDownEnd_Click" FontSize="{StaticResource FontSize-18}"></Button>

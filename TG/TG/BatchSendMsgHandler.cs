@@ -45,12 +45,12 @@ namespace TG.Client.TG
             _client = client;
         }
 
-        public void SendBatchMsg(string users, SendMsgPo sendMsgPo)
+        public void SendBatchMsg(string users, SendMsgPo sendMsgPo, int startInterval, int endInterval)
         {
             SendMsg = sendMsgPo;
             string[] userArr = users.Split(new char[] { '\n' });
             UserHandler.Instance.PublishMsg("Start send msg...");
-
+            Random random = new Random();
             Task.Run(() =>
             {
                 foreach (string user in userArr)
@@ -72,7 +72,7 @@ namespace TG.Client.TG
 
                         //_client.Send(new TdApi.SearchPublicChat() { Username = user }, new BatchSendMsgHandler(_client, SendMsgType.SearchChat, SendMsg));
                     }
-                    Thread.Sleep(2000);
+                    Thread.Sleep(random.Next(startInterval, endInterval));
                 }
             });
             

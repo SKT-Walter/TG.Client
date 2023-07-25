@@ -73,7 +73,7 @@ namespace TG.Client.ViewModel.GroupSendMsg
             }
         }
 
-        private string startInterval;
+        private string startInterval = "20";
         public string StartInterval
         {
             get { return startInterval; }
@@ -85,7 +85,7 @@ namespace TG.Client.ViewModel.GroupSendMsg
             }
         }
 
-        private string endInterval;
+        private string endInterval = "25";
         public string EndInterval
         {
             get { return endInterval; }
@@ -168,47 +168,51 @@ namespace TG.Client.ViewModel.GroupSendMsg
         {
             UserHandler.Instance.PublishMsg("start send msg...");
             double interval = 0;
-            if (timer != null)
-            {
-                timer.Stop();
-                if (double.TryParse(StartInterval, out interval))
-                {
-                    // 设置定时器间隔，例如：1000表示每隔1秒触发一次
-                    timer.Interval = interval * 1000 * 60;
+            //if (timer != null)
+            //{
+            //    timer.Stop();
+            //    if (double.TryParse(StartInterval, out interval))
+            //    {
+            //        // 设置定时器间隔，例如：1000表示每隔1秒触发一次
+            //        timer.Interval = interval * 1000 * 60;
                     
-                    // 设置定时器自动重启
-                    timer.AutoReset = true;
-                    timer.Start();
-                }
-            }
-            else
-            {
-                if (double.TryParse(StartInterval, out interval))
-                {
-                    // 设置定时器间隔，例如：1000表示每隔1秒触发一次
-                    timer = new System.Timers.Timer(interval * 1000 * 60);
-                    timer.Elapsed += Timer_Elapsed;
-                    // 设置定时器自动重启
-                    timer.AutoReset = true;
-                    timer.Start();
-                }
-            }
+            //        // 设置定时器自动重启
+            //        timer.AutoReset = true;
+            //        timer.Start();
+            //    }
+            //}
+            //else
+            //{
+            //    if (double.TryParse(StartInterval, out interval))
+            //    {
+            //        // 设置定时器间隔，例如：1000表示每隔1秒触发一次
+            //        timer = new System.Timers.Timer(interval * 1000 * 60);
+            //        timer.Elapsed += Timer_Elapsed;
+            //        // 设置定时器自动重启
+            //        timer.AutoReset = true;
+            //        timer.Start();
+            //    }
+            //}
 
             SendMsgPo sendMsgPo = new SendMsgPo();
             sendMsgPo.FilePath = FilePathChecked ? FilePath : string.Empty;
             sendMsgPo.SendMsg = sendMsg;
 
-            BatchSendMsgHandler.Instance.SendBatchMsg(SendBatchUser, sendMsgPo);
+            int start = 20;
+            int end = 25;
+            int.TryParse(StartInterval, out start);
+            int.TryParse(EndInterval, out end);
+            BatchSendMsgHandler.Instance.SendBatchMsg(SendBatchUser, sendMsgPo, start, end);
         }
 
-        private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
-        {
-            SendMsgPo sendMsgPo = new SendMsgPo();
-            sendMsgPo.FilePath = FilePathChecked ? FilePath : string.Empty;
-            sendMsgPo.SendMsg = sendMsg;
+        //private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        //{
+        //    SendMsgPo sendMsgPo = new SendMsgPo();
+        //    sendMsgPo.FilePath = FilePathChecked ? FilePath : string.Empty;
+        //    sendMsgPo.SendMsg = sendMsg;
 
-            BatchSendMsgHandler.Instance.SendBatchMsg(SendBatchUser, sendMsgPo);
-        }
+        //    BatchSendMsgHandler.Instance.SendBatchMsg(SendBatchUser, sendMsgPo);
+        //}
 
         #endregion
 
