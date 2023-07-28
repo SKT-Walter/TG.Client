@@ -72,7 +72,9 @@ namespace TG.Client.TG
 
                         //_client.Send(new TdApi.SearchPublicChat() { Username = user }, new BatchSendMsgHandler(_client, SendMsgType.SearchChat, SendMsg));
                     }
-                    Thread.Sleep(random.Next(startInterval, endInterval));
+                    int interval = random.Next(startInterval, endInterval) * 1000;
+                    UserHandler.Instance.PublishMsg("下次发送将等待：" + (interval/1000) + "秒");
+                    Thread.Sleep(interval);
                 }
             });
             
