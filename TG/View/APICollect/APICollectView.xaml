@@ -48,24 +48,24 @@
 
     <Grid Margin="10, 0, 10, 0" >
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"></RowDefinition>
-            <RowDefinition Height="50"></RowDefinition>
-            <RowDefinition Height="50"></RowDefinition>
-            <RowDefinition Height="30"></RowDefinition>
-            <RowDefinition Height="30"></RowDefinition>
-            <RowDefinition Height="50"></RowDefinition>
-            <RowDefinition Height="30"></RowDefinition>
-            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="25"></RowDefinition>
             <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="34"></RowDefinition>
 
             <RowDefinition Height="10"></RowDefinition>
             <RowDefinition Height="30"></RowDefinition>
-            <RowDefinition Height="120"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
 
         <TextBlock Text="账号验证" Grid.Row="0" Foreground="{StaticResource Black-1}" VerticalAlignment="Center"></TextBlock>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0, 0, 0, 8">
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0, 2, 0, 5">
             <ComboBox IsEditable="True" Width="120" Padding="0, 12, 0, 0" TextBlock.TextAlignment="Center" Text="{Binding PhonePrefix}"
                       ToolTip="号码前缀，如中国+86">
             </ComboBox>
@@ -93,7 +93,7 @@
             <Button x:Name="btnSendCode" Width="100" Margin="15, 0, 0, 0" Content="发送验证码" Click="BtnSendCode_Click"></Button>
         </StackPanel>
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0, 0, 0, 8">
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0, 2, 0, 5">
             <TextBox Width="200" Padding="0, 12, 0, 0" TextBlock.TextAlignment="Center" Text="{Binding VerifyCode}">
                 <TextBox.Resources>
                     <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.5" Stretch="None" AlignmentX="Left" >
@@ -161,9 +161,9 @@
             </Grid.ColumnDefinitions>
             <Border Grid.Column="0">
                 <StackPanel Orientation="Horizontal">
-                    <Button x:Name="btnDown" Width="50" Height="40" Content="-" Click="BtnDown_Click" FontSize="{StaticResource FontSize-18}"></Button>
-                    <TextBox Width="60" Height="40" TextAlignment="Center" Padding="0, 12, 0, 0" Text="{Binding CollectNum}"></TextBox>
-                    <Button x:Name="btnAdd" Width="50" Height="40" Content="+" Click="BtnAdd_Click" FontSize="{StaticResource FontSize-18}"></Button>
+                    <Button x:Name="btnDown" Width="50" Height="30" Content="-" Click="BtnDown_Click" FontSize="{StaticResource FontSize-18}"></Button>
+                    <TextBox Width="60" Height="30" TextAlignment="Center" Padding="0, 6, 0, 0" Text="{Binding CollectNum}"></TextBox>
+                    <Button x:Name="btnAdd" Width="50" Height="30" Content="+" Click="BtnAdd_Click" FontSize="{StaticResource FontSize-18}"></Button>
                 </StackPanel>
             </Border>
 
@@ -171,7 +171,7 @@
             <CheckBox Grid.Column="2" Content="7天内" Foreground="{StaticResource Black-1}" VerticalAlignment="Center" IsChecked="{Binding Inner7Day}"></CheckBox>
         </Grid>
 
-        <Button x:Name="btnCollect" Grid.Row="8" Content="开始采集" Click="BtnCollect_Click" Style="{StaticResource CollectButtonStyle}"></Button>
+        <Button x:Name="btnCollect" Grid.Row="8" Margin="0, 2, 0, 2" Content="开始采集" Click="BtnCollect_Click" Style="{StaticResource CollectButtonStyle}"></Button>
 
         <ProgressBar Grid.Row="9" Background="{Binding LinearGradientBrush}" Value="{Binding CollectProcess}" Margin="0, 2, 0, 2"></ProgressBar>
 
@@ -204,7 +204,7 @@
         <DataGrid x:Name="dgData" Grid.Row="11" ItemsSource="{Binding UserList}" GridLinesVisibility="Vertical" Style="{StaticResource DefaultDataGrid}" SelectionMode="Extended"
                       ColumnHeaderStyle="{StaticResource DataGridColumnHeaderCenterStyle}" Margin="0, 0, 0, 10"  HorizontalContentAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Auto"
                   CellStyle="{StaticResource CustomeDataGridTextCenterStyle}" RowStyle="{StaticResource DataGridRowStyle}" BorderThickness="1" PreviewKeyDown="DataGrid1_PreviewKeyDown"
-                  Background="#FFE4E1DB" MinHeight="20">
+                  Background="#FFE4E1DB" MinHeight="90">
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="复制选中行" Click="MenuItem_CopySelectedRows_Click"/>

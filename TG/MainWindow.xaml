@@ -9,7 +9,7 @@
 
         xmlns:BatchInvite="clr-namespace:TG.Client.View.BatchInvite"
         mc:Ignorable="d"
-        Title="TG.Client" Height="750" Width="600" WindowStartupLocation="CenterScreen">
+        Title="TG.Client" Height="680" Width="600" WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
 
