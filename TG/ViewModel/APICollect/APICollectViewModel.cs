@@ -312,6 +312,37 @@ namespace TG.ViewModel.APICollect
             userPo.PhoneNumber = user.PhoneNumber;
             userPo.Flag = user.RestrictionReason;
 
+            if (user.Usernames != null)
+            {
+
+                userPo.Username = userPo.EditableUsername = user.Usernames.EditableUsername;
+                if (user.Usernames.ActiveUsernames != null)
+                {
+                    foreach (string str in user.Usernames.ActiveUsernames)
+                    {
+                        userPo.ActiveUsernames += str + ",";
+                    }
+
+                    if (userPo.ActiveUsernames != null && userPo.ActiveUsernames.Length > 0)
+                    {
+                        userPo.ActiveUsernames = userPo.ActiveUsernames.Substring(0, userPo.ActiveUsernames.Length - 1);
+                    }
+                }
+                if (user.Usernames.DisabledUsernames != null)
+                {
+                    foreach (string str in user.Usernames.DisabledUsernames)
+                    {
+                        userPo.DisabledUsernames += str + ",";
+                    }
+
+                    if (userPo.DisabledUsernames != null && userPo.DisabledUsernames.Length > 0)
+                    {
+                        userPo.DisabledUsernames = userPo.DisabledUsernames.Substring(0, userPo.DisabledUsernames.Length - 1);
+                    }
+                }
+            }
+            
+
             processUserThreadQueue.Enqueue(userPo);
         }
 

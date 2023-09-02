@@ -66,10 +66,10 @@
         <TextBlock Text="账号验证" Grid.Row="0" Foreground="{StaticResource Black-1}" VerticalAlignment="Center"></TextBlock>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0, 2, 0, 5">
-            <ComboBox IsEditable="True" Width="120" Padding="0, 12, 0, 0" TextBlock.TextAlignment="Center" Text="{Binding PhonePrefix}"
+            <ComboBox IsEditable="True" Width="120" Padding="0, 6, 0, 0" TextBlock.TextAlignment="Center" Text="{Binding PhonePrefix}"
                       ToolTip="号码前缀，如中国+86">
             </ComboBox>
-            <TextBox Width="200" Margin="10, 0, 0, 0" TextBlock.TextAlignment="Center" Padding="0, 11, 0, 0" Text="{Binding Phone}">
+            <TextBox Width="200" Margin="10, 0, 0, 0" TextBlock.TextAlignment="Center" Padding="0, 6, 0, 0" Text="{Binding Phone}">
                 <TextBox.Resources>
                     <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.5" Stretch="None" AlignmentX="Left">
                         <VisualBrush.Visual>
@@ -94,7 +94,7 @@
         </StackPanel>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0, 2, 0, 5">
-            <TextBox Width="200" Padding="0, 12, 0, 0" TextBlock.TextAlignment="Center" Text="{Binding VerifyCode}">
+            <TextBox Width="200" Padding="0, 6, 0, 0" TextBlock.TextAlignment="Center" Text="{Binding VerifyCode}">
                 <TextBox.Resources>
                     <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.5" Stretch="None" AlignmentX="Left" >
                         <VisualBrush.Visual>
@@ -204,7 +204,7 @@
         <DataGrid x:Name="dgData" Grid.Row="11" ItemsSource="{Binding UserList}" GridLinesVisibility="Vertical" Style="{StaticResource DefaultDataGrid}" SelectionMode="Extended"
                       ColumnHeaderStyle="{StaticResource DataGridColumnHeaderCenterStyle}" Margin="0, 0, 0, 10"  HorizontalContentAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Auto"
                   CellStyle="{StaticResource CustomeDataGridTextCenterStyle}" RowStyle="{StaticResource DataGridRowStyle}" BorderThickness="1" PreviewKeyDown="DataGrid1_PreviewKeyDown"
-                  Background="#FFE4E1DB" MinHeight="90">
+                  Background="#FFE4E1DB" MinHeight="90" MaxHeight="150">
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="复制选中行" Click="MenuItem_CopySelectedRows_Click"/>
@@ -216,6 +216,7 @@
                 <DataGridTextColumn Binding="{Binding UserId}" Header="用户Id" Width="Auto" MinWidth="85" FontSize="{StaticResource FontSize-12}" ClipboardContentBinding="{Binding Id}"/>
                 <DataGridTextColumn Binding="{Binding Name}" Header="用户名" Width="Auto" MinWidth="85" FontSize="{StaticResource FontSize-12}" ClipboardContentBinding="{Binding Name}"/>
                 <DataGridTextColumn Binding="{Binding PhoneNumber}" Header="电话号码" Width="Auto" MinWidth="85" FontSize="{StaticResource FontSize-12}" ClipboardContentBinding="{Binding Phone}"/>
+                <DataGridTextColumn Binding="{Binding Username}" Header="UserName" Width="Auto" MinWidth="85" FontSize="{StaticResource FontSize-12}" ClipboardContentBinding="{Binding Username}"/>
 
             </DataGrid.Columns>
 

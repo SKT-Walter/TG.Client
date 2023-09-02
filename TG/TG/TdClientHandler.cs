@@ -291,18 +291,25 @@ namespace TG.Client.TG
         public void GetCommand(LoginPo loginPo, string command)
         {
             command = "me";
+            command = "groupsInCommon";
             this.loginPo = loginPo;
             string[] commands = command.Split(new char[] { ' ' }, 2);
             try
             {
                 switch (commands[0])
                 {
+                    case "groupsInCommon":
+                        //_client.Send(new TdApi.GetContacts(), new TestClientResultHandler());
+                        _client.Send(new TdApi.GetUser(974541270), new TestClientResultHandler());
+                        _client.Send(new TdApi.GetGroupsInCommon(974541270, 0, 100), new TestClientResultHandler());
+
+                        break;
                     case "chats":
                         TdApi.GetChats getChats = new TdApi.GetChats();
                         getChats.Limit = 100;
                         _client.Send(getChats, new TestClientResultHandler());
 
-
+                        
                         TdApi.GetChat getChat = new TdApi.GetChat() { ChatId = -1001307554905L };
 
                         _client.Send(getChat, new TestClientResultHandler());
@@ -380,173 +387,181 @@ namespace TG.Client.TG
         {
             try
             {
-                Print(@object.ToString());
-                UserHandler.Instance.PublishMsg(@object);
-                if (currentOperatorType == OperatorType.SearchChat)
+                if (@object != null)
                 {
-                    TdApi.Chat chat = @object as TdApi.Chat;
-
-                    if (chat != null && chat.Type is TdApi.ChatTypeSupergroup)
+                    Print(@object.ToString());
+                    UserHandler.Instance.PublishMsg(@object);
+                    if (currentOperatorType == OperatorType.SearchChat)
                     {
-                        TdApi.ChatTypeSupergroup chatTypeSupergroup = chat.Type as TdApi.ChatTypeSupergroup;
-                        currentGruopId = chatTypeSupergroup.SupergroupId;
-                        if (chat.LastMessage != null)
-                            currentChatLastMsgId = chat.LastMessage.Id;
+                        TdApi.Chat chat = @object as TdApi.Chat;
 
-                        currentChatId = chat.Id;
-                    }
-                    else
-                    {
-                        if (chat == null)
+                        if (chat != null && chat.Type is TdApi.ChatTypeSupergroup)
                         {
-                            Print("SearchChat result chat is null");
+                            TdApi.ChatTypeSupergroup chatTypeSupergroup = chat.Type as TdApi.ChatTypeSupergroup;
+                            currentGruopId = chatTypeSupergroup.SupergroupId;
+                            if (chat.LastMessage != null)
+                                currentChatLastMsgId = chat.LastMessage.Id;
+
+                            currentChatId = chat.Id;
                         }
                         else
                         {
-                            Print("chat is not supergroup.");
-                        }
-                        return;
-                    }
-
-                    currentOperatorType = OperatorType.SearchSupergroupFullInfo;
-                    _client.Send(new TdApi.GetSupergroupFullInfo() { SupergroupId = currentGruopId }, this);
-
-
-                }
-                else if (currentOperatorType == OperatorType.SearchSupergroupFullInfo)
-                {
-                    TdApi.SupergroupFullInfo supergroupFullInfo = @object as TdApi.SupergroupFullInfo;
-
-                    if (supergroupFullInfo != null)
-                    {
-                        if (supergroupFullInfo.CanGetMembers)
-                        {
-                            if (currentTimeFilterType == TimeFilterType.None)//无活跃条件筛选时，获取全部成员
+                            if (chat == null)
                             {
-                                //获取用户列表
-                                startIndex = 0;
-                                endIndex = limit;
+                                Print("SearchChat result chat is null");
+                            }
+                            else
+                            {
+                                Print("chat is not supergroup.");
+                            }
+                            return;
+                        }
 
-                                currentOperatorType = OperatorType.SearchSupergroupMembers;
+                        currentOperatorType = OperatorType.SearchSupergroupFullInfo;
+                        _client.Send(new TdApi.GetSupergroupFullInfo() { SupergroupId = currentGruopId }, this);
+
+
+                    }
+                    else if (currentOperatorType == OperatorType.SearchSupergroupFullInfo)
+                    {
+                        TdApi.SupergroupFullInfo supergroupFullInfo = @object as TdApi.SupergroupFullInfo;
+
+                        if (supergroupFullInfo != null)
+                        {
+                            if (supergroupFullInfo.CanGetMembers)
+                            {
+                                if (currentTimeFilterType == TimeFilterType.None)//无活跃条件筛选时，获取全部成员
+                                {
+                                    //获取用户列表
+                                    startIndex = 0;
+                                    endIndex = limit;
+
+                                    currentOperatorType = OperatorType.SearchSupergroupMembers;
+
+                                    _client.Send(new TdApi.GetSupergroupMembers() { SupergroupId = currentGruopId, Filter = new TdApi.SupergroupMembersFilterRecent(), Offset = startIndex, Limit = limit }, this);
+
+                                }
+                                else
+                                {
+                                    currentOperatorType = OperatorType.SearchChatHistory;
+
+
+                                    startIndex = -50;
+                                    endIndex = 100;
+                                    _client.Send(new TdApi.GetChatHistory()
+                                    {
+                                        ChatId = currentChatId,
+                                        Limit = endIndex,
+                                        FromMessageId = 0,//currentChatLastMsgId,
+                                        Offset = 0,//startIndex,
+                                        OnlyLocal = false
+                                    }, this);
+                                }
+                            }
+                            else
+                            {
+                                UserHandler.Instance.PublishMsg("-------GetSupergroupFullInfo:" + currentGroupUrl + " is not CanGetMembers");
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            UserHandler.Instance.PublishMsg("-------GetSupergroupFullInfo:" + currentGroupUrl + " is null");
+                            return;
+                        }
+
+                    }
+                    else if (currentOperatorType == OperatorType.SearchSupergroupMembers)//无活跃条件筛选时，获取全部成员
+                    {
+                        TdApi.ChatMembers chatMembers = @object as TdApi.ChatMembers;
+                        if (chatMembers != null)
+                        {
+                            CommonHandler.Instance.PublishMemberChange(chatMembers.TotalCount, chatMembers.Members.Length);
+
+                            MsgHandler.Instance.AddOrUpdateByMember(chatMembers, currentCollectNum);
+
+                            int loadCount = MsgHandler.Instance.GetLoadUserCount();
+
+                            if (chatMembers.Members.Length >= limit && (currentCollectNum == 0 || (currentCollectNum > 0 && startIndex <= currentCollectNum)))
+                            {
+                                Thread.Sleep(500);
+
+                                startIndex += chatMembers.Members.Length;
 
                                 _client.Send(new TdApi.GetSupergroupMembers() { SupergroupId = currentGruopId, Filter = new TdApi.SupergroupMembersFilterRecent(), Offset = startIndex, Limit = limit }, this);
 
                             }
                             else
                             {
-                                currentOperatorType = OperatorType.SearchChatHistory;
+                                UserHandler.Instance.PublishMsg("Start get user detail");
+                                Task.Run(() =>
+                                {
+                                    GetUserDetail();
+                                });
+                            }
+                        }
+                    }
+                    else if (currentOperatorType == OperatorType.SearchChatHistory)
+                    {
+                        TdApi.Messages messages = @object as TdApi.Messages;
 
+                        if (messages != null)
+                        {
+                            int lastTime = MsgHandler.Instance.AddOrUpdateByMessage(messages, currentTimeFilterType);
+
+                            bool isContinue = MsgHandler.Instance.ContinueSearchHis(lastTime, currentTimeFilterType);
+
+
+                            if (isContinue && messages.TotalCount > 50 && messages.MessagesValue.Length >= 50)
+                            {
+                                long lastMsgId = messages.MessagesValue[messages.MessagesValue.Length - 1].Id;
 
                                 startIndex = -50;
-                                endIndex = 100;
+                                endIndex = 50;
                                 _client.Send(new TdApi.GetChatHistory()
                                 {
                                     ChatId = currentChatId,
-                                    Limit = endIndex,
-                                    FromMessageId = 0,//currentChatLastMsgId,
-                                    Offset = 0,//startIndex,
+                                    Limit = limit,
+                                    FromMessageId = lastMsgId,
+                                    Offset = startIndex,
                                     OnlyLocal = false
                                 }, this);
+
+                                Thread.Sleep(100);
+                            }
+                            else
+                            {
+                                Task.Run(() =>
+                                {
+                                    GetUserDetail();
+                                });
+
                             }
                         }
-                        else
-                        {
-                            UserHandler.Instance.PublishMsg("-------GetSupergroupFullInfo:" + currentGroupUrl + " is not CanGetMembers");
-                            return;
-                        }
                     }
-                    else
+                    else if (currentOperatorType == OperatorType.SearchChatUser)
                     {
-                        UserHandler.Instance.PublishMsg("-------GetSupergroupFullInfo:" + currentGroupUrl + " is null");
-                        return;
-                    }
-
-                }
-                else if (currentOperatorType == OperatorType.SearchSupergroupMembers)//无活跃条件筛选时，获取全部成员
-                {
-                    TdApi.ChatMembers chatMembers = @object as TdApi.ChatMembers;
-                    if (chatMembers != null)
-                    {
-                        CommonHandler.Instance.PublishMemberChange(chatMembers.TotalCount, chatMembers.Members.Length);
-
-                        MsgHandler.Instance.AddOrUpdateByMember(chatMembers, currentCollectNum);
-
-                        int loadCount = MsgHandler.Instance.GetLoadUserCount();
-
-                        if (chatMembers.Members.Length >= limit && (currentCollectNum == 0 || (currentCollectNum > 0 && startIndex <= currentCollectNum)))
+                        TdApi.User user = @object as TdApi.User;
+                        if (user != null)
                         {
-                            Thread.Sleep(500);
-
-                            startIndex += chatMembers.Members.Length;
-
-                            _client.Send(new TdApi.GetSupergroupMembers() { SupergroupId = currentGruopId, Filter = new TdApi.SupergroupMembersFilterRecent(), Offset = startIndex, Limit = limit }, this);
-
-                        }
-                        else
-                        {
-                            UserHandler.Instance.PublishMsg("Start get user detail");
-                            Task.Run(() =>
+                            if (user.Type is TdApi.UserTypeBot)
                             {
-                                GetUserDetail();
-                            });
+                                UserHandler.Instance.PublishMsg("Filter bot:" + user.FirstName + " " + user.LastName);
+                                return;
+                            }
+                            user.RestrictionReason = currentGroupName;
+                            OnUserChange?.Invoke(user);
+
+                            MsgHandler.Instance.AddOrUpdateUser(user);
                         }
                     }
                 }
-                else if (currentOperatorType == OperatorType.SearchChatHistory)
+                else
                 {
-                    TdApi.Messages messages = @object as TdApi.Messages;
-
-                    if (messages != null)
-                    {
-                        int lastTime = MsgHandler.Instance.AddOrUpdateByMessage(messages, currentTimeFilterType);
-
-                        bool isContinue = MsgHandler.Instance.ContinueSearchHis(lastTime, currentTimeFilterType);
-
-
-                        if (isContinue && messages.TotalCount > 50 && messages.MessagesValue.Length >= 50)
-                        {
-                            long lastMsgId = messages.MessagesValue[messages.MessagesValue.Length - 1].Id;
-
-                            startIndex = -50;
-                            endIndex = 50;
-                            _client.Send(new TdApi.GetChatHistory()
-                            {
-                                ChatId = currentChatId,
-                                Limit = limit,
-                                FromMessageId = lastMsgId,
-                                Offset = startIndex,
-                                OnlyLocal = false
-                            }, this);
-
-                            Thread.Sleep(100);
-                        }
-                        else
-                        {
-                            Task.Run(() =>
-                            {
-                                GetUserDetail();
-                            });
-                            
-                        }
-                    }
+                    UserHandler.Instance.PublishMsg("APICollect OnResult currentOperatorType:" + currentOperatorType + " result is null");
                 }
-                else if (currentOperatorType == OperatorType.SearchChatUser)
-                {
-                    TdApi.User user = @object as TdApi.User;
-                    if (user != null)
-                    {
-                        if (user.Type is TdApi.UserTypeBot)
-                        {
-                            UserHandler.Instance.PublishMsg("Filter bot:" + user.FirstName + " " + user.LastName);
-                            return;
-                        }
-                        user.RestrictionReason = currentGroupName;
-                        OnUserChange?.Invoke(user);
-
-                        MsgHandler.Instance.AddOrUpdateUser(user);
-                    }
-                }
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 UserHandler.Instance.PublishMsg("APICollect OnResult exeception:" + e.Message);
             }

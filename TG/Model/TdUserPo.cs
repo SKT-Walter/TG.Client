@@ -19,5 +19,10 @@ namespace TG.Client.Model
         public string Flag { get; set; }
         
         public string UpdateTime { get; set; }
+        public string Username { get; set; }
+        public string EditableUsername { get; set; }
+        public string ActiveUsernames { get; set; }
+        public string DisabledUsernames { get; set; }
+        
     }
 }

@@ -68,8 +68,7 @@ namespace TG.Client.TG
                     if (userId != 0)
                     {
                         _client.Send(new TdApi.CreatePrivateChat() { UserId = userId, Force = true }, new BatchSendMsgHandler(_client, SendMsgType.CreateChat, SendMsg));
-
-
+                        
                         //_client.Send(new TdApi.SearchPublicChat() { Username = user }, new BatchSendMsgHandler(_client, SendMsgType.SearchChat, SendMsg));
                     }
                     int interval = random.Next(startInterval, endInterval) * 1000;

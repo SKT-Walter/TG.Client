@@ -54,6 +54,10 @@ namespace TG.Client.Handler
                     dbUser.Flag += userPo.UserId + ",";
                     
                 }
+                dbUser.ActiveUsernames = userPo.ActiveUsernames;
+                dbUser.Username = userPo.Username;
+                dbUser.DisabledUsernames = userPo.DisabledUsernames;
+                dbUser.ActiveUsernames = userPo.ActiveUsernames;
             }
             else
             {
@@ -75,7 +79,7 @@ namespace TG.Client.Handler
             try
             {
                 List<TdUserPo> list = SqlliteUtils.Query<TdUserPo>
-                    ("select * from TdUserPo where Name=?",
+                    ("select * from TdUserPo where Username=?",
                     new object[] { name });
                 if (list.Count > 0)
                 {
