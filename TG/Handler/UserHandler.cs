@@ -109,5 +109,41 @@ namespace TG.Client.Handler
             }
             return null;
         }
+
+        public List<TdUserPo> QuoteUserByPage(int pageSize, int pageIndex)
+        {
+            try
+            {
+                List<TdUserPo> list = SqlliteUtils.Query<TdUserPo>
+                    ("select * from TdUserPo ORDER BY UserId LIMIT ? OFFSET ?",
+                    new object[] { pageSize, pageIndex });
+                if (list.Count > 0)
+                {
+                    return list;
+                }
+            }
+            catch (Exception e)
+            {
+            }
+            return null;
+        }
+
+        public int QuoteUserCount()
+        {
+            try
+            {
+                List<TdTotal> list = SqlliteUtils.Query<TdTotal>
+                    ("select count(*) as  from TdUserPo",
+                    new object[] { });
+                if (list.Count > 0)
+                {
+                    return list[0].Total;
+                }
+            }
+            catch (Exception e)
+            {
+            }
+            return 0;
+        }
     }
 }

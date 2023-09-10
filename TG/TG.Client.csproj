@@ -109,8 +109,11 @@
     <Compile Include="Model\SendMsgPo.cs" />
     <Compile Include="Model\SendMsgType.cs" />
     <Compile Include="Model\TdMsgPo.cs" />
+    <Compile Include="Model\TdTotal.cs" />
+    <Compile Include="Model\TdUserEx.cs" />
     <Compile Include="Model\TdUserPo.cs" />
     <Compile Include="Model\TimeFilterType.cs" />
+    <Compile Include="TG\AnalysisChatHandler.cs" />
     <Compile Include="TG\AuthorizationRequestHandler.cs" />
     <Compile Include="TG\BatchSendMsgHandler.cs" />
     <Compile Include="TG\DefaultHandler.cs" />
@@ -127,11 +130,15 @@
     <Compile Include="Utils\SqlLite\SqliteManager.cs" />
     <Compile Include="Utils\SqlLite\SqlliteUtils.cs" />
     <Compile Include="Utils\SqlLite\UserConfigPo.cs" />
+    <Compile Include="ViewModel\Analysis\AnalysisViewModel.cs" />
     <Compile Include="ViewModel\APICollect\APICollectViewModel.cs" />
     <Compile Include="ViewModel\CollectUser\CollectUserViewModel.cs" />
     <Compile Include="ViewModel\GroupSendMsg\GroupSendMsgViewModel.cs" />
     <Compile Include="ViewModel\MoreAccLogin\LoginViewModel.cs" />
     <Compile Include="ViewModel\MoreAccLogin\MoreAccLoginViewModel.cs" />
+    <Compile Include="View\Analysis\AnalysisView.xaml.cs">
+      <DependentUpon>AnalysisView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\APICollect\APICollectView.xaml.cs">
       <DependentUpon>APICollectView.xaml</DependentUpon>
     </Compile>
@@ -177,6 +184,10 @@
     <Page Include="Resources\ScrollViewerDictionary.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Analysis\AnalysisView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\APICollect\APICollectView.xaml">
       <SubType>Designer</SubType>
@@ -233,5 +244,6 @@
   <ItemGroup>
     <Resource Include="favicon.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

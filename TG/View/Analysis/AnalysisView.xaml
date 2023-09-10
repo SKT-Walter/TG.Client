@@ -1,0 +1,112 @@
+﻿<UserControl x:Class="TG.Client.View.Analysis.AnalysisView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TG.Client.View.Analysis"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" Background="#FFFFFF">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/CommonStyle.xaml"/>
+                <ResourceDictionary Source="/Resources/ButtonStyleDictionary.xaml"/>
+                <ResourceDictionary Source="/Resources/DataGridStyleDictionary.xaml"/>
+                <ResourceDictionary Source="/Resources/ScrollViewerDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style x:Key="DataGridCellStylesss" TargetType="{x:Type DataGridCell}">
+                <Setter Property="IsTabStop" Value="False"/>
+                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                <Setter Property="Foreground" Value="{StaticResource Black-1}"/>
+                <Setter Property="Height" Value="30"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type DataGridCell}">
+                            <Border x:Name="Bg" Background="Transparent" UseLayoutRounding="True"  BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0">
+                                <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Margin="5,0,0,0"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- 居中 -->
+            <Style x:Key="CustomeDataGridTextCenterStyle" TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource DataGridCellStylesss}">
+                <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                <!--<Setter Property="BorderThickness" Value="0, 0, 1, 0"/>
+                <Setter Property="BorderBrush" Value="#0A0F0E"/>-->
+            </Style>
+
+
+
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="36"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Button x:Name="btnCollect" Grid.Row="0" Margin="0, 4, 0, 2" Content="开始分析采集数据" Style="{StaticResource CollectButtonStyle}" Click="BtnCollect_Click"></Button>
+        <ProgressBar x:Name="pbDeal" Grid.Row="1" Background="Orange" Value="{Binding ProcessPercent}" Margin="2, 0, 2, 0">
+            <ProgressBar.Style>
+                <Style TargetType="ProgressBar">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ProgressBar">
+                                <Grid>
+                                    <Rectangle StrokeThickness="1" RadiusX="10" RadiusY="10">
+                                        <Rectangle.Fill>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                <GradientStop Color="#FFF1F1F1" Offset="0"/>
+                                                <GradientStop Color="#FFE5E5E5" Offset="1"/>
+                                            </LinearGradientBrush>
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                    <Rectangle Name="PART_Track" RadiusX="10" RadiusY="10"/>
+                                    <Decorator x:Name="PART_Indicator" HorizontalAlignment="Left" ClipToBounds="True">
+                                        <Grid>
+                                            <Rectangle x:Name="Indicator" RadiusX="10" RadiusY="10">
+                                                <Rectangle.Fill>
+                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                        <GradientStop Color="LightBlue" Offset="0"/>
+                                                        <GradientStop Color="DeepSkyBlue" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Rectangle.Fill>
+                                            </Rectangle>
+                                        </Grid>
+                                    </Decorator>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ProgressBar.Style>
+        </ProgressBar>
+        <DataGrid x:Name="dgData" Grid.Row="2" ItemsSource="{Binding UserList}" GridLinesVisibility="Vertical" Style="{StaticResource DefaultDataGrid}" SelectionMode="Extended"
+                      ColumnHeaderStyle="{StaticResource DataGridColumnHeaderCenterStyle}" Margin="0, 10, 0, 10"  HorizontalContentAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                  CellStyle="{StaticResource CustomeDataGridTextCenterStyle}" RowStyle="{StaticResource DataGridRowStyle}" BorderThickness="1" PreviewKeyDown="DataGrid1_PreviewKeyDown"
+                  Background="#FFE4E1DB">
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="复制选中行" Click="MenuItem_CopySelectedRows_Click"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+
+            <DataGrid.Columns>
+
+                <DataGridTextColumn Binding="{Binding UserId}" Header="用户Id" Width="Auto" MinWidth="85" FontSize="{StaticResource FontSize-12}" ClipboardContentBinding="{Binding Id}"/>
+                <DataGridTextColumn Binding="{Binding Name}" Header="用户名" Width="Auto" MinWidth="85" FontSize="{StaticResource FontSize-12}" ClipboardContentBinding="{Binding Name}"/>
+                <DataGridTextColumn Binding="{Binding PhoneNumber}" Header="电话号码" Width="Auto" MinWidth="85" FontSize="{StaticResource FontSize-12}" ClipboardContentBinding="{Binding Phone}"/>
+                <DataGridTextColumn Binding="{Binding Username}" Header="UserName" Width="Auto" MinWidth="85" FontSize="{StaticResource FontSize-12}" ClipboardContentBinding="{Binding Username}"/>
+                <DataGridTextColumn Binding="{Binding GroupName}" Header="所在群" Width="Auto" MinWidth="85" FontSize="{StaticResource FontSize-12}" ClipboardContentBinding="{Binding Username}"/>
+
+            </DataGrid.Columns>
+
+        </DataGrid>
+
+    </Grid>
+</UserControl>

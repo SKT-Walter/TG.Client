@@ -71,6 +71,8 @@ namespace TG.Client.TG
                 _defaultHandler.OnResult(Td.Client.Execute(new TdApi.GetTextEntities("@telegram /test_command https://telegram.org telegram.me @gif @test")));
 
                 BatchSendMsgHandler.Instance.Init(_client);
+
+                AnalysisChatHandler.Instance.Init(_client);
             }
 
             return _client;
@@ -292,6 +294,7 @@ namespace TG.Client.TG
         {
             command = "me";
             command = "groupsInCommon";
+            command = "chats";
             this.loginPo = loginPo;
             string[] commands = command.Split(new char[] { ' ' }, 2);
             try
