@@ -22,6 +22,7 @@ namespace TG.Client.Handler
 
 
         private AsyncThreadQueue<TdUserPo> userThread;
+        private AsyncThreadQueue<TdUserEx> userExThread;
 
         public void PublishMsg(object obj)
         {
@@ -39,6 +40,7 @@ namespace TG.Client.Handler
                 SqlliteUtils.CreateTable<TdUserPo>(pkColList);
 
                 userThread = new AsyncThreadQueue<TdUserPo>(UpdateData);
+                userExThread = new AsyncThreadQueue<TdUserEx>(UpdateDexData);
 
                 isInit = false;
             }
@@ -67,11 +69,19 @@ namespace TG.Client.Handler
             SqlliteUtils.Replace<TdUserPo>(dbUser);
         }
 
+
+        
+
         public void SaveUser(TdUserPo po)
         {
             userThread.Enqueue(po);
 
 
+        }
+
+        public void SaveDexUser(TdUserEx userEx)
+        {
+            userExThread.Enqueue(userEx);
         }
 
         public TdUserPo QuoteUserByName(string name)
@@ -144,6 +154,35 @@ namespace TG.Client.Handler
             {
             }
             return 0;
+        }
+
+        public TdUserEx QuoteDexUserById(long userId)
+        {
+            try
+            {
+                List<TdUserEx> list = SqlliteUtils.Query<TdUserEx>
+                    ("select * from TdUserEx where UserId=?",
+                    new object[] { userId });
+                if (list.Count > 0)
+                {
+                    return list[0];
+                }
+            }
+            catch (Exception e)
+            {
+            }
+            return null;
+        }
+
+        public void UpdateDexUser(TdUserEx userPo)
+        {
+            userPo.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            SqlliteUtils.Replace<TdUserEx>(userPo);
+        }
+
+        private void UpdateDexData(TdUserEx userPo)
+        {
+            UpdateDexUser(userPo);
         }
     }
 }

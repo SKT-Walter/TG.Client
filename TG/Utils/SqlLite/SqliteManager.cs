@@ -15,13 +15,13 @@ namespace TG.Client.Utils.SqlLite
         public static readonly string Version = "v1";
         public static readonly string LastVersion = "";
         //public static readonly string DBFile = "./data/StcLite_{0}_{1}.db";
-        public static readonly string DBFile = "./data/TG.db";
+        public static readonly string DBFile = "./collectData/TG.db";//"./data/TG.db";
 
         public static void Initialize()
         {
             try
             {
-                string folder = System.AppDomain.CurrentDomain.BaseDirectory + "./data";
+                string folder = System.AppDomain.CurrentDomain.BaseDirectory + "./collectData";//"./data";
                 if (!Directory.Exists(folder))
                 {
                     Directory.CreateDirectory(folder);

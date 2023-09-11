@@ -18,16 +18,16 @@ namespace TG.Client.Handler
         }
 
         public event Action<int, int> OnGetMembers;
-        public event Action<object> OnStartAnalysis;
+        public event Action OnStartAnalysis;
 
         public void PublishMemberChange(int total, int oneNum)
         {
             OnGetMembers?.Invoke(total, oneNum);
         }
 
-        public void PublishStartAnalysis(object obj)
+        public void PublishStartAnalysis()
         {
-            OnStartAnalysis?.Invoke(obj);
+            OnStartAnalysis?.Invoke();
         }
 
     }

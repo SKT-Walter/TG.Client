@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -15,6 +16,8 @@ namespace TG.Client.ViewModel.Analysis
 {
     public class AnalysisViewModel : BaseViewModel
     {
+        
+
         private FrameworkElement ownUI = null;
         private ObservableCollection<TdUserEx> userList = new ObservableCollection<TdUserEx>();
 
@@ -44,12 +47,11 @@ namespace TG.Client.ViewModel.Analysis
             CommonHandler.Instance.OnStartAnalysis += Instance_OnStartAnalysis;
         }
 
-        private void Instance_OnStartAnalysis(object obj)
+        private void Instance_OnStartAnalysis()
         {
-            if (obj is TdApi.Chats)
-            {
-                this.StartCompare(obj as TdApi.Chats);
-            }
+            SetProcessPercent(10);
+            this.StartCompare();
+
         }
 
         public void StartAnalysis()
@@ -58,12 +60,12 @@ namespace TG.Client.ViewModel.Analysis
             ProcessPercent = 5;
             Task.Run(() =>
             {
-                AnalysisChatHandler.Instance.GetChat();
+                AnalysisChatHandler.Instance.GetChats();
                 
             });
         }
 
-        public void StartCompare(TdApi.Chats chats)
+        public void StartCompare()
         {
             Task.Run(() =>
             {
@@ -74,8 +76,33 @@ namespace TG.Client.ViewModel.Analysis
                 while (true)
                 {
                     List<TdUserPo> userList = UserHandler.Instance.QuoteUserByPage(pageSize, pageSize * pageIndex);
+
+                    foreach (TdUserPo userPo in userList)
+                    {
+                        foreach (TdApi.Chat chat in AnalysisChatHandler.Instance.ChatList)
+                        {
+                            if (userPo.Flag.Contains(chat.Title))
+                            {
+                                string userJsonStr = JsonConvert.SerializeObject(userPo);
+                                TdUserEx userEx = JsonConvert.DeserializeObject<TdUserEx>(userJsonStr);
+                                userEx.GroupName = chat.Title;
+
+                                UserHandler.Instance.SaveDexUser(userEx);
+                            }
+                        }
+                    }
+                    UserHandler.Instance.PublishMsg("StartCompare into next page...");
+                    SetProcessPercent(1);
                 }
             });
+        }
+
+        private void SetProcessPercent(int percent)
+        {
+            Application.Current.Dispatcher.BeginInvoke((Action)(() =>
+            {
+                ProcessPercent += percent;
+            }));
         }
 
     }
