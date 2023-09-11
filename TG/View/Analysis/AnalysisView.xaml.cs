@@ -26,9 +26,9 @@ namespace TG.Client.View.Analysis
         public AnalysisView()
         {
             InitializeComponent();
-
-            this.DataContext = new AnalysisViewModel();
+            
             analysisViewModel = new AnalysisViewModel();
+            this.DataContext = analysisViewModel;
             this.analysisViewModel.Init(this);
         }
 

@@ -22,8 +22,16 @@ namespace TG.Client.TG
 
         }
 
-        private List<TdApi.Chat> chatList = new List<TdApi.Chat>();
+        private object lockObj = new object();
+        
+        private Dictionary<string, TdApi.Supergroup> groupNameHs = new Dictionary<string, TdApi.Supergroup>();
 
+        public Dictionary<string, TdApi.Supergroup> GetGroupNameHs
+        {
+            get { return groupNameHs; }
+        }
+
+        private List<TdApi.Chat> chatList = new List<TdApi.Chat>();
         public List<TdApi.Chat> ChatList
         {
             get { return chatList; }
@@ -36,8 +44,11 @@ namespace TG.Client.TG
 
         public void GetChats()
         {
+            totalChatNum = 0;
             _client.Send(new TdApi.GetChats(new TdApi.ChatListMain(), 200), this);
         }
+
+        private int totalChatNum = 0;
 
         public void OnResult(TdApi.BaseObject baseObject)
         {
@@ -62,6 +73,24 @@ namespace TG.Client.TG
                                 chatList.Add(baseObject as TdApi.Chat);
                                 UserHandler.Instance.PublishMsg("Add chat size:" + chatList.Count);
                                 UserHandler.Instance.PublishMsg("Add chat:" + baseObject.ToString());
+
+                                TdApi.ChatTypeSupergroup supergroup = chat.Type as TdApi.ChatTypeSupergroup;
+                                //_client.Send(new TdApi.GetSupergroup() { SupergroupId = supergroup.SupergroupId }, this);
+
+                                this.GetGroupInfo(supergroup.SupergroupId);
+                            }
+                        }
+                        else if (baseObject is TdApi.Supergroup)
+                        {
+                            TdApi.Supergroup supergroupFullInfo = baseObject as TdApi.Supergroup;
+                            string title = supergroupFullInfo.Usernames.ActiveUsernames[0];
+
+                            lock (lockObj)
+                            {
+                                if (!groupNameHs.ContainsKey(title))
+                                {
+                                    groupNameHs.Add(title, supergroupFullInfo);
+                                }
                             }
                         }
                     }
@@ -73,18 +102,31 @@ namespace TG.Client.TG
             }
         }
 
+        private void GetGroupInfo(long id)
+        {
+            Task.Run(() =>
+            {
+                _client.Send(new TdApi.GetSupergroup() { SupergroupId = id }, this);
+
+                Thread.Sleep(100);
+            });
+        }
+
         private void GetChatListDetail(TdApi.Chats chats)
         {
             Task.Run(() =>
             {
+                totalChatNum = chats.TotalCount;
                 foreach (long chatId in chats.ChatIds)
                 {
                     _client.Send(new TdApi.GetChat(chatId), this);
 
                     Thread.Sleep(100);
+
+                    totalChatNum--;
                 }
 
-                Thread.Sleep(1000);
+                Thread.Sleep(5000);
                 CommonHandler.Instance.PublishStartAnalysis();
             });
         }

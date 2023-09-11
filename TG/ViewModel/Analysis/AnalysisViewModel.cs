@@ -70,22 +70,22 @@ namespace TG.Client.ViewModel.Analysis
             Task.Run(() =>
             {
                 int total = UserHandler.Instance.QuoteUserCount();
-
+                ;
                 int pageSize = 1000;
                 int pageIndex = 0;
                 while (true)
                 {
                     List<TdUserPo> userList = UserHandler.Instance.QuoteUserByPage(pageSize, pageSize * pageIndex);
-
+                    pageIndex++;
                     foreach (TdUserPo userPo in userList)
                     {
-                        foreach (TdApi.Chat chat in AnalysisChatHandler.Instance.ChatList)
+                        foreach (string groupName in AnalysisChatHandler.Instance.GetGroupNameHs.Keys)
                         {
-                            if (userPo.Flag.Contains(chat.Title))
+                            if (userPo.Flag.Contains(groupName))
                             {
                                 string userJsonStr = JsonConvert.SerializeObject(userPo);
                                 TdUserEx userEx = JsonConvert.DeserializeObject<TdUserEx>(userJsonStr);
-                                userEx.GroupName = chat.Title;
+                                userEx.GroupName = groupName;
 
                                 UserHandler.Instance.SaveDexUser(userEx);
                             }

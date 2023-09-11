@@ -39,6 +39,8 @@ namespace TG.Client.Handler
                 pkColList.Add("UserId");
                 SqlliteUtils.CreateTable<TdUserPo>(pkColList);
 
+                SqlliteUtils.CreateTable<TdUserEx>(pkColList);
+
                 userThread = new AsyncThreadQueue<TdUserPo>(UpdateData);
                 userExThread = new AsyncThreadQueue<TdUserEx>(UpdateDexData);
 
