@@ -140,12 +140,12 @@ namespace TG.Client.Handler
             return null;
         }
 
-        public int QuoteUserCount()
+        public Int64 QuoteUserCount()
         {
             try
             {
                 List<TdTotal> list = SqlliteUtils.Query<TdTotal>
-                    ("select count(*) as  from TdUserPo",
+                    ("select count(*) as Total from TdUserPo",
                     new object[] { });
                 if (list.Count > 0)
                 {

@@ -83,13 +83,17 @@ namespace TG.Client.TG
                         else if (baseObject is TdApi.Supergroup)
                         {
                             TdApi.Supergroup supergroupFullInfo = baseObject as TdApi.Supergroup;
-                            string title = supergroupFullInfo.Usernames.ActiveUsernames[0];
-
-                            lock (lockObj)
+                            if (supergroupFullInfo.Usernames != null && supergroupFullInfo.Usernames.ActiveUsernames != null
+                                && supergroupFullInfo.Usernames.ActiveUsernames.Length > 0)
                             {
-                                if (!groupNameHs.ContainsKey(title))
+                                string title = supergroupFullInfo.Usernames.ActiveUsernames[0];
+
+                                lock (lockObj)
                                 {
-                                    groupNameHs.Add(title, supergroupFullInfo);
+                                    if (!groupNameHs.ContainsKey(title))
+                                    {
+                                        groupNameHs.Add(title, supergroupFullInfo);
+                                    }
                                 }
                             }
                         }
@@ -116,14 +120,12 @@ namespace TG.Client.TG
         {
             Task.Run(() =>
             {
-                totalChatNum = chats.TotalCount;
                 foreach (long chatId in chats.ChatIds)
                 {
                     _client.Send(new TdApi.GetChat(chatId), this);
 
                     Thread.Sleep(100);
 
-                    totalChatNum--;
                 }
 
                 Thread.Sleep(5000);

@@ -8,6 +8,6 @@ namespace TG.Client.Model
 {
     public class TdTotal
     {
-        public int Total { get; set; }
+        public Int64 Total { get; set; }
     }
 }

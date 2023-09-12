@@ -26,8 +26,8 @@ namespace TG.Client.ViewModel.Analysis
             get { return userList; }
         }
 
-        private int processPercent = 0;
-        public int ProcessPercent
+        private double processPercent = 0;
+        public double ProcessPercent
         {
             get { return processPercent; }
             set
@@ -69,10 +69,16 @@ namespace TG.Client.ViewModel.Analysis
         {
             Task.Run(() =>
             {
-                int total = UserHandler.Instance.QuoteUserCount();
-                ;
+                Int64 total = UserHandler.Instance.QuoteUserCount();
+                decimal totalD = 0;
+                decimal.TryParse(total.ToString(), out totalD);
                 int pageSize = 1000;
                 int pageIndex = 0;
+                decimal temD = totalD / pageSize;
+                int temInt = (int)temD;
+                int totalPage = temD > temInt ? (temInt + 1) : temInt;
+                double percent = 90.0;
+                double step = percent / totalPage;
                 while (true)
                 {
                     List<TdUserPo> userList = UserHandler.Instance.QuoteUserByPage(pageSize, pageSize * pageIndex);
@@ -88,16 +94,30 @@ namespace TG.Client.ViewModel.Analysis
                                 userEx.GroupName = groupName;
 
                                 UserHandler.Instance.SaveDexUser(userEx);
+
+                                Application.Current.Dispatcher.BeginInvoke((Action)(() =>
+                                {
+                                    UserList.Add(userEx);
+                                }));
                             }
                         }
                     }
-                    UserHandler.Instance.PublishMsg("StartCompare into next page...");
-                    SetProcessPercent(1);
+
+                    UserHandler.Instance.PublishMsg("StartCompare into next page:" + pageIndex + ", total page:" + totalPage);
+                    
+                    SetProcessPercent(step);
+
+                    if (userList == null || userList.Count < pageSize)
+                    {
+                        break;
+                    }
                 }
+
+                UserHandler.Instance.PublishMsg("分析数据完成...");
             });
         }
 
-        private void SetProcessPercent(int percent)
+        private void SetProcessPercent(double percent)
         {
             Application.Current.Dispatcher.BeginInvoke((Action)(() =>
             {
