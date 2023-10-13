@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TG.Client.ViewModel.MoreAccLogin;
 
 namespace TG.Client.View.MoreAccLogin
 {
@@ -20,9 +21,32 @@ namespace TG.Client.View.MoreAccLogin
     /// </summary>
     public partial class MoreAccLoginView : UserControl
     {
+        private MoreAccLoginViewModel moreAccLoginViewModel = null;
+
         public MoreAccLoginView()
         {
             InitializeComponent();
+
+            moreAccLoginViewModel = new MoreAccLoginViewModel();
+
+            this.DataContext = moreAccLoginViewModel;
+
+            moreAccLoginViewModel.Init(this);
+        }
+
+        private void DataGrid1_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+
+        }
+
+        private void BtnSendCode_Click(object sender, RoutedEventArgs e)
+        {
+            moreAccLoginViewModel.ProcessLogin();
+        }
+
+        private void BtnVerify_Click(object sender, RoutedEventArgs e)
+        {
+            moreAccLoginViewModel.ProcessLogin();
         }
     }
 }

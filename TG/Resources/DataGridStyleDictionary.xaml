@@ -110,7 +110,7 @@
     <Style x:Key="DataGridRowStyle" TargetType="DataGridRow">
         <Setter Property="Foreground" Value="{StaticResource Black-1}"></Setter>
         <!--<Setter Property="Background" Value="{StaticResource DefaultBackgroup.ColorBrush}"/>-->
-        <Setter Property="Height" Value="24"/>
+        <!--<Setter Property="Height" Value="24"/>-->
         <Style.Triggers>
             <!--<Trigger Property="AlternationIndex" Value="0">
                 <Setter Property="Background" Value="{StaticResource DefaultAlternatingRowBackground.Zero.ColorBrush}"/>
@@ -148,7 +148,7 @@
         <Setter Property="IsTabStop" Value="False"/>
         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="Foreground" Value="{StaticResource DataGrid.Foreground}"/>
-        <Setter Property="Height" Value="24"/>
+        <!--<Setter Property="Height" Value="24"/>-->
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type DataGridCell}">

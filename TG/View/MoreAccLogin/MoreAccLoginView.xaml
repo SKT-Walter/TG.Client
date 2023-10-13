@@ -5,10 +5,206 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TG.Client.View.MoreAccLogin"
              mc:Ignorable="d" 
-             d:DesignHeight="350" d:DesignWidth="800">
+             d:DesignHeight="350" d:DesignWidth="800" Background="#FFFFFF">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/CommonStyle.xaml"/>
+                <ResourceDictionary Source="/Resources/ButtonStyleDictionary.xaml"/>
+                <ResourceDictionary Source="/Resources/DataGridStyleDictionary.xaml"/>
+                <ResourceDictionary Source="/Resources/ScrollViewerDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style x:Key="DataGridCellStylesss" TargetType="{x:Type DataGridCell}">
+                <Setter Property="IsTabStop" Value="False"/>
+                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                <Setter Property="Foreground" Value="{StaticResource Black-1}"/>
+                <Setter Property="Height" Value="50"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type DataGridCell}">
+                            <Border x:Name="Bg" Background="Transparent" UseLayoutRounding="True"  BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0">
+                                <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Margin="5,0,0,0"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- 居中 -->
+            <Style x:Key="CustomeDataGridTextCenterStyle" TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource DataGridCellStylesss}">
+                <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                <!--<Setter Property="BorderThickness" Value="0, 0, 1, 0"/>
+                <Setter Property="BorderBrush" Value="#0A0F0E"/>-->
+            </Style>
+
+
+
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+
     <Grid>
-        <DataGrid>
-            
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="34"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Button Grid.Row="0" Content="批量验证" Margin="0, 2, 0, 2" Style="{StaticResource CollectButtonStyle}"></Button>
+
+
+        <DataGrid Grid.Row="1" x:Name="dgAccount" ItemsSource="{Binding AccountData}" GridLinesVisibility="Vertical" Style="{StaticResource DefaultDataGrid}" SelectionMode="Extended"
+                      ColumnHeaderStyle="{StaticResource DataGridColumnHeaderCenterStyle}" Margin="0, 0, 0, 10"  HorizontalContentAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                  CellStyle="{StaticResource CustomeDataGridTextCenterStyle}" RowStyle="{StaticResource DataGridRowStyle}" RowHeight="50" BorderThickness="1" PreviewKeyDown="DataGrid1_PreviewKeyDown"
+                  Background="#FFE4E1DB" MinHeight="300" SelectedItem="{Binding SelectRow, Mode=TwoWay}">
+
+            <DataGrid.Columns>
+                
+                <DataGridTextColumn Header="账号" Binding="{Binding Account}" Width="150"/>
+                
+                <DataGridTemplateColumn Header="登录状态" Width="60">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <!--<TextBlock Text="{Binding Status}"></TextBlock>-->
+                            <Border Width="16" Height="16" CornerRadius="10" Background="{Binding StatusBrush}">
+                                <!--<Border.Style>
+                                    <Style TargetType="Border">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Status}" Value="1">
+                                                <Setter Property="Background" Value="Green"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Status}" Value="0">
+                                                <Setter Property="Background" Value="Red"/>
+                                            </DataTrigger>
+
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="Green"/>
+                                            </Trigger>
+                                            
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>-->
+                            </Border>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="手机前缀" Width="90">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox Grid.Column="3" Width="80" Margin="0, 0, 2, 0" Height="40" TextBlock.TextAlignment="Center" Padding="0, 11, 0, 0" Text="{Binding PhonePrefix, Mode=TwoWay}">
+                                <TextBox.Resources>
+                                    <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.5" Stretch="None" AlignmentX="Left">
+                                        <VisualBrush.Visual>
+                                            <TextBlock Text="如中国+86"/>
+                                        </VisualBrush.Visual>
+                                    </VisualBrush>
+                                </TextBox.Resources>
+                                <TextBox.Style>
+                                    <Style TargetType="TextBox">
+                                        <Style.Triggers>
+                                            <Trigger Property="Text" Value="{x:Null}">
+                                                <Setter Property="Background" Value="{StaticResource HintText}"/>
+                                            </Trigger>
+                                            <Trigger Property="Text" Value="">
+                                                <Setter Property="Background" Value="{StaticResource HintText}"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="电话号码" MinWidth="174">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox Grid.Column="3" Width="170" Margin="0, 0, 2, 0" Height="40" TextBlock.TextAlignment="Center" Padding="0, 11, 0, 0" Text="{Binding Phone, Mode=TwoWay}">
+                                <TextBox.Resources>
+                                    <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.5" Stretch="None" AlignmentX="Left">
+                                        <VisualBrush.Visual>
+                                            <TextBlock Text="请输入电话号码"/>
+                                        </VisualBrush.Visual>
+                                    </VisualBrush>
+                                </TextBox.Resources>
+                                <TextBox.Style>
+                                    <Style TargetType="TextBox">
+                                        <Style.Triggers>
+                                            <Trigger Property="Text" Value="{x:Null}">
+                                                <Setter Property="Background" Value="{StaticResource HintText}"/>
+                                            </Trigger>
+                                            <Trigger Property="Text" Value="">
+                                                <Setter Property="Background" Value="{StaticResource HintText}"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Width="90">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button x:Name="btnSendCode" Width="80" Height="40" Margin="0, 0, 2, 0" Content="发送验证码" Click="BtnSendCode_Click"></Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="验证码" Width="150">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox Grid.Column="5" Width="140" Padding="0, 12, 0, 0" Margin="0, 0, 2, 0" Height="40" TextBlock.TextAlignment="Center" Text="{Binding VerifyCode, Mode=TwoWay}">
+                                <TextBox.Resources>
+                                    <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.5" Stretch="None" AlignmentX="Left" >
+                                        <VisualBrush.Visual>
+                                            <TextBlock Text="请输入验证码"/>
+                                        </VisualBrush.Visual>
+                                    </VisualBrush>
+                                </TextBox.Resources>
+                                <TextBox.Style>
+                                    <Style TargetType="TextBox">
+                                        <Style.Triggers>
+                                            <Trigger Property="Text" Value="{x:Null}">
+                                                <Setter Property="Background" Value="{StaticResource HintText}"/>
+                                            </Trigger>
+                                            <Trigger Property="Text" Value="">
+                                                <Setter Property="Background" Value="{StaticResource HintText}"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Width="80">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button x:Name="btnVerify" Width="60" Height="40" Margin="5, 0, 5, 0" Content="验证" Click="BtnVerify_Click"></Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <!-- Add more columns as needed -->
+            </DataGrid.Columns>
+
+
+
+            <!--<DataGrid.Columns>
+                <DataGridTemplateColumn Width="330">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <local:LoginView x:Name="loginView" Margin="0, 0, 0, 0"></local:LoginView>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>-->
         </DataGrid>
     </Grid>
 </UserControl>

@@ -98,7 +98,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BatchTG\TGClient.cs" />
     <Compile Include="Cache\TGCache.cs" />
+    <Compile Include="Cache\TGClientManager.cs" />
     <Compile Include="Handler\CommonHandler.cs" />
     <Compile Include="Handler\UserHandler.cs" />
     <Compile Include="Model\BaseReplyPo.cs" />

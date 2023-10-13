@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 using TG.Client.Model;
 
 namespace TG.Client.ViewModel.MoreAccLogin
@@ -24,8 +25,24 @@ namespace TG.Client.ViewModel.MoreAccLogin
         public string Status
         {
             get { return status; }
-            set { status = value; this.OnPropertyChanged(); }
+            set 
+            { 
+                status = value; 
+                this.OnPropertyChanged(); 
+            }
         }
+
+        private Brush statusBrush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(243, 42, 25));
+        public Brush StatusBrush
+        {
+            get { return statusBrush; }
+            set
+            {
+                statusBrush = value;
+                this.OnPropertyChanged();
+            }
+        }
+
 
         private string phonePrefix;
 
@@ -53,6 +70,11 @@ namespace TG.Client.ViewModel.MoreAccLogin
             }
         }
 
+        public string SendPhone
+        {
+            get { return PhonePrefix + " " + Phone; }
+        }
+
         private string verifyCode;
 
         public string VerifyCode
@@ -61,6 +83,33 @@ namespace TG.Client.ViewModel.MoreAccLogin
             set
             {
                 verifyCode = value;
+
+                this.OnPropertyChanged();
+            }
+        }
+
+
+        private string apiId;
+
+        public string APIID
+        {
+            get { return apiId; }
+            set
+            {
+                apiId = value;
+
+                this.OnPropertyChanged();
+            }
+        }
+
+        private string apiHash;
+
+        public string APIHASH
+        {
+            get { return apiHash; }
+            set
+            {
+                apiHash = value;
 
                 this.OnPropertyChanged();
             }
