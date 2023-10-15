@@ -419,7 +419,7 @@ namespace TG.Client.TG
                             }
                             return;
                         }
-
+                        //_client.Send(new TdApi.AddChatMembers(chatId, new long[] { userId, userId }), this);
                         currentOperatorType = OperatorType.SearchSupergroupFullInfo;
                         _client.Send(new TdApi.GetSupergroupFullInfo() { SupergroupId = currentGruopId }, this);
 

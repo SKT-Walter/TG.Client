@@ -21,6 +21,10 @@ namespace TG.Client.Cache
         private Dictionary<string, TGClient> dic = new Dictionary<string, TGClient>();
         private object lockObj = new object();
 
+        public int GetCount()
+        {
+            return dic.Count;
+        }
 
         public void AddOrUpdate(TGClient client, string account)
         {

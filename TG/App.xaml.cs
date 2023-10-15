@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using TG.Client.Handler;
+using TG.Client.Utils;
 
 namespace TG
 {
@@ -56,6 +57,9 @@ namespace TG
             this.DispatcherUnhandledException += App_DispatcherUnhandledException;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
+
+
+            //BinLogHelper.DisableBinLog();
         }
     }
 }

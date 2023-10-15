@@ -68,7 +68,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <!--<TextBlock Text="{Binding Status}"></TextBlock>-->
-                            <Border Width="16" Height="16" CornerRadius="10" Background="{Binding StatusBrush}">
+                            <Border Width="16" Height="16" CornerRadius="10" Background="{Binding StatusBrush, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                 <!--<Border.Style>
                                     <Style TargetType="Border">
                                         <Style.Triggers>
@@ -94,7 +94,7 @@
                 <DataGridTemplateColumn Header="手机前缀" Width="90">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox Grid.Column="3" Width="80" Margin="0, 0, 2, 0" Height="40" TextBlock.TextAlignment="Center" Padding="0, 11, 0, 0" Text="{Binding PhonePrefix, Mode=TwoWay}">
+                            <TextBox Grid.Column="3" Width="80" Margin="0, 0, 2, 0" Height="40" TextBlock.TextAlignment="Center" Padding="0, 11, 0, 0" Text="{Binding PhonePrefix, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                 <TextBox.Resources>
                                     <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.5" Stretch="None" AlignmentX="Left">
                                         <VisualBrush.Visual>
@@ -122,7 +122,7 @@
                 <DataGridTemplateColumn Header="电话号码" MinWidth="174">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox Grid.Column="3" Width="170" Margin="0, 0, 2, 0" Height="40" TextBlock.TextAlignment="Center" Padding="0, 11, 0, 0" Text="{Binding Phone, Mode=TwoWay}">
+                            <TextBox Grid.Column="3" Width="170" Margin="0, 0, 2, 0" Height="40" TextBlock.TextAlignment="Center" Padding="0, 11, 0, 0" Text="{Binding Phone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                 <TextBox.Resources>
                                     <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.5" Stretch="None" AlignmentX="Left">
                                         <VisualBrush.Visual>
@@ -158,7 +158,7 @@
                 <DataGridTemplateColumn Header="验证码" Width="150">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox Grid.Column="5" Width="140" Padding="0, 12, 0, 0" Margin="0, 0, 2, 0" Height="40" TextBlock.TextAlignment="Center" Text="{Binding VerifyCode, Mode=TwoWay}">
+                            <TextBox Grid.Column="5" Width="140" Padding="0, 12, 0, 0" Margin="0, 0, 2, 0" Height="40" TextBlock.TextAlignment="Center" Text="{Binding VerifyCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                 <TextBox.Resources>
                                     <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.5" Stretch="None" AlignmentX="Left" >
                                         <VisualBrush.Visual>

@@ -4,7 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using Telegram.Td.Api;
+using TG.Client.Cache;
+using TG.Client.Handler;
 using TG.Client.Model;
 using TG.Client.TG;
 using TG.Client.ViewModel.MoreAccLogin;
@@ -13,7 +16,7 @@ using TdApi = Telegram.Td.Api;
 
 namespace TG.Client.BatchTG
 {
-    public class TGClient : Td.ClientResultHandler
+    public class TGClient : Td.ClientResultHandler, IMessage
     {
 
         private Telegram.Td.Client _client = null;
@@ -23,38 +26,44 @@ namespace TG.Client.BatchTG
         private volatile bool _needQuit = false;
         private volatile bool _canQuit = false;
         private volatile AutoResetEvent _gotAuthorization = new AutoResetEvent(false);
-
-        private IMessage msgListener;
+        
         private LoginViewModel loginData;
+        
 
-        public void SetMsgListener(IMessage msgListener)
+        public Td.Client CreateTdClient(LoginViewModel loginData)
         {
-            this.msgListener = msgListener;
-        }
-
-        public Td.Client CreateTdClient(IMessage msgListener)
-        {
-            if (this.msgListener == null)
-                this.msgListener = msgListener;
+            if (this.loginData == null)
+            {
+                this.loginData = loginData;
+            }
 
             if (_client == null)
             {
+                //Td.Client.Execute(new TdApi.SetLogVerbosityLevel(0));
+                //if (Td.Client.Execute(new TdApi.SetLogStream(new TdApi.LogStreamFile("tdlib.log", 1 << 27, false))) is TdApi.Error)
+                //{
+                //    throw new System.IO.IOException("Write access to the current directory is required");
+                //}
+                //new Thread(() =>
+                //{
+                //    Thread.CurrentThread.IsBackground = true;
+                //    Td.Client.Run();
+                //}).Start();
+
                 Td.Client.Execute(new TdApi.SetLogVerbosityLevel(0));
-                if (Td.Client.Execute(new TdApi.SetLogStream(new TdApi.LogStreamFile("tdlib.log", 1 << 27, false))) is TdApi.Error)
-                {
-                    throw new System.IO.IOException("Write access to the current directory is required");
-                }
-                new Thread(() =>
-                {
-                    Thread.CurrentThread.IsBackground = true;
-                    Td.Client.Run();
-                }).Start();
-
+                int number = TGClientManager.Instance.GetCount();
+                //string fileName = "tdlib" + number + ".log";
+                //if (Td.Client.Execute(new TdApi.SetLogStream(new TdApi.LogStreamFile(fileName, 1 << 27, false))) is TdApi.Error)
+                //{
+                //    throw new System.IO.IOException("Write access to the current directory is required");
+                //}
+                
                 _client = Td.Client.Create(new InnerCallHandler(this));
-
+                
                 // test Client.Execute
                 _defaultHandler.OnResult(Td.Client.Execute(new TdApi.GetTextEntities("@telegram /test_command https://telegram.org telegram.me @gif @test")));
 
+                
             }
 
             return _client;
@@ -70,7 +79,10 @@ namespace TG.Client.BatchTG
             if (_authorizationState is TdApi.AuthorizationStateWaitTdlibParameters)
             {
                 TdApi.SetTdlibParameters request = new TdApi.SetTdlibParameters();
-                request.DatabaseDirectory = "tdlib";
+
+                int number = TGClientManager.Instance.GetCount();
+
+                request.DatabaseDirectory = "tdlib" + number;
                 request.UseMessageDatabase = true;
                 request.UseSecretChats = true;
                 //request.ApiId = 94575;
@@ -103,12 +115,10 @@ namespace TG.Client.BatchTG
             }
             else if (_authorizationState is TdApi.AuthorizationStateReady)
             {
-                if (msgListener != null)
-                {
-                    BaseReplyPo replyPo = new BaseReplyPo();
-                    replyPo.Msg = string.Format("账号:{0},验证成功！", loginData.Account);
-                    msgListener.OnMessage(replyPo);
-                }
+                BaseReplyPo replyPo = new BaseReplyPo();
+                replyPo.Msg = string.Format("账号:{0},验证成功！", loginData.Account);
+                loginData.OnLoginStatus(true);
+                this.OnMessage(replyPo);
 
             }
             else
@@ -117,12 +127,8 @@ namespace TG.Client.BatchTG
             }
         }
 
-        public void ProcessLogin(LoginViewModel loginViewModel)
+        public void ProcessLogin()
         {
-            if (loginData == null)
-            {
-                this.loginData = loginViewModel;
-            }
             if (_authorizationState is TdApi.AuthorizationStateWaitPhoneNumber)
             {
                 string phoneNumber = loginData.SendPhone;//ReadLine("Please enter phone number: ");
@@ -171,14 +177,10 @@ namespace TG.Client.BatchTG
 
                 //_client.Send(new TdApi.LoadChats(null, 100), _defaultHandler);
 
-
-                if (msgListener != null)
-                {
-                    BaseReplyPo replyPo = new BaseReplyPo();
-                    replyPo.Msg = "验证成功！";
-                    msgListener.OnMessage(replyPo);
-                }
-
+                BaseReplyPo replyPo = new BaseReplyPo();
+                replyPo.Msg = "验证成功！";
+                loginData.OnLoginStatus(true);
+                this.OnMessage(replyPo);
             }
             else if (_authorizationState is TdApi.AuthorizationStateLoggingOut)
             {
@@ -195,7 +197,7 @@ namespace TG.Client.BatchTG
                 Print("Closed");
                 if (!_needQuit)
                 {
-                    _client = CreateTdClient(msgListener); // recreate _client after previous has closed
+                    _client = CreateTdClient(loginData); // recreate _client after previous has closed
                 }
                 else
                 {
@@ -208,14 +210,41 @@ namespace TG.Client.BatchTG
             }
         }
 
-        public void OnResult(BaseObject @object)
+        public void OnResult(BaseObject obj)
         {
-            throw new NotImplementedException();
+            UserHandler.Instance.PublishMsg(obj);
         }
 
         private void Print(string str)
         {
-            Console.WriteLine(str);
+            UserHandler.Instance.PublishMsg(str);
+        }
+
+
+        public void OnMessage(object obj)
+        {
+            UserHandler.Instance.PublishMsg(obj);
+            BaseReplyPo baseReply = obj as BaseReplyPo;
+            if (baseReply != null)
+            {
+                //Application.Current.Dispatcher.BeginInvoke((Action)(() =>
+                //{
+                //    if (baseReply.Code == "1100")
+                //    {
+                //        this.VerifyForeground = this.ownUI.FindResource("Orange-1") as Brush;
+                //    }
+                //    else if (baseReply.IsSuccess())
+                //    {
+                //        this.VerifyForeground = this.ownUI.FindResource("Green-1") as Brush;
+                //    }
+                //    else
+                //    {
+                //        this.VerifyForeground = this.ownUI.FindResource("Orange-2") as Brush;
+                //    }
+                //    this.VerifyMsg = baseReply.Msg;
+
+                //}));
+            }
         }
     }
 

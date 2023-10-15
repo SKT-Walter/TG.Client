@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 using TG.Client.Model;
 
@@ -83,7 +84,7 @@ namespace TG.Client.ViewModel.MoreAccLogin
             set
             {
                 verifyCode = value;
-
+                
                 this.OnPropertyChanged();
             }
         }
@@ -113,6 +114,23 @@ namespace TG.Client.ViewModel.MoreAccLogin
 
                 this.OnPropertyChanged();
             }
+        }
+
+        public void OnLoginStatus(bool isSuccess)
+        {
+            Application.Current.Dispatcher.BeginInvoke((Action)(() =>
+            {
+                if (isSuccess)
+                {
+                    StatusBrush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(39, 220, 28));
+                    Status = "1";
+                }
+                else
+                {
+                    StatusBrush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(243, 42, 25));
+                    Status = "0";
+                }
+            }));
         }
 
         #endregion

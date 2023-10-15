@@ -4,12 +4,16 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using TG.Client.BatchTG;
 using TG.Client.Cache;
 using TG.Client.Model;
+
+using Td = Telegram.Td;
+using TdApi = Telegram.Td.Api;
 
 namespace TG.Client.ViewModel.MoreAccLogin
 {
@@ -41,6 +45,18 @@ namespace TG.Client.ViewModel.MoreAccLogin
 
 
             this.ReadAccount();
+
+
+            //Td.Client.Execute(new TdApi.SetLogVerbosityLevel(0));
+            //if (Td.Client.Execute(new TdApi.SetLogStream(new TdApi.LogStreamFile("tdlib.log", 1 << 27, false))) is TdApi.Error)
+            //{
+            //    throw new System.IO.IOException("Write access to the current directory is required");
+            //}
+            new Thread(() =>
+            {
+                Thread.CurrentThread.IsBackground = true;
+                Td.Client.Run();
+            }).Start();
         }
 
         private void ReadAccount()
@@ -50,19 +66,21 @@ namespace TG.Client.ViewModel.MoreAccLogin
                 Account = "Leland1",
                 Status = "1",
                 StatusBrush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(243, 42, 25)),
-                Phone = "1231231",
-                PhonePrefix = "86",
-                VerifyCode = "123"
+                Phone = "18201920475",
+                PhonePrefix = "+86",
+                APIID = "26272692",
+                APIHASH = "241a6f347f3b88e5bb7ca38f148e2bdb"
             };
 
             LoginViewModel two = new LoginViewModel()
             {
-                Account = "Leland2",
+                Account = "Willow Amery",
                 Status = "0",
-                StatusBrush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(39, 220, 28)),
-                Phone = "2342342",
-                PhonePrefix = "26",
-                VerifyCode = "12323"
+                StatusBrush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(243, 42, 25)),
+                Phone = "02319457",
+                PhonePrefix = "+888",
+                APIID = "28406007",
+                APIHASH = "cab10c8a4c0e9c99a180b3c7fc6c6aae"
             };
 
 
@@ -78,10 +96,11 @@ namespace TG.Client.ViewModel.MoreAccLogin
                 if (client == null)
                 {
                     client = new TGClient();
+                    client.CreateTdClient(selectRow);
                     TGClientManager.Instance.AddOrUpdate(client, selectRow.Account);
                 }
 
-                client.ProcessLogin(selectRow);
+                client.ProcessLogin();
             }
         }
     }

@@ -35,7 +35,7 @@ namespace TG.Client.View.APICollect
             apiCollectViewModel = new APICollectViewModel();
             this.DataContext = apiCollectViewModel;
 
-            apiCollectViewModel.Init(this);
+            //apiCollectViewModel.Init(this);
         }
 
         private void BtnCollect_Click(object sender, RoutedEventArgs e)
