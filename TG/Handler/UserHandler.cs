@@ -179,7 +179,8 @@ namespace TG.Client.Handler
         public void UpdateDexUser(TdUserEx userPo)
         {
             userPo.UpdateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            SqlliteUtils.Replace<TdUserEx>(userPo);
+            //SqlliteUtils.Replace<TdUserEx>(userPo);
+            SqlliteUtils.Insert<TdUserEx>(userPo);
         }
 
         private void UpdateDexData(TdUserEx userPo)

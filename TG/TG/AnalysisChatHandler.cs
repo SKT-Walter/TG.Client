@@ -96,6 +96,10 @@ namespace TG.Client.TG
                                     }
                                 }
                             }
+                            else
+                            {
+                                Console.WriteLine("-----------------" + supergroupFullInfo.ToString());
+                            }
                         }
                     }
                 }

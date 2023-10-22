@@ -11,7 +11,7 @@ using System.Windows.Media;
 using TG.Client.BatchTG;
 using TG.Client.Cache;
 using TG.Client.Model;
-
+using TG.Client.Utils;
 using Td = Telegram.Td;
 using TdApi = Telegram.Td.Api;
 
@@ -61,6 +61,25 @@ namespace TG.Client.ViewModel.MoreAccLogin
 
         private void ReadAccount()
         {
+            string[] lines = FileHelper.ReadFile("./data/TG_ID.txt");
+
+            foreach (string line in lines)
+            {
+                string[] arr = line.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                LoginViewModel tem = new LoginViewModel()
+                {
+                    Account = arr[0],//"Leland1",
+                    Status = "1",
+                    StatusBrush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(243, 42, 25)),
+                    Phone = arr[2],//"18201920475",
+                    PhonePrefix = arr[1],//"+86",
+                    APIID = arr[3],//"26272692",
+                    APIHASH = arr[4]//"241a6f347f3b88e5bb7ca38f148e2bdb"
+                };
+
+                _accountData.Add(tem);
+            }
+
             LoginViewModel one = new LoginViewModel()
             {
                 Account = "Leland1",
@@ -72,20 +91,20 @@ namespace TG.Client.ViewModel.MoreAccLogin
                 APIHASH = "241a6f347f3b88e5bb7ca38f148e2bdb"
             };
 
-            LoginViewModel two = new LoginViewModel()
-            {
-                Account = "Willow Amery",
-                Status = "0",
-                StatusBrush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(243, 42, 25)),
-                Phone = "02319457",
-                PhonePrefix = "+888",
-                APIID = "28406007",
-                APIHASH = "cab10c8a4c0e9c99a180b3c7fc6c6aae"
-            };
+            //LoginViewModel two = new LoginViewModel()
+            //{
+            //    Account = "Willow Amery",
+            //    Status = "0",
+            //    StatusBrush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(243, 42, 25)),
+            //    Phone = "02319457",
+            //    PhonePrefix = "+888",
+            //    APIID = "28406007",
+            //    APIHASH = "cab10c8a4c0e9c99a180b3c7fc6c6aae"
+            //};
 
 
             _accountData.Add(one);
-            _accountData.Add(two);
+            //_accountData.Add(two);
         }
 
         public void ProcessLogin()

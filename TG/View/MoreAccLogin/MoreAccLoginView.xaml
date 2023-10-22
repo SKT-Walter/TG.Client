@@ -58,7 +58,7 @@
         <DataGrid Grid.Row="1" x:Name="dgAccount" ItemsSource="{Binding AccountData}" GridLinesVisibility="Vertical" Style="{StaticResource DefaultDataGrid}" SelectionMode="Extended"
                       ColumnHeaderStyle="{StaticResource DataGridColumnHeaderCenterStyle}" Margin="0, 0, 0, 10"  HorizontalContentAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Auto"
                   CellStyle="{StaticResource CustomeDataGridTextCenterStyle}" RowStyle="{StaticResource DataGridRowStyle}" RowHeight="50" BorderThickness="1" PreviewKeyDown="DataGrid1_PreviewKeyDown"
-                  Background="#FFE4E1DB" MinHeight="300" SelectedItem="{Binding SelectRow, Mode=TwoWay}">
+                  Background="#FFE4E1DB" MinHeight="280" MaxHeight="380" SelectedItem="{Binding SelectRow, Mode=TwoWay}">
 
             <DataGrid.Columns>
                 

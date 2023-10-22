@@ -129,6 +129,32 @@ namespace TG.ViewModel.APICollect
                 this.OnPropertyChanged();
             }
         }
+        
+
+        private int noBackTotal;
+        public int NoBackTotal
+        {
+            get { return noBackTotal; }
+            set
+            {
+                noBackTotal = value;
+
+                this.OnPropertyChanged();
+            }
+        }
+
+
+        private int filterBotTotal;
+        public int FilterBotTotal
+        {
+            get { return filterBotTotal; }
+            set
+            {
+                filterBotTotal = value;
+
+                this.OnPropertyChanged();
+            }
+        }
 
         private string verifyMsg = "需要先验证才能使用API采集";
 
@@ -182,6 +208,7 @@ namespace TG.ViewModel.APICollect
                 this.OnPropertyChanged();
             }
         }
+        
 
         private bool inner7Day = false;
 
@@ -280,7 +307,28 @@ namespace TG.ViewModel.APICollect
             processUserThreadQueue = new AsyncThreadQueue<TdUserPo>(OnUserChange);
 
             TdClientHandler.Instance.OnUserChange += Instance_OnUserChange;
-            TdClientHandler.Instance.CreateTdClient(this);
+            //TdClientHandler.Instance.CreateTdClient(this);
+
+            TdClientHandler.Instance.OnBotUserChange += Instance_OnBotUserChange;
+            TdClientHandler.Instance.OnFailUserChange += Instance_OnFailUserChange;
+        }
+
+        private void Instance_OnFailUserChange(int obj)
+        {
+            Application.Current.Dispatcher.BeginInvoke((Action)(() =>
+            {
+                NoBackTotal = obj;
+
+            }));
+        }
+
+        private void Instance_OnBotUserChange(Telegram.Td.Api.User obj)
+        {
+            Application.Current.Dispatcher.BeginInvoke((Action)(() =>
+            {
+                FilterBotTotal += 1;
+
+            }));
         }
 
         private void Instance_OnGetMembers(int arg1, int arg2)

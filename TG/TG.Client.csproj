@@ -98,6 +98,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BatchTG\MoreClientBatchSendMsgHandler.cs" />
     <Compile Include="BatchTG\TGClient.cs" />
     <Compile Include="Cache\TGCache.cs" />
     <Compile Include="Cache\TGClientManager.cs" />
@@ -128,6 +129,7 @@
     <Compile Include="Utils\AsyncThreadQueue.cs" />
     <Compile Include="Utils\BinLogHelper.cs" />
     <Compile Include="Utils\ExcelHelper.cs" />
+    <Compile Include="Utils\FileHelper.cs" />
     <Compile Include="Utils\SqlLite\SqlCreator.cs" />
     <Compile Include="Utils\SqlLite\SqliteHandler.cs" />
     <Compile Include="Utils\SqlLite\SqliteManager.cs" />

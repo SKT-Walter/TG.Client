@@ -187,6 +187,14 @@
             </Grid.ColumnDefinitions>
             <TextBlock Text="可采集群用户总数：" Grid.Column="0" Foreground="{StaticResource Black-1}" VerticalAlignment="Center"></TextBlock>
             <TextBlock Text="{Binding GroupTotal}" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="{StaticResource Orange-1}"></TextBlock>
+
+            <StackPanel Orientation="Horizontal" Grid.Column="2">
+                <TextBlock Text="过滤机器人数：" Foreground="{StaticResource Black-1}" VerticalAlignment="Center"></TextBlock>
+                <TextBlock Text="{Binding FilterBotTotal}" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="{StaticResource Orange-1}"></TextBlock>
+                <TextBlock Text="没数据返回人数：" Foreground="{StaticResource Black-1}" VerticalAlignment="Center"></TextBlock>
+                <TextBlock Text="{Binding NoBackTotal}" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="{StaticResource Orange-1}"></TextBlock>
+            </StackPanel>
+            
             <TextBlock Text="已采集群成员数：" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="{StaticResource Black-1}"></TextBlock>
             <TextBlock Text="{Binding CollectedGroupUserNum}" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="{StaticResource Orange-1}"></TextBlock>
 

@@ -33,6 +33,8 @@ namespace TG.Client.TG
         private volatile AutoResetEvent _gotAuthorization = new AutoResetEvent(false);
 
         public event Action<TdApi.User> OnUserChange;
+        public event Action<TdApi.User> OnBotUserChange;
+        public event Action<int> OnFailUserChange;
 
         private IMessage msgListener;
 
@@ -547,9 +549,16 @@ namespace TG.Client.TG
                         TdApi.User user = @object as TdApi.User;
                         if (user != null)
                         {
+                            if (sendUserIdHs.Contains(user.Id))
+                            {
+                                sendUserIdHs.Remove(user.Id);
+                            }
                             if (user.Type is TdApi.UserTypeBot)
                             {
                                 UserHandler.Instance.PublishMsg("Filter bot:" + user.FirstName + " " + user.LastName);
+
+                                OnBotUserChange?.Invoke(user);
+
                                 return;
                             }
                             user.RestrictionReason = currentGroupName;
@@ -570,10 +579,14 @@ namespace TG.Client.TG
             }
         }
 
+        private HashSet<long> sendUserIdHs = new HashSet<long>();
+
         private void GetUserDetail()
         {
             startIndex = 0;
             endIndex = 0;
+
+            sendUserIdHs.Clear();
 
             Thread.Sleep(2000);
             endIndex += 500;
@@ -591,6 +604,7 @@ namespace TG.Client.TG
                 else
                 {
                     Console.WriteLine("GetUser by UserId:" + userId);
+                    sendUserIdHs.Add(userId);
                     _client.Send(new TdApi.GetUser() { UserId = userId }, this);
                 }
 
@@ -598,12 +612,17 @@ namespace TG.Client.TG
 
 
                 if (index % 100 == 0)
-                    Thread.Sleep(2000);
+                    Thread.Sleep(5000);
                 else
                     Thread.Sleep(150);
             }
 
+            Thread.Sleep(3000);
+            
             UserHandler.Instance.PublishMsg("Get user detail end...");
+
+            OnFailUserChange?.Invoke(sendUserIdHs.Count);
+
         }
 
     }

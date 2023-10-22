@@ -29,6 +29,10 @@ namespace TG.Client.BatchTG
         
         private LoginViewModel loginData;
         
+        public Td.Client GetClient()
+        {
+            return _client;
+        }
 
         public Td.Client CreateTdClient(LoginViewModel loginData)
         {
