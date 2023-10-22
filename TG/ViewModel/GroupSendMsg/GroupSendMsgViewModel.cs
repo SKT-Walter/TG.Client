@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using TG.Client.BatchTG;
+using TG.Client.Cache;
 using TG.Client.Handler;
 using TG.Client.Model;
 using TG.Client.TG;
@@ -202,7 +204,19 @@ namespace TG.Client.ViewModel.GroupSendMsg
             int end = 25;
             int.TryParse(StartInterval, out start);
             int.TryParse(EndInterval, out end);
-            BatchSendMsgHandler.Instance.SendBatchMsg(SendBatchUser, sendMsgPo, start, end);
+            //单个发送
+            //BatchSendMsgHandler.Instance.SendBatchMsg(SendBatchUser, sendMsgPo, start, end);
+
+            //批量发送
+            Dictionary<string, TGClient> dic = TGClientManager.Instance.GetAllClient();
+            foreach (KeyValuePair<string, TGClient> kv in dic)
+            {
+                MoreClientBatchSendMsgHandler moreClientBatchSendMsgHandler = new MoreClientBatchSendMsgHandler(kv.Key, SendMsgType.None, sendMsgPo);
+
+                moreClientBatchSendMsgHandler.SendBatchMsg(SendBatchUser, sendMsgPo, start, end);
+
+            }
+
         }
 
         //private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)

@@ -26,6 +26,11 @@ namespace TG.Client.Cache
             return dic.Count;
         }
 
+        public Dictionary<string, TGClient> GetAllClient()
+        {
+            return dic;
+        }
+
         public void AddOrUpdate(TGClient client, string account)
         {
             lock (lockObj)

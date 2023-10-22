@@ -20,16 +20,16 @@ namespace TG.Client.BatchTG
         private SendMsgType curentSendMsgType = SendMsgType.None;
         public SendMsgPo SendMsg { get; set; }
 
-        private static MoreClientBatchSendMsgHandler batchSendMsgHandler = new MoreClientBatchSendMsgHandler();
+        //private static MoreClientBatchSendMsgHandler batchSendMsgHandler = new MoreClientBatchSendMsgHandler();
 
-        public static MoreClientBatchSendMsgHandler Instance { get { return batchSendMsgHandler; } }
+        //public static MoreClientBatchSendMsgHandler Instance { get { return batchSendMsgHandler; } }
 
-        private MoreClientBatchSendMsgHandler()
-        {
+        //private MoreClientBatchSendMsgHandler()
+        //{
 
-        }
+        //}
 
-        private MoreClientBatchSendMsgHandler(string account, SendMsgType sendMsgType, SendMsgPo msg, TdApi.Chat chat = null)
+        public MoreClientBatchSendMsgHandler(string account, SendMsgType sendMsgType, SendMsgPo msg, TdApi.Chat chat = null)
         {
             this._currentAcc = account;
             curentSendMsgType = sendMsgType;
