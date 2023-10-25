@@ -107,6 +107,7 @@ namespace TG.Client.ViewModel.GroupSendMsg
         private void Init(FrameworkElement ownUI)
         {
             this.ownUI = ownUI;
+
         }
 
         public void OnClickDownStartBtn()

@@ -48,5 +48,10 @@ namespace TG.Client.View.MoreAccLogin
         {
             moreAccLoginViewModel.ProcessLogin();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

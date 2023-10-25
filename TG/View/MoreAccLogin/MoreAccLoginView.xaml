@@ -52,7 +52,7 @@
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
 
-        <Button Grid.Row="0" Content="批量验证" Margin="0, 2, 0, 2" Style="{StaticResource CollectButtonStyle}"></Button>
+        <Button Grid.Row="0" Content="批量验证" Margin="0, 2, 0, 2" Style="{StaticResource CollectButtonStyle}" Click="Button_Click"></Button>
 
 
         <DataGrid Grid.Row="1" x:Name="dgAccount" ItemsSource="{Binding AccountData}" GridLinesVisibility="Vertical" Style="{StaticResource DefaultDataGrid}" SelectionMode="Extended"

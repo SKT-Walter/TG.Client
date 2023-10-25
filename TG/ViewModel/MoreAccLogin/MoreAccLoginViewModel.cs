@@ -103,8 +103,8 @@ namespace TG.Client.ViewModel.MoreAccLogin
             };
 
 
-            _accountData.Add(one);
-            _accountData.Add(two);
+            //_accountData.Add(one);
+            //_accountData.Add(two);
         }
 
         public void ProcessLogin()

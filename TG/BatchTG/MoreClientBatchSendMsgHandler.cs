@@ -158,16 +158,19 @@ namespace TG.Client.BatchTG
 
             TdApi.ReplyMarkup replyMarkup = new TdApi.ReplyMarkupInlineKeyboard(new TdApi.InlineKeyboardButton[][] { row, row, row });
 
-            if (!string.IsNullOrEmpty(message.SendMsg))
+            string sendMsg = FileMsgCache.Instance.GetMsg();
+            UserHandler.Instance.PublishMsg("发送消息：" + sendMsg);
+            if (!string.IsNullOrEmpty(sendMsg))
             {
-                TdApi.InputMessageContent content = new TdApi.InputMessageText(new TdApi.FormattedText(message.SendMsg, null), false, true);
+                TdApi.InputMessageContent content = new TdApi.InputMessageText(new TdApi.FormattedText(sendMsg, null), false, true);
+                //new TdApi.InputMessageText(new TdApi.FormattedText(message.SendMsg, null), false, true);
 
                 Td.Client _client = TGClientManager.Instance.GetClientByAcc(_currentAcc).GetClient();
                 if (_client != null)
                 {
 
                     _client.Send(new TdApi.SendMessage(chatId, 0, 0, null, replyMarkup, content),
-                    !string.IsNullOrEmpty(message.FilePath) ? new MoreClientBatchSendMsgHandler(_currentAcc, SendMsgType.SendTxtAndImage, SendMsg, txtMsgChat) : this);
+                        !string.IsNullOrEmpty(message.FilePath) ? new MoreClientBatchSendMsgHandler(_currentAcc, SendMsgType.SendTxtAndImage, SendMsg, txtMsgChat) : this);
                 }
                 else
                 {
@@ -184,14 +187,14 @@ namespace TG.Client.BatchTG
                 new TdApi.InlineKeyboardButton("https://telegram.org?3", new TdApi.InlineKeyboardButtonTypeUrl()) };
 
             TdApi.ReplyMarkup replyMarkup = new TdApi.ReplyMarkupInlineKeyboard(new TdApi.InlineKeyboardButton[][] { row, row, row });
-
-            if (!string.IsNullOrEmpty(message.FilePath))
+            // 发送图片消息
+            string filePath = FileMsgCache.Instance.GetImage();
+            UserHandler.Instance.PublishMsg("发送图片路径：" + filePath);
+            //if (!string.IsNullOrEmpty(message.FilePath))
             {
-                // 发送图片消息
-
                 TdApi.InputMessageContent photoMessage = new TdApi.InputMessagePhoto
                 {
-                    Photo = new TdApi.InputFileLocal(@message.FilePath),//(@"C:\photos\my-photo.jpg"),  // 这里你需要使用实际图片路径
+                    Photo = new TdApi.InputFileLocal(filePath),// message.FilePath),//(@"C:\photos\my-photo.jpg"),  // 这里你需要使用实际图片路径
                     Caption = new TdApi.FormattedText { Text = string.Empty },//"图片说明" },  //图片下面会显示的文字
 
                 };

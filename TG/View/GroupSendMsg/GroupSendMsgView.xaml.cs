@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TG.Client.Cache;
 using TG.Client.ViewModel.GroupSendMsg;
 
 namespace TG.Client.View.GroupSendMsg
@@ -31,8 +32,16 @@ namespace TG.Client.View.GroupSendMsg
             groupSendMsgViewModel = new GroupSendMsgViewModel();
 
             this.DataContext = groupSendMsgViewModel;
+
+            this.Loaded += GroupSendMsgView_Loaded;
         }
 
+        private void GroupSendMsgView_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.Loaded -= GroupSendMsgView_Loaded;
+
+            FileMsgCache.Instance.Init();
+        }
 
         private void BtnDownStart_Click(object sender, RoutedEventArgs e)
         {
