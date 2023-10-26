@@ -63,7 +63,9 @@ namespace TG.Client.BatchTG
                 //}
                 
                 _client = Td.Client.Create(new InnerCallHandler(this));
-                
+
+                AnalysisChatHandler.Instance.Init(_client);
+
                 // test Client.Execute
                 _defaultHandler.OnResult(Td.Client.Execute(new TdApi.GetTextEntities("@telegram /test_command https://telegram.org telegram.me @gif @test")));
 

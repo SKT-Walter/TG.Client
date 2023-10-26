@@ -104,6 +104,24 @@ namespace TG.Client.Handler
             return null;
         }
 
+        public TdUserEx QuoteUserExByName(string name)
+        {
+            try
+            {
+                List<TdUserEx> list = SqlliteUtils.Query<TdUserEx>
+                    ("select * from TdUserEx where Username=?",
+                    new object[] { name });
+                if (list.Count > 0)
+                {
+                    return list[0];
+                }
+            }
+            catch (Exception e)
+            {
+            }
+            return null;
+        }
+
         public TdUserPo QuoteUserById(long userId)
         {
             try

@@ -45,7 +45,9 @@ namespace TG.Client.TG
         public void GetChats()
         {
             totalChatNum = 0;
+
             _client.Send(new TdApi.GetChats(new TdApi.ChatListMain(), 200), this);
+            //_client.Send(new TdApi.GetTopChats(new TdApi.TopChatCategoryCalls(), 200), this);
         }
 
         private int totalChatNum = 0;
@@ -112,11 +114,11 @@ namespace TG.Client.TG
 
         private void GetGroupInfo(long id)
         {
+            Thread.Sleep(500);
             Task.Run(() =>
             {
                 _client.Send(new TdApi.GetSupergroup() { SupergroupId = id }, this);
-
-                Thread.Sleep(100);
+                
             });
         }
 
