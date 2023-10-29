@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using TG.Client.Cache;
 using TG.Client.Handler;
 using TG.Client.Model;
 using Td = Telegram.Td;
@@ -45,8 +46,19 @@ namespace TG.Client.TG
             _client = client;
         }
 
+        private void InitClient()
+        {
+            if (_client == null)
+            {
+                Td.Client client = TGClientManager.Instance.GetClientByAcc("Leland1").GetClient();
+                this._client = client;
+            }
+        }
+
         public void SendBatchMsg(string users, SendMsgPo sendMsgPo, int startInterval, int endInterval)
         {
+            InitClient();
+
             SendMsg = sendMsgPo;
             string[] userArr = users.Split(new char[] { '\n' });
             UserHandler.Instance.PublishMsg("Start send msg...");
@@ -67,6 +79,7 @@ namespace TG.Client.TG
                     //MsgHandler.Instance.GetIdByName(user);
                     if (userId != 0)
                     {
+                        //userId = 1480565976;
                         _client.Send(new TdApi.CreatePrivateChat() { UserId = userId, Force = true }, new BatchSendMsgHandler(_client, SendMsgType.CreateChat, SendMsg));
                         
                         //_client.Send(new TdApi.SearchPublicChat() { Username = user }, new BatchSendMsgHandler(_client, SendMsgType.SearchChat, SendMsg));

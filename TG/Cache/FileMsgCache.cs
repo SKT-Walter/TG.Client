@@ -26,9 +26,40 @@ namespace TG.Client.Cache
 
         public void Init()
         {
-            ReadMsg();
+            ReadMsgFromFile();
 
             ReadImage();
+        }
+
+        private void ReadMsgFromFile()
+        {
+            try
+            {
+                // 文件路径
+                string filePath = "./data/MSG.txt";
+
+                // 创建一个StreamReader对象来读取文件内容
+                using (StreamReader sr = new StreamReader(filePath))
+                {
+                    string line;
+
+                    // 逐行读取文件内容，直到文件末尾
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        if (!string.IsNullOrEmpty(line.Trim()))
+                        {
+                            fileMsgList.Add(line.Trim());
+                            UserHandler.Instance.PublishMsg("读取消息:" + line.Trim());
+                        }
+                    }
+
+                    UserHandler.Instance.PublishMsg("读取消息总数:" + fileMsgList.Count);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("读取文件时出错：" + ex.Message);
+            }
         }
 
         private void ReadMsg()
@@ -42,7 +73,7 @@ namespace TG.Client.Cache
             string msg7 = "Experience Hybrid Trading with RubyDex! Combining the liquidity and efficiency of centralized exchanges with decentralized security. Your funds, your control, top-notch trading! 🛡️ Start now ➡️";
             string msg8 = "RubyDex Airdrop Missions are LIVE! Embark on our thrilling journey, collect points, and unlock exclusive token airdrop rewards! Don't miss out on this grand adventure! 🎁 Participate now ➡️";
             string msg9 = "Future-Ready with RubyDex! Our roadmap promises more TradFi perpetual contracts, multi-language support, and an innovative liquidity pool system. We're reshaping decentralized trading for the global community! 🌐 Dive in ➡️";
-            string msg10 = "10. Mobile Support & Comprehensive Guides! Trade on the go with RubyDex and get the assistance you need with our detailed user guides. Perfect for both beginners and pros! 📚 Explore ➡️ https://support.rubydex.com/en";
+            string msg10 = "Mobile Support & Comprehensive Guides! Trade on the go with RubyDex and get the assistance you need with our detailed user guides. Perfect for both beginners and pros! 📚 Explore ➡️ https://support.rubydex.com/en";
             
 
             fileMsgList.Add(msg1);
@@ -80,6 +111,8 @@ namespace TG.Client.Cache
                         imageMsgList.Add(fullPath);
                     }
                 }
+
+                UserHandler.Instance.PublishMsg("读取图片总数:" + imageMsgList.Count);
             }
             else
             {

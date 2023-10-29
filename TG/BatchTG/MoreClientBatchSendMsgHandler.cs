@@ -69,7 +69,8 @@ namespace TG.Client.BatchTG
                     {
                         long userId = 0;
                         string name = user.Replace("@", "").Replace("\r", "");
-                        TdUserPo userPo = UserHandler.Instance.QuoteUserExByName(name);
+                        TdUserPo userPo = UserHandler.Instance.QuoteUserByName(name);
+                        //TdUserEx userPo = UserHandler.Instance.QuoteUserExByName(name);
                         if (userPo != null)
                         {
                             userId = userPo.UserId;
@@ -79,9 +80,21 @@ namespace TG.Client.BatchTG
                         //MsgHandler.Instance.GetIdByName(user);
                         if (userId != 0)
                         {
+                            //userId = 1480565976;
+                            //userId = 1299076404;
+                            _client.Send(new TdApi.GetUser() { UserId = userId }, this);
+
+                            Thread.Sleep(2000);
+
                             _client.Send(new TdApi.CreatePrivateChat() { UserId = userId, Force = true }, new MoreClientBatchSendMsgHandler(_currentAcc, SendMsgType.CreateChat, SendMsg));
 
                             //_client.Send(new TdApi.SearchPublicChat() { Username = user }, new BatchSendMsgHandler(_client, SendMsgType.SearchChat, SendMsg));
+                        }
+                        else
+                        {
+                            userId = 6233893620;
+;
+                            _client.Send(new TdApi.GetUser() { UserId = userId }, this);
                         }
                         int interval = random.Next(startInterval, endInterval) * 1000;
                         UserHandler.Instance.PublishMsg("下次发送将等待：" + (interval / 1000) + "秒");

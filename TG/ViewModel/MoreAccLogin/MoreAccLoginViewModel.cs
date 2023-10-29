@@ -77,7 +77,7 @@ namespace TG.Client.ViewModel.MoreAccLogin
                     APIHASH = arr[4]//"241a6f347f3b88e5bb7ca38f148e2bdb"
                 };
 
-                //_accountData.Add(tem);
+                _accountData.Add(tem);
             }
 
             LoginViewModel one = new LoginViewModel()
@@ -103,8 +103,8 @@ namespace TG.Client.ViewModel.MoreAccLogin
             };
 
 
-            //_accountData.Add(one);
-            _accountData.Add(two);
+            _accountData.Add(one);
+            //_accountData.Add(two);
         }
 
         public void ProcessLogin()
