@@ -261,7 +261,7 @@ namespace TG.ViewModel.APICollect
 
         public void OnClickTestBtn()
         {
-            TdClientHandler.Instance.GetCommand(GetLoginPo(), "me");
+            TdClientHandler.Instance.GetCommandAsync(GetLoginPo(), "me");
         }
         
         #endregion

@@ -55,11 +55,11 @@ namespace TG.Client.TG
 
             if (_client == null)
             {
-                Td.Client.Execute(new TdApi.SetLogVerbosityLevel(0));
-                if (Td.Client.Execute(new TdApi.SetLogStream(new TdApi.LogStreamFile("tdlib.log", 1 << 27, false))) is TdApi.Error)
-                {
-                    throw new System.IO.IOException("Write access to the current directory is required");
-                }
+                //Td.Client.Execute(new TdApi.SetLogVerbosityLevel(0));
+                //if (Td.Client.Execute(new TdApi.SetLogStream(new TdApi.LogStreamFile("tdlib.log", 1 << 27, false))) is TdApi.Error)
+                //{
+                //    throw new System.IO.IOException("Write access to the current directory is required");
+                //}
                 new Thread(() =>
                 {
                     Thread.CurrentThread.IsBackground = true;
@@ -92,8 +92,11 @@ namespace TG.Client.TG
             {
                 TdApi.SetTdlibParameters request = new TdApi.SetTdlibParameters();
                 request.DatabaseDirectory = "tdlib";
-                request.UseMessageDatabase = true;
-                request.UseSecretChats = true;
+                request.UseMessageDatabase = false;
+                request.UseSecretChats = false;
+                request.UseChatInfoDatabase = false;
+                request.UseFileDatabase = false;
+                request.UseTestDc = false;
                 //request.ApiId = 94575;
                 //request.ApiHash = "a3406de8d171bb422bb6ddf3bbd800e2";
 
@@ -291,11 +294,11 @@ namespace TG.Client.TG
         }
 
 
-        public void GetCommand(LoginPo loginPo, string command)
+        public async Task GetCommandAsync(LoginPo loginPo, string command)
         {
             command = "me";
             //command = "groupsInCommon";
-            //command = "chats";
+            command = "chats";
             this.loginPo = loginPo;
             string[] commands = command.Split(new char[] { ' ' }, 2);
             try
@@ -314,9 +317,42 @@ namespace TG.Client.TG
                         //_client.Send(new TdApi.LoadChats(new TdApi.ChatListArchive(), 100), new TestClientResultHandler());
                         //_client.Send(getChats, this);// new TestClientResultHandler());
 
+                        //TdApi.Contact contact = new TdApi.Contact();
+                        //contact.UserId = 6639521811;
+                        //contact.LastName = "️ape";
+                        //contact.FirstName = "️ape";
+                        //contact.PhoneNumber = "123456789";
 
-                        TdApi.GetUser getUser = new TdApi.GetUser(1468854815);
-                        _client.Send(getUser, new TestClientResultHandler());
+                        //TdApi.AddContact addContact = new TdApi.AddContact(contact, false);
+                        //_client.Send(addContact, new TestClientResultHandler());
+
+                        //Thread.Sleep(1000);
+
+                        string name = "https://t.me/GMX_IO";
+                        //currentGroupName = name;
+                        //currentOperatorType = OperatorType.SearchChat;
+                        //_client.Send(new TdApi.SearchPublicChat() { Username = name }, this);
+
+                        //_client.Send(new TdApi.GetSupergroupFullInfo() { SupergroupId = 1364264200 }, this);
+
+                        //Thread.Sleep(2000);
+
+                        //_client.Send(new TdApi.GetSupergroupMembers() { SupergroupId = 1364264200, Filter = new TdApi.SupergroupMembersFilterRecent(), Offset = startIndex, Limit = 1 }, this);
+                        //Thread.Sleep(2000);
+
+
+                        TdApi.GetUser getUser = new TdApi.GetUser(39480677);
+                        //_client.Send(getUser, new TestClientResultHandler());
+
+                        TdApi.BaseObject baseObject = Td.Client.Execute(getUser);
+
+                        string str = "";
+
+                        
+
+
+                        //TdApi.GetChat getChat = new TdApi.GetChat() { ChatId = 664942073 };
+                        //_client.Send(getChat, new TestClientResultHandler());
 
                         //TdApi.GetChat getChat = new TdApi.GetChat() { ChatId = 6414132850 };
                         //TdApi.CreatePrivateChat creatChat = new TdApi.CreatePrivateChat(5390289483, true);
@@ -440,6 +476,9 @@ namespace TG.Client.TG
 
 
                     Print(@object.ToString());
+
+                    //return;
+
                     UserHandler.Instance.PublishMsg(@object);
                     if (currentOperatorType == OperatorType.SearchChat)
                     {
@@ -474,6 +513,8 @@ namespace TG.Client.TG
                     }
                     else if (currentOperatorType == OperatorType.SearchSupergroupFullInfo)
                     {
+                        //return;
+
                         TdApi.SupergroupFullInfo supergroupFullInfo = @object as TdApi.SupergroupFullInfo;
 
                         if (supergroupFullInfo != null)
@@ -523,6 +564,8 @@ namespace TG.Client.TG
                     }
                     else if (currentOperatorType == OperatorType.SearchSupergroupMembers)//无活跃条件筛选时，获取全部成员
                     {
+                        //return;
+
                         TdApi.ChatMembers chatMembers = @object as TdApi.ChatMembers;
                         if (chatMembers != null)
                         {
@@ -531,7 +574,7 @@ namespace TG.Client.TG
                             MsgHandler.Instance.AddOrUpdateByMember(chatMembers, currentCollectNum);
 
                             int loadCount = MsgHandler.Instance.GetLoadUserCount();
-
+                            limit = 1;
                             if (chatMembers.Members.Length >= limit && (currentCollectNum == 0 || (currentCollectNum > 0 && startIndex <= currentCollectNum)))
                             {
                                 Thread.Sleep(500);
@@ -544,15 +587,17 @@ namespace TG.Client.TG
                             else
                             {
                                 UserHandler.Instance.PublishMsg("Start get user detail");
-                                Task.Run(() =>
-                                {
-                                    GetUserDetail();
-                                });
+                                //Task.Run(() =>
+                                //{
+                                //    GetUserDetail();
+                                //});
                             }
                         }
                     }
                     else if (currentOperatorType == OperatorType.SearchChatHistory)
                     {
+                        return;
+
                         TdApi.Messages messages = @object as TdApi.Messages;
 
                         if (messages != null)
@@ -591,18 +636,20 @@ namespace TG.Client.TG
                     }
                     else if (currentOperatorType == OperatorType.SearchChatUser)
                     {
+                        return;
+
                         TdApi.User user = @object as TdApi.User;
                         if (user != null)
                         {
-                            if (user.Type is TdApi.UserTypeBot)
-                            {
-                                UserHandler.Instance.PublishMsg("Filter bot:" + user.FirstName + " " + user.LastName);
-                                return;
-                            }
-                            user.RestrictionReason = currentGroupName;
-                            OnUserChange?.Invoke(user);
+                            //if (user.Type is TdApi.UserTypeBot)
+                            //{
+                            //    UserHandler.Instance.PublishMsg("Filter bot:" + user.FirstName + " " + user.LastName);
+                            //    return;
+                            //}
+                            //user.RestrictionReason = currentGroupName;
+                            //OnUserChange?.Invoke(user);
 
-                            MsgHandler.Instance.AddOrUpdateUser(user);
+                            //MsgHandler.Instance.AddOrUpdateUser(user);
                         }
                     }
                 }
@@ -619,6 +666,8 @@ namespace TG.Client.TG
 
         private void GetUserDetail()
         {
+            return;
+
             startIndex = 0;
             endIndex = 0;
 
