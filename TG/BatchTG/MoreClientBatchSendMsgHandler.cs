@@ -69,8 +69,8 @@ namespace TG.Client.BatchTG
                     {
                         long userId = 0;
                         string name = user.Replace("@", "").Replace("\r", "");
-                        TdUserPo userPo = UserHandler.Instance.QuoteUserByName(name);
-                        //TdUserEx userPo = UserHandler.Instance.QuoteUserExByName(name);
+                        //TdUserPo userPo = UserHandler.Instance.QuoteUserByName(name);
+                        TdUserEx userPo = UserHandler.Instance.QuoteUserExByName(name);
                         if (userPo != null)
                         {
                             userId = userPo.UserId;
