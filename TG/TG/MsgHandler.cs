@@ -59,23 +59,30 @@ namespace TG.Client.TG
 
             return 0;
         }
-        
+
 
         public bool ContainId(long userId)
         {
-            return idSet.Contains(userId);
+            lock (lockObj)
+            {
+                return idSet.Contains(userId);
+            }
         }
 
         public HashSet<long> GetAllId()
         {
-            HashSet<long> copySet = new HashSet<long>();
-
-            foreach (long lon in idSet)
+            lock (lockObj)
             {
-                copySet.Add(lon);
-            }
+                HashSet<long> copySet = new HashSet<long>();
 
-            return copySet;
+                foreach (long lon in idSet)
+                {
+                    copySet.Add(lon);
+                }
+
+                return copySet;
+            }
+           
         }
 
         public int GetLoadUserCount()

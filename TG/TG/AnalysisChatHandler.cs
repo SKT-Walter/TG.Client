@@ -45,6 +45,12 @@ namespace TG.Client.TG
         public void GetChats()
         {
             totalChatNum = 0;
+
+            //TdApi.GetChats getChats = new TdApi.GetChats(new TdApi.ChatListMain(), 600);
+            _client.Send(new TdApi.LoadChats(new TdApi.ChatListArchive(), 300), new TestClientResultHandler());
+
+            Thread.Sleep(5000);
+
             _client.Send(new TdApi.GetChats(new TdApi.ChatListMain(), 200), this);
         }
 

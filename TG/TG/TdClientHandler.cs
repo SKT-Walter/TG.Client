@@ -294,8 +294,8 @@ namespace TG.Client.TG
         public void GetCommand(LoginPo loginPo, string command)
         {
             command = "me";
-            command = "groupsInCommon";
-            command = "chats";
+            //command = "groupsInCommon";
+            //command = "chats";
             this.loginPo = loginPo;
             string[] commands = command.Split(new char[] { ' ' }, 2);
             try
@@ -309,19 +309,18 @@ namespace TG.Client.TG
 
                         break;
                     case "chats":
-                        TdApi.GetChats getChats = new TdApi.GetChats(new TdApi.ChatListMain(), 600);
-                        //getChats.Limit = 100;
 
-                        _client.Send(new TdApi.LoadChats(new TdApi.ChatListArchive(), 100), new TestClientResultHandler());
+                        //TdApi.GetChats getChats = new TdApi.GetChats(new TdApi.ChatListMain(), 600);
+                        //_client.Send(new TdApi.LoadChats(new TdApi.ChatListArchive(), 100), new TestClientResultHandler());
+                        //_client.Send(getChats, this);// new TestClientResultHandler());
 
-                        //Thread.Sleep(2000);
 
-                        _client.Send(getChats, this);// new TestClientResultHandler());
+                        TdApi.GetUser getUser = new TdApi.GetUser(1468854815);
+                        _client.Send(getUser, new TestClientResultHandler());
 
-                        
-                        //TdApi.GetChat getChat = new TdApi.GetChat() { ChatId = -1001307554905L };
-
-                        //_client.Send(getChat, new TestClientResultHandler());
+                        //TdApi.GetChat getChat = new TdApi.GetChat() { ChatId = 6414132850 };
+                        //TdApi.CreatePrivateChat creatChat = new TdApi.CreatePrivateChat(5390289483, true);
+                        //_client.Send(creatChat, new TestClientResultHandler());
 
 
                         break;
@@ -400,42 +399,42 @@ namespace TG.Client.TG
             {
                 if (@object != null)
                 {
-                    if (@object is TdApi.Chats)
-                    {
-                        MessageBox.Show(@object.ToString());
-                        TdApi.Chats chats = @object as TdApi.Chats;
+                    //if (@object is TdApi.Chats)
+                    //{
+                    //    MessageBox.Show(@object.ToString());
+                    //    TdApi.Chats chats = @object as TdApi.Chats;
 
-                        //chats.Sort((c1, c2) => c2.LastMessage.Timestamp.CompareTo(c1.LastMessage.Timestamp));
-                        totalChatList = chats.ChatIds.Count();
-                        foreach (long chatId in chats.ChatIds)
-                        {
-                            //if (chatId > 0)
-                            {
-                                TdApi.GetChat getChat = new TdApi.GetChat() { ChatId = chatId };
+                    //    //chats.Sort((c1, c2) => c2.LastMessage.Timestamp.CompareTo(c1.LastMessage.Timestamp));
+                    //    totalChatList = chats.ChatIds.Count();
+                    //    foreach (long chatId in chats.ChatIds)
+                    //    {
+                    //        //if (chatId > 0)
+                    //        {
+                    //            TdApi.GetChat getChat = new TdApi.GetChat() { ChatId = chatId };
 
-                                _client.Send(getChat, this);
-                            }
-                        }
-                    }
-                    else if (@object is TdApi.Chat)
-                    {
-                        Console.WriteLine("-++++++++++++     +++++-----------------:" + @object.ToString());
-                        TdApi.Chat chat = @object as TdApi.Chat;
+                    //            _client.Send(getChat, this);
+                    //        }
+                    //    }
+                    //}
+                    //else if (@object is TdApi.Chat)
+                    //{
+                    //    Console.WriteLine("-++++++++++++     +++++-----------------:" + @object.ToString());
+                    //    TdApi.Chat chat = @object as TdApi.Chat;
 
-                        chatList.Add(chat);
+                    //    chatList.Add(chat);
 
-                        if (chat.Title.Equals("Prok | Biswap") || chat.Title.Equals("Vesnushki Vesnushki"))
-                        {
-                        }
+                    //    if (chat.Title.Equals("Prok | Biswap") || chat.Title.Equals("Vesnushki Vesnushki"))
+                    //    {
+                    //    }
 
-                        if (chatList.Count == totalChatList)
-                        {
-                            chatList.Sort((c1, c2) => c2.LastMessage.Date.CompareTo(c1.LastMessage.Date));
-                        }
+                    //    if (chatList.Count == totalChatList)
+                    //    {
+                    //        chatList.Sort((c1, c2) => c2.LastMessage.Date.CompareTo(c1.LastMessage.Date));
+                    //    }
 
 
 
-                    }
+                    //}
 
 
 
