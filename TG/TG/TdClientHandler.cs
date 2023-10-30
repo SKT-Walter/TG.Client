@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using TG.Client.Handler;
 using TG.Client.Model;
 using TG.Client.Model.Login;
@@ -308,14 +309,19 @@ namespace TG.Client.TG
 
                         break;
                     case "chats":
-                        TdApi.GetChats getChats = new TdApi.GetChats();
-                        getChats.Limit = 100;
-                        _client.Send(getChats, new TestClientResultHandler());
+                        TdApi.GetChats getChats = new TdApi.GetChats(new TdApi.ChatListMain(), 600);
+                        //getChats.Limit = 100;
+
+                        _client.Send(new TdApi.LoadChats(new TdApi.ChatListArchive(), 100), new TestClientResultHandler());
+
+                        //Thread.Sleep(2000);
+
+                        _client.Send(getChats, this);// new TestClientResultHandler());
 
                         
-                        TdApi.GetChat getChat = new TdApi.GetChat() { ChatId = -1001307554905L };
+                        //TdApi.GetChat getChat = new TdApi.GetChat() { ChatId = -1001307554905L };
 
-                        _client.Send(getChat, new TestClientResultHandler());
+                        //_client.Send(getChat, new TestClientResultHandler());
 
 
                         break;
@@ -383,15 +389,57 @@ namespace TG.Client.TG
 
         private void Print(string str)
         {
-            Console.WriteLine(str);
+            //Console.WriteLine(str);
         }
 
+        private List<TdApi.Chat> chatList = new List<TdApi.Chat>();
+        private int totalChatList = 0;
         public void OnResult(TdApi.BaseObject @object)
         {
             try
             {
                 if (@object != null)
                 {
+                    if (@object is TdApi.Chats)
+                    {
+                        MessageBox.Show(@object.ToString());
+                        TdApi.Chats chats = @object as TdApi.Chats;
+
+                        //chats.Sort((c1, c2) => c2.LastMessage.Timestamp.CompareTo(c1.LastMessage.Timestamp));
+                        totalChatList = chats.ChatIds.Count();
+                        foreach (long chatId in chats.ChatIds)
+                        {
+                            //if (chatId > 0)
+                            {
+                                TdApi.GetChat getChat = new TdApi.GetChat() { ChatId = chatId };
+
+                                _client.Send(getChat, this);
+                            }
+                        }
+                    }
+                    else if (@object is TdApi.Chat)
+                    {
+                        Console.WriteLine("-++++++++++++     +++++-----------------:" + @object.ToString());
+                        TdApi.Chat chat = @object as TdApi.Chat;
+
+                        chatList.Add(chat);
+
+                        if (chat.Title.Equals("Prok | Biswap") || chat.Title.Equals("Vesnushki Vesnushki"))
+                        {
+                        }
+
+                        if (chatList.Count == totalChatList)
+                        {
+                            chatList.Sort((c1, c2) => c2.LastMessage.Date.CompareTo(c1.LastMessage.Date));
+                        }
+
+
+
+                    }
+
+
+
+
                     Print(@object.ToString());
                     UserHandler.Instance.PublishMsg(@object);
                     if (currentOperatorType == OperatorType.SearchChat)
