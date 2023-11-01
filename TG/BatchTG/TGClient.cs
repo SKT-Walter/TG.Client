@@ -89,8 +89,12 @@ namespace TG.Client.BatchTG
                 int number = TGClientManager.Instance.GetCount();
 
                 request.DatabaseDirectory = "tdlib" + number;
-                request.UseMessageDatabase = true;
-                request.UseSecretChats = true;
+                request.UseMessageDatabase = false;
+                request.UseSecretChats = false;
+                request.UseChatInfoDatabase = false;
+                request.UseFileDatabase = false;
+                request.UseMessageDatabase = false;
+                request.UseTestDc = false;
                 //request.ApiId = 94575;
                 //request.ApiHash = "a3406de8d171bb422bb6ddf3bbd800e2";
 

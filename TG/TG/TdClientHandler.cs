@@ -228,36 +228,7 @@ namespace TG.Client.TG
             }
         }
 
-
-
-        public void GetChatMembers()
-        {
-            long chatId = 12345; //Replace with your group chat Id
-            DateTimeOffset fromDate = DateTimeOffset.Parse("2023-06-07"); //Replace with the start date you want
-            DateTimeOffset toDate = DateTimeOffset.Parse("2023-06-08"); //Replace with the end date you want
-
-            var fromUnixTime = new DateTimeOffset(fromDate.Date).ToUnixTimeSeconds();
-            var toUnixTime = new DateTimeOffset(toDate.Date).ToUnixTimeSeconds();
-
-            TdApi.ChatListMain chatListMain = new TdApi.ChatListMain();
-
-            _client.Send(new TdApi.GetChatHistory()
-            {
-                ChatId = -1001078465602L, // 替换specificChatId为要查询的chat_id
-                Limit = 10,
-                FromMessageId = 0,
-                Offset = 0,
-                OnlyLocal = false
-            }, new TestClientResultHandler());
-
-        }
-
-
-        public void GetGroupMembers(long groupId)
-        {
-            _client.Send(new TdApi.GetChatAdministrators(groupId), new ParseGroupHandler(this));
-
-        }
+        
 
         private OperatorType currentOperatorType = OperatorType.SearchChat;
         private long currentChatId = 0;

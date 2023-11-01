@@ -98,6 +98,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BatchTG\BatchCollectUser.cs" />
     <Compile Include="BatchTG\MoreClientBatchSendMsgHandler.cs" />
     <Compile Include="BatchTG\TGClient.cs" />
     <Compile Include="Cache\FileMsgCache.cs" />
@@ -112,6 +113,7 @@
     <Compile Include="Model\OperatorType.cs" />
     <Compile Include="Model\SendMsgPo.cs" />
     <Compile Include="Model\SendMsgType.cs" />
+    <Compile Include="Model\TdCollectParam.cs" />
     <Compile Include="Model\TdMsgPo.cs" />
     <Compile Include="Model\TdTotal.cs" />
     <Compile Include="Model\TdUserEx.cs" />

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using TG.Client.BatchTG;
 using TG.Client.Handler;
 using TG.Client.Model;
 using TG.Client.Model.Login;
@@ -255,7 +256,16 @@ namespace TG.ViewModel.APICollect
             GroupTotal = CollectedGroupUserNum = CollectedUserNum = 0;
             int num = 0;
             int.TryParse(CollectNum, out num);
-            TdClientHandler.Instance.CollectUser(InviteLink, Inner24Hour ? TimeFilterType.OneDay : Inner7Day ? TimeFilterType.SevenDay : TimeFilterType.None, num);
+            //单个采集
+            //TdClientHandler.Instance.CollectUser(InviteLink, Inner24Hour ? TimeFilterType.OneDay : Inner7Day ? TimeFilterType.SevenDay : TimeFilterType.None, num);
+
+            //批量采集
+            BatchCollectUser batchCollectUser = new BatchCollectUser();
+            string[] linkArr = InviteLink.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string link in linkArr)
+            {
+                batchCollectUser.CollectUser(link, Inner24Hour ? TimeFilterType.OneDay : Inner7Day ? TimeFilterType.SevenDay : TimeFilterType.None, num);
+            }
         }
 
         public void OnClickDownBtn()
