@@ -29,7 +29,7 @@ namespace TG.Client.BatchTG
 
         public BatchCollectUser(TdCollectParam collectParam)
         {
-
+            this.collectParam = collectParam;
         }
 
         public void CollectUser(string groupUrl, TimeFilterType timeFilterType, int collectNum)
@@ -167,7 +167,7 @@ namespace TG.Client.BatchTG
                         {
                             CommonHandler.Instance.PublishMemberChange(chatMembers.TotalCount, chatMembers.Members.Length);
 
-                            //MsgHandler.Instance.AddOrUpdateByMember(chatMembers, currentCollectNum);
+                            MsgHandler.Instance.AddOrUpdateByMember(chatMembers, collectParam.CurrentCollectNum);
 
                             int loadCount = MsgHandler.Instance.GetLoadUserCount();
 

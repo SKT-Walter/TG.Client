@@ -53,7 +53,7 @@
             <RowDefinition Height="40"></RowDefinition>
             <RowDefinition Height="30"></RowDefinition>
             <RowDefinition Height="30"></RowDefinition>
-            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="60"></RowDefinition>
             <RowDefinition Height="30"></RowDefinition>
             <RowDefinition Height="40"></RowDefinition>
             <RowDefinition Height="34"></RowDefinition>
@@ -126,7 +126,7 @@
 
         <TextBlock Grid.Row="4" Text="采集群成员" VerticalAlignment="Center" Foreground="{StaticResource Black-1}"></TextBlock>
 
-        <TextBox Grid.Row="5" Text="{Binding InviteLink}">
+        <TextBox Grid.Row="5" Text="{Binding InviteLink}" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"  HorizontalScrollBarVisibility="Auto">
             <TextBox.Resources>
                 <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.5" Stretch="None" AlignmentX="Left" AlignmentY="Top">
                     <VisualBrush.Visual>
