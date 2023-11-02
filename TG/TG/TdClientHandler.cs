@@ -587,16 +587,16 @@ namespace TG.Client.TG
                             else
                             {
                                 UserHandler.Instance.PublishMsg("Start get user detail");
-                                //Task.Run(() =>
-                                //{
-                                //    GetUserDetail();
-                                //});
+                                Task.Run(() =>
+                                {
+                                    GetUserDetail();
+                                });
                             }
                         }
                     }
                     else if (currentOperatorType == OperatorType.SearchChatHistory)
                     {
-                        return;
+                        //return;
 
                         TdApi.Messages messages = @object as TdApi.Messages;
 
@@ -636,20 +636,20 @@ namespace TG.Client.TG
                     }
                     else if (currentOperatorType == OperatorType.SearchChatUser)
                     {
-                        return;
+                        //return;
 
                         TdApi.User user = @object as TdApi.User;
                         if (user != null)
                         {
-                            //if (user.Type is TdApi.UserTypeBot)
-                            //{
-                            //    UserHandler.Instance.PublishMsg("Filter bot:" + user.FirstName + " " + user.LastName);
-                            //    return;
-                            //}
-                            //user.RestrictionReason = currentGroupName;
-                            //OnUserChange?.Invoke(user);
+                            if (user.Type is TdApi.UserTypeBot)
+                            {
+                                UserHandler.Instance.PublishMsg("Filter bot:" + user.FirstName + " " + user.LastName);
+                                return;
+                            }
+                            user.RestrictionReason = currentGroupName;
+                            OnUserChange?.Invoke(user);
 
-                            //MsgHandler.Instance.AddOrUpdateUser(user);
+                            MsgHandler.Instance.AddOrUpdateUser(user);
                         }
                     }
                 }
@@ -666,7 +666,7 @@ namespace TG.Client.TG
 
         private void GetUserDetail()
         {
-            return;
+            //return;
 
             startIndex = 0;
             endIndex = 0;
