@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Td = Telegram.Td;
+using TdApi = Telegram.Td.Api;
 
 namespace TG.Client.Handler
 {
@@ -17,8 +19,14 @@ namespace TG.Client.Handler
 
         }
 
+        public event Action<TdApi.User> OnUserChange;
         public event Action<int, int> OnGetMembers;
         public event Action OnStartAnalysis;
+
+        public void PublishUser(TdApi.User user)
+        {
+            OnUserChange.Invoke(user);
+        }
 
         public void PublishMemberChange(int total, int oneNum)
         {

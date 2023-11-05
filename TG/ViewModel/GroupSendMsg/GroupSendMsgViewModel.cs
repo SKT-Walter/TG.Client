@@ -216,6 +216,8 @@ namespace TG.Client.ViewModel.GroupSendMsg
 
                 moreClientBatchSendMsgHandler.SendBatchMsg(SendBatchUser, sendMsgPo, start, end);
 
+                Thread.Sleep(1000);
+
             }
 
         }

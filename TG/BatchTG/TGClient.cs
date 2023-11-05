@@ -18,7 +18,7 @@ namespace TG.Client.BatchTG
 {
     public class TGClient : Td.ClientResultHandler, IMessage
     {
-
+        
         private Telegram.Td.Client _client = null;
         private TdApi.AuthorizationState _authorizationState = null;
         private Telegram.Td.ClientResultHandler _defaultHandler = new DefaultHandler();
@@ -89,12 +89,8 @@ namespace TG.Client.BatchTG
                 int number = TGClientManager.Instance.GetCount();
 
                 request.DatabaseDirectory = "tdlib" + number;
-                request.UseMessageDatabase = false;
-                request.UseSecretChats = false;
-                request.UseChatInfoDatabase = false;
-                request.UseFileDatabase = false;
-                request.UseMessageDatabase = false;
-                request.UseTestDc = false;
+                request.UseMessageDatabase = true;
+                request.UseSecretChats = true;
                 //request.ApiId = 94575;
                 //request.ApiHash = "a3406de8d171bb422bb6ddf3bbd800e2";
 

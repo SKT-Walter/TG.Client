@@ -20,6 +20,9 @@ namespace TG.Client.Model
         private int limit = 200;
         private string currentGroupName = string.Empty;
         private string currentGroupUrl = string.Empty;
+        private bool saveIntoDB = false;
+
+
 
         public long CurrentChatId { get => currentChatId; set => currentChatId = value; }
         public OperatorType CurrentOperatorType { get => currentOperatorType; set => currentOperatorType = value; }
@@ -33,5 +36,6 @@ namespace TG.Client.Model
         public int Limit { get => limit; set => limit = value; }
         public string CurrentGroupUrl { get => currentGroupUrl; set => currentGroupUrl = value; }
         public string Account { get => account; set => account = value; }
+        public bool SaveIntoDB { get => saveIntoDB; set => saveIntoDB = value; }
     }
 }

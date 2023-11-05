@@ -99,8 +99,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BatchTG\BatchCollectUser.cs" />
+    <Compile Include="BatchTG\ICollectMessage.cs" />
     <Compile Include="BatchTG\MoreClientBatchSendMsgHandler.cs" />
     <Compile Include="BatchTG\TGClient.cs" />
+    <Compile Include="Cache\BatchCollectStatus.cs" />
+    <Compile Include="Cache\BatchTaskManager.cs" />
     <Compile Include="Cache\FileMsgCache.cs" />
     <Compile Include="Cache\TGCache.cs" />
     <Compile Include="Cache\TGClientManager.cs" />

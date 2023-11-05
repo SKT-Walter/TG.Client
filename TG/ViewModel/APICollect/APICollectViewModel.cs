@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using TG.Client.BatchTG;
+using TG.Client.Cache;
 using TG.Client.Handler;
 using TG.Client.Model;
 using TG.Client.Model.Login;
@@ -16,7 +17,7 @@ using TG.Client.Utils;
 
 namespace TG.ViewModel.APICollect
 {
-    public class APICollectViewModel : BaseViewModel, IMessage
+    public class APICollectViewModel : BaseViewModel, IMessage, ICollectMessage
     {
         private FrameworkElement ownUI = null;
         private AsyncThreadQueue<TdUserPo> processUserThreadQueue;
@@ -259,13 +260,19 @@ namespace TG.ViewModel.APICollect
             //单个采集
             //TdClientHandler.Instance.CollectUser(InviteLink, Inner24Hour ? TimeFilterType.OneDay : Inner7Day ? TimeFilterType.SevenDay : TimeFilterType.None, num);
 
+
+
+            BatchTaskManager.Instance.Clear();
             //批量采集
             BatchCollectUser batchCollectUser = new BatchCollectUser();
+            batchCollectUser.SetCollectMessage(this);
             string[] linkArr = InviteLink.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (string link in linkArr)
             {
                 batchCollectUser.CollectUser(link, Inner24Hour ? TimeFilterType.OneDay : Inner7Day ? TimeFilterType.SevenDay : TimeFilterType.None, num);
             }
+
+            batchCollectUser.StartCollect();
         }
 
         public void OnClickDownBtn()
@@ -309,6 +316,7 @@ namespace TG.ViewModel.APICollect
             this.ownUI = ownui;
 
             CommonHandler.Instance.OnGetMembers += Instance_OnGetMembers;
+            CommonHandler.Instance.OnUserChange += Instance_OnUserChange1;
 
             VerifyForeground = ownUI.FindResource("Black-1") as Brush;
 
@@ -323,6 +331,11 @@ namespace TG.ViewModel.APICollect
             TdClientHandler.Instance.OnFailUserChange += Instance_OnFailUserChange;
         }
 
+        private void Instance_OnUserChange1(Telegram.Td.Api.User user)
+        {
+            this.Instance_OnUserChange(user);
+        }
+
         private void Instance_OnFailUserChange(int obj)
         {
             Application.Current.Dispatcher.BeginInvoke((Action)(() =>
@@ -332,7 +345,7 @@ namespace TG.ViewModel.APICollect
             }));
         }
 
-        private void Instance_OnBotUserChange(Telegram.Td.Api.User obj)
+        public void Instance_OnBotUserChange(Telegram.Td.Api.User obj)
         {
             Application.Current.Dispatcher.BeginInvoke((Action)(() =>
             {
@@ -341,13 +354,13 @@ namespace TG.ViewModel.APICollect
             }));
         }
 
-        private void Instance_OnGetMembers(int arg1, int arg2)
+        public void Instance_OnGetMembers(int arg1, int arg2)
         {
             GroupTotal = arg1;
             CollectedGroupUserNum += arg2;
         }
 
-        private void OnUserChange(TdUserPo userPo)
+        public void OnUserChange(TdUserPo userPo)
         {
             UserHandler.Instance.SaveUser(userPo);
 
@@ -361,7 +374,7 @@ namespace TG.ViewModel.APICollect
            
         }
 
-        private void Instance_OnUserChange(Telegram.Td.Api.User user)
+        public void Instance_OnUserChange(Telegram.Td.Api.User user)
         {
             TdUserPo userPo = new TdUserPo();
             userPo.UserId = user.Id;

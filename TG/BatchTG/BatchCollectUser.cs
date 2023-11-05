@@ -16,6 +16,13 @@ namespace TG.Client.BatchTG
 {
     public class BatchCollectUser : Td.ClientResultHandler
     {
+        private ICollectMessage collectMessage;
+
+        public void SetCollectMessage(ICollectMessage collectMessage)
+        {
+            this.collectMessage = collectMessage;
+        }
+
         private TdCollectParam collectParam;
         public void SetCollectParam(TdCollectParam collectParam)
         {
@@ -31,33 +38,63 @@ namespace TG.Client.BatchTG
         {
             this.collectParam = collectParam;
         }
+        
 
         public void CollectUser(string groupUrl, TimeFilterType timeFilterType, int collectNum)
         {
-            TdCollectParam temCollectParam = new TdCollectParam();
-            temCollectParam.CurrentGroupUrl = groupUrl;
-            temCollectParam.CurrentOperatorType = OperatorType.None;
-            temCollectParam.CurrentCollectNum = collectNum;
-            temCollectParam.CurrentTimeFilterType = timeFilterType;
+            
             
             if (!string.IsNullOrEmpty(groupUrl))
             {
                 string name = groupUrl.Replace("https://t.me/", "");
-                temCollectParam.CurrentGroupName = name;
-                temCollectParam.CurrentOperatorType = OperatorType.SearchChat;
+                
 
 
                 //批量发送
                 Dictionary<string, TGClient> dic = TGClientManager.Instance.GetAllClient();
+                int index = 0;
                 foreach (KeyValuePair<string, TGClient> kv in dic)
                 {
+                    TdCollectParam temCollectParam = new TdCollectParam();
+                    temCollectParam.CurrentGroupUrl = groupUrl;
+                    temCollectParam.CurrentOperatorType = OperatorType.None;
+                    temCollectParam.CurrentCollectNum = collectNum;
+                    temCollectParam.CurrentTimeFilterType = timeFilterType;
                     temCollectParam.Account = kv.Key;
-                    TGClient client = kv.Value;
-                    client.GetClient().Send(new TdApi.SearchPublicChat() { Username = name }, new BatchCollectUser(temCollectParam));
+                    temCollectParam.CurrentGroupName = name;
+                    temCollectParam.CurrentOperatorType = OperatorType.SearchChat;
+
+                    BatchCollectTask batchCollectTask = new BatchCollectTask();
+                    batchCollectTask.Name = name;
+                    batchCollectTask.TGClient = kv.Value;
+                    batchCollectTask.BatchCollectUser = new BatchCollectUser(temCollectParam);
+
+                    BatchTaskManager.Instance.Enqueu(batchCollectTask);
+                    
+                    BatchCollectStatus.Instance.AddOrUpdate(kv.Key + name, false);
+                    
+                    //TGClient client = kv.Value;
+                    //client.GetClient().Send(new TdApi.SearchPublicChat() { Username = name }, new BatchCollectUser(temCollectParam));
+                    
                 }
                 
             }
 
+        }
+
+        public void StartCollect()
+        {
+            BatchCollectTask batchCollectTask = BatchTaskManager.Instance.Dequeue();
+            if (batchCollectTask != null)
+            {
+                UserHandler.Instance.PublishMsg("开始账号:" + batchCollectTask.BatchCollectUser.collectParam.Account + 
+                    " 采集 " + batchCollectTask.BatchCollectUser.collectParam.CurrentGroupName + " 任务");
+                batchCollectTask.TGClient.GetClient().Send(new TdApi.SearchPublicChat() { Username = batchCollectTask.Name }, batchCollectTask.BatchCollectUser);
+            }
+            else
+            {
+                UserHandler.Instance.PublishMsg("没有采集任务");
+            }
         }
         
 
@@ -72,8 +109,9 @@ namespace TG.Client.BatchTG
             {
                 if (@object != null)
                 {
-                    Print(@object.ToString());
-                    UserHandler.Instance.PublishMsg(@object);
+                    string msg = "Account(" + collectParam.Account + ")'s msg:" + @object.ToString();
+                    Print(msg);
+                    UserHandler.Instance.PublishMsg(msg);
                     if (collectParam.CurrentOperatorType == OperatorType.SearchChat)
                     {
                         TdApi.Chat chat = @object as TdApi.Chat;
@@ -165,7 +203,12 @@ namespace TG.Client.BatchTG
                         TdApi.ChatMembers chatMembers = @object as TdApi.ChatMembers;
                         if (chatMembers != null)
                         {
-                            CommonHandler.Instance.PublishMemberChange(chatMembers.TotalCount, chatMembers.Members.Length);
+                            //CommonHandler.Instance.PublishMemberChange(chatMembers.TotalCount, chatMembers.Members.Length);
+
+                            if (collectParam.SaveIntoDB && collectMessage != null)
+                            {
+                                collectMessage.Instance_OnGetMembers(chatMembers.TotalCount, chatMembers.Members.Length);
+                            }
 
                             MsgHandler.Instance.AddOrUpdateByMember(chatMembers, collectParam.CurrentCollectNum);
 
@@ -244,12 +287,14 @@ namespace TG.Client.BatchTG
                             if (user.Type is TdApi.UserTypeBot)
                             {
                                 UserHandler.Instance.PublishMsg("Filter bot:" + user.FirstName + " " + user.LastName);
-
+                                
                                 //OnBotUserChange?.Invoke(user);
 
                                 return;
                             }
                             user.RestrictionReason = collectParam.CurrentGroupName;
+
+                            CommonHandler.Instance.PublishUser(user);
                             //OnUserChange?.Invoke(user);
 
                             MsgHandler.Instance.AddOrUpdateUser(user);
@@ -268,6 +313,8 @@ namespace TG.Client.BatchTG
         }
 
         private HashSet<long> sendUserIdHs = new HashSet<long>();
+
+        
 
         private void GetUserDetail()
         {
@@ -313,8 +360,28 @@ namespace TG.Client.BatchTG
 
             UserHandler.Instance.PublishMsg("Client:" + collectParam.Account + ", Get user detail end...");
 
+            BatchCollectStatus.Instance.AddOrUpdate(collectParam.Account + collectParam.CurrentGroupName, true);
+
+            bool allIsOk = BatchCollectStatus.Instance.AllIsOk();
+
+
+            StartCollect();
+
+            if (allIsOk)
+            {
+                UserHandler.Instance.PublishMsg("---------------------Collect user end.----------------------");
+            }
+
             //OnFailUserChange?.Invoke(sendUserIdHs.Count);
 
         }
     }
+
+    public class BatchCollectTask
+    {
+        public TGClient TGClient { get; set; }
+        public string Name { get; set; }
+        public BatchCollectUser BatchCollectUser { get; set; }
+    }
+
 }
