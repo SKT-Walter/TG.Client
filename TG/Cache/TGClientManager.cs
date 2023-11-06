@@ -46,6 +46,19 @@ namespace TG.Client.Cache
             }
         }
 
+        public TGClient GetClientByIndex(int index)
+        {
+            lock (lockObj)
+            {
+                if (index >= 0 && dic.Keys.Count > 0)
+                {
+                    return dic.Values.ElementAt(index);
+                }
+
+                return null;
+            }
+        }
+
         public TGClient GetClientByAcc(string account)
         {
             lock (lockObj)

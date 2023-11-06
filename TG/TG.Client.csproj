@@ -98,6 +98,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BatchTG\AddContactHandler.cs" />
     <Compile Include="BatchTG\BatchCollectUser.cs" />
     <Compile Include="BatchTG\ICollectMessage.cs" />
     <Compile Include="BatchTG\MoreClientBatchSendMsgHandler.cs" />
@@ -141,12 +142,16 @@
     <Compile Include="Utils\SqlLite\SqliteManager.cs" />
     <Compile Include="Utils\SqlLite\SqlliteUtils.cs" />
     <Compile Include="Utils\SqlLite\UserConfigPo.cs" />
+    <Compile Include="ViewModel\AddContact\AddContactViewModel.cs" />
     <Compile Include="ViewModel\Analysis\AnalysisViewModel.cs" />
     <Compile Include="ViewModel\APICollect\APICollectViewModel.cs" />
     <Compile Include="ViewModel\CollectUser\CollectUserViewModel.cs" />
     <Compile Include="ViewModel\GroupSendMsg\GroupSendMsgViewModel.cs" />
     <Compile Include="ViewModel\MoreAccLogin\LoginViewModel.cs" />
     <Compile Include="ViewModel\MoreAccLogin\MoreAccLoginViewModel.cs" />
+    <Compile Include="View\AddContact\AddContactView.xaml.cs">
+      <DependentUpon>AddContactView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Analysis\AnalysisView.xaml.cs">
       <DependentUpon>AnalysisView.xaml</DependentUpon>
     </Compile>
@@ -195,6 +200,10 @@
     <Page Include="Resources\ScrollViewerDictionary.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\AddContact\AddContactView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Analysis\AnalysisView.xaml">
       <SubType>Designer</SubType>

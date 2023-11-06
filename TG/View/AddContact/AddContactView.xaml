@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="TG.Client.View.AddContact.AddContactView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TG.Client.View.AddContact"
+             mc:Ignorable="d" 
+             d:DesignHeight="230" d:DesignWidth="800" Background="#FFFFFF">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/CommonStyle.xaml"/>
+                <ResourceDictionary Source="/Resources/ButtonStyleDictionary.xaml"/>
+                <ResourceDictionary Source="/Resources/DataGridStyleDictionary.xaml"/>
+                <ResourceDictionary Source="/Resources/ScrollViewerDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid Margin="10, 0, 10, 0" >
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="150"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="用户名/群组名/电话号码" Grid.Row="1" Foreground="{StaticResource Black-1}" VerticalAlignment="Center"></TextBlock>
+
+        <TextBox Grid.Row="2" Text="{Binding SendBatchUser}" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"  HorizontalScrollBarVisibility="Auto">
+            <TextBox.Resources>
+                <VisualBrush x:Key="HintText" TileMode="None" Opacity="0.5" Stretch="None" AlignmentX="Left" AlignmentY="Top">
+                    <VisualBrush.Visual>
+                        <TextBlock Text="每行输入一个用户名，例如&#x0a;name&#x0a;name&#x0a;name"/>
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </TextBox.Resources>
+            <TextBox.Style>
+                <Style TargetType="TextBox">
+                    <Style.Triggers>
+                        <Trigger Property="Text" Value="{x:Null}">
+                            <Setter Property="Background" Value="{StaticResource HintText}"/>
+                        </Trigger>
+                        <Trigger Property="Text" Value="">
+                            <Setter Property="Background" Value="{StaticResource HintText}"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
+
+        <Button x:Name="btnSendGroup" Grid.Row="3" Margin="0, 2, 0, 2" Content="开始批量添加好友" Click="BtnSendGroup_Click" Style="{StaticResource CollectButtonStyle}"></Button>
+
+    </Grid>
+</UserControl>

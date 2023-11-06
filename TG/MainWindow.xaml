@@ -7,6 +7,7 @@
         xmlns:GroupMsg="clr-namespace:TG.Client.View.GroupSendMsg"
         xmlns:MoreAccLogin="clr-namespace:TG.Client.View.MoreAccLogin"
         xmlns:Analysis="clr-namespace:TG.Client.View.Analysis"
+        xmlns:AddContact="clr-namespace:TG.Client.View.AddContact"
         xmlns:BatchInvite="clr-namespace:TG.Client.View.BatchInvite"
         mc:Ignorable="d"
         Title="TG.Client" Height="700" Width="830" WindowStartupLocation="CenterScreen">
@@ -99,6 +100,9 @@
             </TabItem>
             <TabItem Header="账号分析">
                 <Analysis:AnalysisView></Analysis:AnalysisView>
+            </TabItem>
+            <TabItem Header="批量添加好友">
+                <AddContact:AddContactView></AddContact:AddContactView>
             </TabItem>
             <!--<TabItem Header="批量邀请">
                 <BatchInvite:BatchInviteView></BatchInvite:BatchInviteView>
