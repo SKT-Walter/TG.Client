@@ -313,9 +313,13 @@ namespace TG.Client.TG
                         break;
                     case "chats":
 
-                        //TdApi.GetChats getChats = new TdApi.GetChats(new TdApi.ChatListMain(), 600);
+                        TdApi.GetChats getChats = new TdApi.GetChats(new TdApi.ChatListMain(), 200);
                         //_client.Send(new TdApi.LoadChats(new TdApi.ChatListArchive(), 100), new TestClientResultHandler());
-                        //_client.Send(getChats, this);// new TestClientResultHandler());
+                        _client.Send(getChats, new TestClientResultHandler());
+
+                        Thread.Sleep(3000);
+
+                        this.sendMessage(-1001144411934, "hello");
 
                         //TdApi.Contact contact = new TdApi.Contact();
                         //contact.UserId = 6639521811;
