@@ -118,6 +118,7 @@
     <Compile Include="Model\SendMsgPo.cs" />
     <Compile Include="Model\SendMsgType.cs" />
     <Compile Include="Model\TdCollectParam.cs" />
+    <Compile Include="Model\TdGroupInfo.cs" />
     <Compile Include="Model\TdMsgPo.cs" />
     <Compile Include="Model\TdTotal.cs" />
     <Compile Include="Model\TdUserEx.cs" />
@@ -149,6 +150,7 @@
     <Compile Include="ViewModel\GroupSendMsg\GroupSendMsgViewModel.cs" />
     <Compile Include="ViewModel\MoreAccLogin\LoginViewModel.cs" />
     <Compile Include="ViewModel\MoreAccLogin\MoreAccLoginViewModel.cs" />
+    <Compile Include="ViewModel\SendGroup\SendGroupViewModel.cs" />
     <Compile Include="View\AddContact\AddContactView.xaml.cs">
       <DependentUpon>AddContactView.xaml</DependentUpon>
     </Compile>
@@ -172,6 +174,9 @@
     </Compile>
     <Compile Include="View\MoreAccLogin\MoreAccLoginView.xaml.cs">
       <DependentUpon>MoreAccLoginView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SendGroup\SendGroupView.xaml.cs">
+      <DependentUpon>SendGroupView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -233,6 +238,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\SendGroup\SendGroupView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -267,5 +276,6 @@
   <ItemGroup>
     <Resource Include="Image\wx.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

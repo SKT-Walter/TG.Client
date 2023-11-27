@@ -17,6 +17,8 @@ namespace TG.Client.Cache
         
         public static FileMsgCache Instance { get { return server; } }
 
+        private bool isload = false;
+
         private FileMsgCache()
         {
             //ReadMsg();
@@ -26,9 +28,14 @@ namespace TG.Client.Cache
 
         public void Init()
         {
-            ReadMsgFromFile();
+            if (!isload)
+            {
+                isload = true;
 
-            ReadImage();
+                ReadMsgFromFile();
+
+                ReadImage();
+            }
         }
 
         private void ReadMsgFromFile()
