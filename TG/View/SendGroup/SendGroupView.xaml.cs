@@ -82,6 +82,16 @@ namespace TG.Client.View.SendGroup
 
         private void BtnGetGroup_Click(object sender, RoutedEventArgs e)
         {
+            sendGroupViewModel.GetGroup();
+        }
+
+        private void DataGrid1_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+
+        }
+
+        private void MenuItem_CopySelectedRows_Click(object sender, RoutedEventArgs e)
+        {
 
         }
     }

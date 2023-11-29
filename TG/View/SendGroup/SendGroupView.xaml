@@ -59,7 +59,7 @@
             <RowDefinition Height="30"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <Button x:Name="btnGetGroup" Grid.Row="1" Content="获取群组" Click="BtnGetGroup_Click" Margin="0, 2, 0, 2" Style="{StaticResource CollectButtonStyle}"></Button>
+        <Button x:Name="btnGetGroup" Grid.Row="1" Content="获取已加活跃群组" Click="BtnGetGroup_Click" Margin="0, 2, 0, 2" Style="{StaticResource CollectButtonStyle}"></Button>
         <!--<TextBlock Text="用户名/群组名/电话号码" Grid.Row="1" Foreground="{StaticResource Black-1}" VerticalAlignment="Center"></TextBlock>-->
 
         <DataGrid x:Name="dgData" Grid.Row="2" ItemsSource="{Binding GroupInfoList}" GridLinesVisibility="Vertical" Style="{StaticResource DefaultDataGrid}" SelectionMode="Extended"
