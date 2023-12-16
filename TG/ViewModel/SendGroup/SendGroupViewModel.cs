@@ -186,8 +186,7 @@ namespace TG.Client.ViewModel.SendGroupViewModel
         public void SendGroupMsg()
         {
             UserHandler.Instance.PublishMsg("start send msg...");
-            double interval = 0;
-
+            
 
             SendMsgPo sendMsgPo = new SendMsgPo();
             sendMsgPo.FilePath = FilePathChecked ? FilePath : string.Empty;
@@ -208,8 +207,10 @@ namespace TG.Client.ViewModel.SendGroupViewModel
                 foreach (TdGroupInfo tdGroupInfo in groupInfoList)
                 {
                     this.SendMessage(tGClient, tdGroupInfo.GroupId, null);
-
-                    Thread.Sleep((new Random().Next(start, end)));
+                    this.SendImageMsg(tGClient, tdGroupInfo.GroupId, null);
+                    int nextInterval = new Random().Next(start, end);
+                    UserHandler.Instance.PublishMsg("下一次发送消息间隔：" + nextInterval);
+                    Thread.Sleep(nextInterval * 1000);
                 }
             });
         }
@@ -231,6 +232,7 @@ namespace TG.Client.ViewModel.SendGroupViewModel
                 //new TdApi.InputMessageText(new TdApi.FormattedText(message.SendMsg, null), false, true);
 
                 tGClient.GetClient().Send(new TdApi.SendMessage(chatId, 0, 0, null, replyMarkup, content), this);
+                
             }
 
         }
@@ -253,7 +255,7 @@ namespace TG.Client.ViewModel.SendGroupViewModel
                     Caption = new TdApi.FormattedText { Text = string.Empty },//"图片说明" },  //图片下面会显示的文字
 
                 };
-                tGClient.GetClient().Send(new TdApi.SendMessage(chatId, 0, txtMsgId, null, replyMarkup, photoMessage), this);
+                tGClient.GetClient().Send(new TdApi.SendMessage(chatId, 0, 0, null, replyMarkup, photoMessage), this);
             }
         }
 
@@ -312,21 +314,21 @@ namespace TG.Client.ViewModel.SendGroupViewModel
 
 
                     }
-                    else
-                    {
-                        TdApi.Message replayMsg = result as TdApi.Message;
-                        if (replayMsg != null)
-                        {
-                            txtMsgId = replayMsg.ChatId;
+                    //else
+                    //{
+                    //    TdApi.Message replayMsg = result as TdApi.Message;
+                    //    if (replayMsg != null)
+                    //    {
+                    //        txtMsgId = replayMsg.ChatId;
 
-                            Task.Run(() =>
-                            {
-                                TGClient tGClient = GetOneClient();
-                                this.SendImageMsg(tGClient, txtMsgId, null);
-                            });
-                        }
+                    //        Task.Run(() =>
+                    //        {
+                    //            TGClient tGClient = GetOneClient();
+                    //            this.SendImageMsg(tGClient, txtMsgId, null);
+                    //        });
+                    //    }
 
-                    }
+                    //}
 
                 }
             }
