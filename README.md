@@ -1,4 +1,4 @@
-# TG.Client
+# Telegram.Client
 telegram client
 
 WPF开发的telegram数据采集、分析、群发工具，类似chrome telegram插件功能
